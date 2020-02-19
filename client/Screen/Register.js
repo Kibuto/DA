@@ -1,0 +1,8 @@
+import React from 'react';
+import RegisterItem from '../Components/RegisterItem';
+
+export default function Register() {
+    return (
+        <RegisterItem />
+    )
+}
