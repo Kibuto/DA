@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { View, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
-// import LogoTitle from '../components/LogoTitle';
+import LogoTitle from '../Components/LogoTitle';
 import CategoryListItem from "../Components/CategoryListItem";
 import { HOST } from '../key';
 class Categories extends Component {
 
-    // static navigationOptions = {
-    //     headerTitle: () => <LogoTitle />,
-    //     headerTitleAlign: {
-    //         textAlign: 'center'
-    //     }
-    // };
+    static navigationOptions = {
+        headerTitle: () => <LogoTitle />,
+        headerTitleAlign: {
+            textAlign: 'center'
+        }
+    };
 
     state = {
         categories: []
@@ -44,7 +44,8 @@ class Categories extends Component {
                     </View> :
                     <FlatList 
                         data={categories}
-                        renderItem={({ item }) => <CategoryListItem category={item} onPress={() => navigation.navigate('Category', { categoryProduct: item })}/>}
+                        //
+                        renderItem={({ item }) => <CategoryListItem category={item} onPress={() => navigation.navigate('Products', { categoryProduct: item })}/>}
                         keyExtractor={(item) => `${item.id}`}
                         contentContainerStyle={{paddingHorizontal: 16, backgroundColor: '#fffaff', paddingTop: 16}}
                     />
