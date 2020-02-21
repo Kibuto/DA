@@ -17,9 +17,9 @@ export default class CategoryListItem extends Component {
     }
 
     render() {
-        const { category } = this.props;
+        const { category, onPress } = this.props;
         return (
-            <TouchableOpacity style={[styles.container, {backgroundColor: this._handleRandomColor()}]} activeOpacity={0.5}>
+            <TouchableOpacity onPress={onPress} style={[styles.container, {backgroundColor: this._handleRandomColor()}]} activeOpacity={0.5}>
                 <Text style={styles.header}>{category.name}</Text>
                 <View style={{elevation: 1, position: 'relative'}}>
                     <View style={styles.boxShadow} />

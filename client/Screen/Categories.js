@@ -32,18 +32,25 @@ class Categories extends Component {
 
     render() {
         const { categories } = this.state;
+        const { navigation } = this.props;
         return (
-            <FlatList 
-                data={categories}
-                numColumns={2}
-                renderItem={({ item }) =>
-                    <View style={{flex: 1, paddingHorizontal: 10}}>
-                        <CategoryListItem random={Math.random} category={item}/>
-                    </View>
-                }
-                keyExtractor={(item) => `${item.id}`}
-                contentContainerStyle={styles.container}
-            />
+            <>{
+                categories.length < 1 ? 
+                <View style={[styles.container_indicator, styles.horizontal]}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View> :
+                <FlatList 
+                    data={categories}
+                    numColumns={2}
+                    renderItem={({ item }) =>
+                        <View style={{flex: 1, paddingHorizontal: 10}}>
+                            <CategoryListItem random={Math.random} category={item} onPress={() => navigation.navigate('Products', { categoryProduct: item })}/>
+                        </View>
+                    }
+                    keyExtractor={(item) => `${item.id}`}
+                    contentContainerStyle={styles.container}
+                />
+            }</>
         )
     }
 }
