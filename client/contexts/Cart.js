@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { _handleGetFromStorage, _handleSaveInStorage } from '../utils/Storage';
 
 export const CartContext = React.createContext();
 export class CartProvider extends Component {
@@ -68,6 +69,32 @@ export class CartProvider extends Component {
     } else {
         this.countIncrease(product);
     }
+  }
+
+  componentDidMount() {
+    this._handleGetStorage();
+  }
+
+  _handleGetStorage = async () => {
+    const cart = await _handleGetFromStorage('cart');
+    const sum = await _handleGetFromStorage('sum');
+    const amount = await _handleGetFromStorage('amount');
+    await this.setState({
+      cartItems: cart || [],
+      sum: sum || 0,
+      amount: amount || 0
+    })
+  }
+
+  _handleSaveStorage = async () => {
+    const { cartItems, sum, amount } = this.state;
+    await _handleSaveInStorage('cart', cartItems);
+    await _handleSaveInStorage('sum', sum);
+    await _handleSaveInStorage('amount', amount);
+  }
+
+  componentDidUpdate() {
+    this._handleSaveStorage();
   }
 
   render() {
