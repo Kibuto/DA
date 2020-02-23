@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import { CartContext } from '../contexts/Cart';
+import { _changeFormatToVND } from '../utils/Number';
+import CartListItem from '../Components/CartListItem';
 export default class CartScreen extends Component {
 
     static navigationOptions = {
@@ -11,17 +13,77 @@ export default class CartScreen extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Cart</Text>
-            </View>
+            <CartContext.Consumer>
+                {   
+                    ({ cartItems, countIncrease, removeFromCart, sum }) => (
+                        cartItems.length < 1 ? 
+                        <View style={[styles.container_indicator, styles.horizontal]}>
+                            <ActivityIndicator size='large' color="#0000ff"/>
+                            <Text style={styles.text}>Thêm đồ vào giỏ hàng đi nào</Text>
+                        </View> : 
+                        <>
+                            <FlatList 
+                                data={cartItems}
+                                renderItem={({ item }) =>
+                                    <CartListItem item={item} countIncrease={countIncrease} removeFromCart={removeFromCart}/>
+                                }
+                                keyExtractor={(item) => `${item.id}`}
+                                contentContainerStyle={styles.container}
+                            />
+                            <View style={styles.footer}>
+                                <Text style={styles.total}>{_changeFormatToVND(sum)}</Text>
+                                <TouchableOpacity style={styles.btn}>
+                                    <Text style={styles.text_btn}>Order</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </>
+                    )
+                }
+            </CartContext.Consumer>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
+    container_indicator: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10
+    },
+    container: {
+        paddingTop: 16,
+        paddingHorizontal: 8
+    },
+    btn: {
+        width: `50%`,
+        alignSelf: 'center',
+        //marginTop: 15,
+        borderRadius: 10,
+        backgroundColor: '#DB3362',
+        paddingVertical: 12
+    },
+    text_btn: {
+        color: '#000',
+        fontSize: 18,
+        fontWeight: '700',
+        color: '#FFF',
+        textAlign: 'center',
+        letterSpacing: 2
+    },
+    footer: {
+        // flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center'
+    },
+    total: {
+        letterSpacing: 2,
+        color: '#999',
+        fontWeight: '700'
     }
 })

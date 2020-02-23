@@ -8,13 +8,15 @@
 
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
-import Categories from './Screen/Categories';
+import { CartProvider } from './contexts/Cart';
 import AppNavigator from './AppNavigator';
 class App extends Component {
 
   render() {
     return (
-      <AppNavigator />
+      <CartProvider>
+        <AppNavigator />
+      </CartProvider>
     )
   }
 }

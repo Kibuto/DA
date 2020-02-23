@@ -10,7 +10,7 @@ export default class DetailItem extends Component {
     };
 
     render() {
-        const { item } = this.props;
+        const { item, addToCart } = this.props;
         return (
             <ImageBackground resizeMode="cover" blurRadius={.9} source={{ uri: item.images[0].url }} style={styles.container}>
                 <Image resizeMode='contain' source={{ uri: item.images[0].url }} style={styles.img}/>
@@ -21,7 +21,7 @@ export default class DetailItem extends Component {
                         <Text numberOfLines={3} ellipsizeMode='tail' style={styles.name}>{item.name}</Text>
                         <Text numberOfLines={5} ellipsizeMode='tail' style={styles.description}>{item.description}</Text>
                         <Text style={styles.price}>{_changeFormatToVND(item.price)}</Text>
-                        <TouchableOpacity style={styles.btn}>
+                        <TouchableOpacity onPress={() => addToCart(item)} style={styles.btn}>
                             <Text style={styles.text_btn}>Add to cart</Text>
                         </TouchableOpacity>
                     </View>

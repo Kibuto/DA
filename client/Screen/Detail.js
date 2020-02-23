@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { CartContext } from '../contexts/Cart';
 import DetailItem from '../Components/DetailItem';
 export default class DetailScreen extends Component {
 
@@ -30,7 +31,13 @@ export default class DetailScreen extends Component {
             // }
             // </>
             <View style={styles.container}>
-                <DetailItem item={navigation.getParam('product')}/>
+                <CartContext.Consumer>
+                    {
+                        ({ addToCart }) => (
+                            <DetailItem addToCart={addToCart} item={navigation.getParam('product')}/>
+                        )
+                    }
+                </CartContext.Consumer>
             </View>
         )
     }
