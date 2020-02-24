@@ -19,7 +19,7 @@ export default class DetailItem extends Component {
                     <View style={styles.content}>
                         <Text style={styles.author}>{item.author}</Text>
                         <Text numberOfLines={3} ellipsizeMode='tail' style={styles.name}>{item.name}</Text>
-                        <Text numberOfLines={5} ellipsizeMode='tail' style={styles.description}>{item.description}</Text>
+                        <Text numberOfLines={6} ellipsizeMode='tail' style={styles.description}>{item.description}</Text>
                         <Text style={styles.price}>{_changeFormatToVND(item.price)}</Text>
                         <TouchableOpacity onPress={() => addToCart(item)} style={styles.btn}>
                             <Text style={styles.text_btn}>Add to cart</Text>
@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
     component: {
         backgroundColor:'#FFF',
         height: '100%',
-        borderRadius: 30
+        borderRadius: 30,
+        paddingHorizontal: 5
     },
     content: {
         textAlign: 'center',
@@ -70,10 +71,10 @@ const styles = StyleSheet.create({
         fontWeight: '700'
     },
     description: {
-        textAlign: 'center',
+        textAlign: 'justify',
         marginTop: 15,
         fontSize: 16,
-        letterSpacing: 2
+        letterSpacing: 1.5
     },
     price: {
         fontSize: 18,
