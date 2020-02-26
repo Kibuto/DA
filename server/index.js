@@ -22,7 +22,6 @@ app.use('/api', signInRoutes);
 app.use('/api', signUpRoutes);
 app.use('/api', verifyRoutes);
 
-
 app.listen(port, () => {
     console.log(`App running port ${port}`);
 });
