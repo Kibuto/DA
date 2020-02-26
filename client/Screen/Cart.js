@@ -34,8 +34,11 @@ export default class CartScreen extends Component {
                                 <Text style={styles.total}>{_changeFormatToVND(sum)}</Text>
                                 <TouchableOpacity style={styles.btn}>
                                     <Text style={styles.text_btn}>Order</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity> 
                             </View>
+                            {/* <TouchableOpacity style={styles.btn}>
+                                <Text style={styles.text_btn}>Order - <Text style={styles.total}>{_changeFormatToVND(sum)}</Text></Text>
+                            </TouchableOpacity> */}
                         </>
                     )
                 }
@@ -60,12 +63,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8
     },
     btn: {
-        width: `50%`,
+        width: `40%`,
         alignSelf: 'center',
         //marginTop: 15,
-        borderRadius: 10,
+        borderRadius: 50,
         backgroundColor: '#DB3362',
-        paddingVertical: 12
+        paddingVertical: 10
     },
     text_btn: {
         color: '#000',
@@ -79,11 +82,14 @@ const styles = StyleSheet.create({
         // flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingVertical: 5,
+        backgroundColor: '#FFF'
     },
     total: {
         letterSpacing: 2,
+        fontWeight: '700',
         color: '#999',
-        fontWeight: '700'
+        fontSize: 18
     }
 })
