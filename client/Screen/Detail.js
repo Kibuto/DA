@@ -16,7 +16,7 @@ export default class DetailScreen extends Component {
     }
 
     render() {
-        const { navigation } = this.props;
+        const { product } = this.props.route.params;
         return (
             // <>
             // {
@@ -34,7 +34,7 @@ export default class DetailScreen extends Component {
                 <CartContext.Consumer>
                     {
                         ({ addToCart }) => (
-                            <DetailItem addToCart={addToCart} item={navigation.getParam('product')}/>
+                            <DetailItem addToCart={addToCart} item={product}/>
                         )
                     }
                 </CartContext.Consumer>

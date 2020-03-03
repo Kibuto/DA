@@ -51,11 +51,9 @@ const styles = StyleSheet.create({
     container_indicator: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     horizontal: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
         padding: 10
     },
     container: {
