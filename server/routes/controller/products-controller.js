@@ -1,6 +1,36 @@
 const Product = require("../../models/product.model.js");
+const checkProduct = require('../../models/checkProducts.model');
+const multer  = require('multer');
+const path = require('path');
+require('dotenv').config();
+const storage = multer.diskStorage({
+    destination: './public/uploads/',
+    filename: function(req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+})
+
+function checkFileType(file, cb) {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
+    if(mimetype && extname) {
+        return cb(null, true);
+    } else {
+        cb('Error: Images Only!!!')
+    }
+}
+
+const upload = multer({ 
+    storage,
+    fileFilter: function(req, file, cb) {
+        checkFileType(file, cb);
+    }
+}).single('avatar');
+
 
 const fs = require('fs');
+
 module.exports.index = async (req, res, next) => {
     const { category } = req.query;
     await Product.find({
@@ -25,81 +55,42 @@ module.exports.index = async (req, res, next) => {
     });
 };
 
-// module.exports.create = async (req, res, next) => {
-//     let formidable = require('formidable');
-//     let form = new formidable.IncomingForm();
-//     const filetypes = /jpeg|jpg|png|svg/;
-//     form.uploadDir = global.__project_dirname + '../../uploads';
-//     form.keepExtensions = true;
-//     form.maxFileSize = 5*1024*1024;
-//     form.parse(req, (err, fields, files) => {
-//         if(err) {
-//             res.send({
-//                 success: false,
-//                 message: 'Error: Cannot upload image'
-//             })
-//         }
-//         console.log(files);
-//         let fileName = files.avatar.path.split('\\')[1].split('.');;
-//         if(files.avatar.path && filetypes.test(fileName[1])) {
-//             res.send({
-//                 success: true,
-//                 message: 'Upload images successfully'
-//             });
-//         }
-//         else {
-//             res.send({
-//                 success: false,
-//                 message: 'No images to upload!'
-//             })
-//         }
-//     })
-//     // const userId = req.userId;
-//     // console.log(userId);
-//     // if(userId) {
-        
-//     // }
-//     // else {
-//     //     res.send({
-//     //         success: false,
-//     //         message: 'You must login'
-//     //     })
-//     // }
-// };
-
-// module.exports.getImage = async (req, res, next) => {
-//     let imageName = 'uploads/' + req.query.image_name;
-//     fs.readFile(imageName, (err, imageData) => {
-//         if(err) {
-//             res.send({
-//                 success: false,
-//                 message: `Can't read image ${err}`
-//             });
-//             return;
-//         }
-//         res.writeHead(200, {'Content-Type': 'image/jpeg'});
-//         res.end(imageData);
-//     })
-// };
-
 module.exports.create = (req, res, next) => {
-    console.log(req.body);
-    console.log(req.file);
-    const filetypes = /jpeg|jpg|png|svg/;
-    const filename = req.file.originalname;
-    if(filetypes.test(filename)) {
-        res.send({
-            success: true,
-            message: 'Upload image successfully'
-        })
-    }
-    else {
-        res.send({
-            success: false,
-            message: 'No image upload'
-        })
-    }
-    
+    upload(req, res, (err) => {
+        const { body, file, userId } = req;
+        const { name, price, category, description } = body;
+        if(err) {
+            res.send({
+                success: false,
+                msg: err
+            })
+        } else {
+            let newProduct = new checkProduct();
+            newProduct.userId = userId;
+            newProduct.name = name;
+            newProduct.price = price;
+            newProduct.category = category;
+            newProduct.images = [{url: `http://localhost:${process.env.PORT}/api/open_image?image_name=${file.filename}`}];
+            newProduct.description = description;
+            newProduct.save((err, checkProduct) => {
+                if(err) {
+                    return res.send({
+                        success: false,
+                        message: 'Error: Server error.'
+                    })
+                } else {
+                    return res.send({
+                        success: true,
+                        message: 'Upload product successfully'
+                    })
+                }
+            })
+            // res.send({
+            //     success: true,
+            //     msg: 'Upload image successfully'
+            // })
+        }
+    })
 }
 
 module.exports.getImage = async (req, res, next) => {
