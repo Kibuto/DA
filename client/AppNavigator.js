@@ -15,6 +15,7 @@ import Loading from './Screen/Loading';
 import Cart from './Screen/Cart';
 import Settings from './Screen/Settings';
 import Orders from './Screen/Order';
+import CheckProduct from './Screen/CheckProduct';
 import LogoTitle from './Components/LogoTitle';
 import { CartContext } from './contexts/Cart';
 import * as firebase from 'firebase';
@@ -102,6 +103,7 @@ export default function AppNavigator(props) {
         <Stack.Screen name='Register' component={Register} />
         <Stack.Screen name='Create' component={Create} />
         <Stack.Screen name='Loading' component={Loading} />
+        <Stack.Screen name='CheckProduct' component={CheckProduct} />
       </Stack.Navigator>
     </NavigationContainer>
   );
