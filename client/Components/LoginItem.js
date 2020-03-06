@@ -80,7 +80,7 @@ class LoginItem extends Component {
         .then(res => res.json())
         .then(json => {
             if(json.success) {
-                navigation.navigate('Settings', {name: json.name, token});
+                navigation.navigate('Settings', { name: json.name, token, isLogin: true });
             } else {
                 console.log("Lỗi ở call api sign item: ", json.message);
             }
