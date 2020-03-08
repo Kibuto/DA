@@ -37,7 +37,7 @@ export default class Home extends Component {
                         <Title style={{fontSize: 26, color: '#D90368', fontWeight:'700', alignSelf: 'center'}}>Home</Title>
                     </Body>
                 </Header>
-                <Content>
+                <Content contentContainerStyle={styles.err}>
                     <Text style={{color: '#888'}}>Home</Text>
                 </Content>
             </Container>
@@ -60,5 +60,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 10
+    },
+    err: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

@@ -4,7 +4,7 @@ import bg from '../images/bgSignIn.png';
 
 export default function WallPaper(props) {
     return (
-        <ImageBackground source={bg} style={styles.picture}>
+        <ImageBackground blurRadius={.9} source={{ uri: props.img }} style={styles.picture}>
             {props.children}
         </ImageBackground>
     )

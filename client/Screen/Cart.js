@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import { CartContext } from '../contexts/Cart';
 import { _changeFormatToVND } from '../utils/Number';
+import { Container, Header, Title, Body } from "native-base";
 import CartListItem from '../Components/CartListItem';
+import { ColorHeader } from '../key';
 export default class CartScreen extends Component {
 
     static navigationOptions = {
@@ -22,6 +24,11 @@ export default class CartScreen extends Component {
                             <Text style={styles.text}>Thêm đồ vào giỏ hàng đi nào</Text>
                         </View> : 
                         <>
+                            <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>
+                                <Body>
+                                    <Title style={{fontSize: 26, color: '#D90368', fontWeight:'700', alignSelf: 'center'}}>Cart</Title>
+                                </Body>
+                            </Header>
                             <FlatList 
                                 data={cartItems}
                                 renderItem={({ item }) =>
