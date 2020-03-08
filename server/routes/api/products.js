@@ -7,5 +7,5 @@ router.get("/products", controller.index);
 // router.get('/open_image', controller.getImage);
 router.post('/upload', authController.requireToken, controller.create);
 router.get('/open_image', controller.getImage);
-
+router.get('/getProduct', authController.requireToken, controller.getProduct);
 module.exports = router;

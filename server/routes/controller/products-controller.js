@@ -2,6 +2,7 @@ const Product = require("../../models/product.model.js");
 const checkProduct = require('../../models/checkProducts.model');
 const multer  = require('multer');
 const path = require('path');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const storage = multer.diskStorage({
     destination: './public/uploads/',
@@ -57,7 +58,7 @@ module.exports.index = async (req, res, next) => {
 
 module.exports.create = (req, res, next) => {
     upload(req, res, (err) => {
-        const { body, file, userId } = req;
+        const { body, file, userId, seller } = req;
         const { name, price, category, description } = body;
         if(err) {
             res.send({
@@ -68,9 +69,10 @@ module.exports.create = (req, res, next) => {
             let newProduct = new checkProduct();
             newProduct.userId = userId;
             newProduct.name = name;
+            newProduct.seller = seller;
             newProduct.price = price;
             newProduct.category = category;
-            newProduct.images = [{url: `http://localhost:${process.env.PORT}/api/open_image?image_name=${file.filename}`}];
+            newProduct.images = [{url: `${process.env.HOST}/api/open_image?image_name=${file.filename}`}];
             newProduct.description = description;
             newProduct.save((err, checkProduct) => {
                 if(err) {
@@ -85,10 +87,6 @@ module.exports.create = (req, res, next) => {
                     })
                 }
             })
-            // res.send({
-            //     success: true,
-            //     msg: 'Upload image successfully'
-            // })
         }
     })
 }
@@ -107,3 +105,35 @@ module.exports.getImage = async (req, res, next) => {
         res.end(imageData);
     })
 };
+
+module.exports.getProduct = async (req, res, next) => {
+    const { userId } = req;
+    await checkProduct.find({
+        userId: userId
+    }, (err, product) => {
+        if(err) {
+            return res.send({
+                success: false,
+                message: 'Error: Server error'
+            })
+        }
+        if(product.length) {
+            product.map(item => {
+                item.userId = jwt.sign({ userId: item.userId }, process.env.jwtKey)
+            })
+            res.send({
+                success: true,
+                product: product,
+                message: 'get data successfully'
+            })
+        }
+        else {
+            res.send({
+                success: false,
+                message: 'You do not sell any product'
+            })
+        }
+        
+        
+    });
+}

@@ -229,8 +229,8 @@ module.exports.requireToken = async (req, res, next) => {
                     message: `Server error`
                 })
             }
-            
             req.userId = userId;
+            req.seller = user.name;
             next();
         })
     })
