@@ -62,7 +62,7 @@ export default class ProductScreen extends Component {
                             <ProductListItem product={item} onPress={() => navigation.navigate('Detail', { product: item })} />
                         </View>
                     }
-                    keyExtractor={(item) => `${item.id}`}
+                    keyExtractor={(item) => `${item._id}`}
                     contentContainerStyle={styles.container}
                 />
                 <CartContext.Consumer>

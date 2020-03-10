@@ -6,6 +6,10 @@ var productSchema = new mongoose.Schema({
   name: String,
   price: String,
   category: String,
+  seller: {
+    type: String,
+    default: 'Admin'
+  },
   isDeleted: Boolean
 });
 
