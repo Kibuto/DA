@@ -107,33 +107,43 @@ module.exports.getImage = async (req, res, next) => {
 };
 
 module.exports.getProduct = async (req, res, next) => {
-    const { userId } = req;
-    await checkProduct.find({
-        userId: userId
-    }, (err, product) => {
-        if(err) {
-            return res.send({
-                success: false,
-                message: 'Error: Server error'
-            })
-        }
-        if(product.length) {
-            product.map(item => {
-                item.userId = jwt.sign({ userId: item.userId }, process.env.jwtKey)
-            })
-            res.send({
-                success: true,
-                product: product,
-                message: 'get data successfully'
-            })
-        }
-        else {
-            res.send({
-                success: false,
-                message: 'You do not sell any product'
-            })
-        }
-        
-        
-    });
+    const { userId, isAdmin } = req;
+    if(isAdmin) {
+        let product = await checkProduct.find({"isCheck": false})//.select({"isCheck": true})
+        console.log(product);
+        res.send({
+            success: true,
+            isAdmin,
+            product,
+            message: "Select successfully"
+        })
+    } else {
+        await checkProduct.find({
+            userId: userId
+        }, (err, product) => {
+            if(err) {
+                return res.send({
+                    success: false,
+                    message: 'Error: Server error'
+                })
+            }
+            if(product.length) {
+                product.map(item => {
+                    item.userId = jwt.sign({ userId: item.userId }, process.env.jwtKey)
+                })
+                res.send({
+                    success: true,
+                    product: product,
+                    message: 'get data successfully'
+                })
+            }
+            else {
+                res.send({
+                    success: false,
+                    message: 'You do not sell any product'
+                })
+            }
+        });
+    }
+    
 }

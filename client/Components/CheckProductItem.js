@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Button } from "native-base";
 export default class CheckProduct extends Component {
     render() {
-        const { product } = this.props;
-        console.log(product);
+        const { product, isAdmin } = this.props;
+        console.log(isAdmin);
         return (
             <TouchableOpacity style={styles.container} activeOpacity={0.9}>
                 <View style={styles.content_left}>
@@ -16,9 +16,20 @@ export default class CheckProduct extends Component {
                     {/* <Text style={{ marginBottom: 10}}>by <Text style={styles.author}>{product.author}</Text></Text> */}
                     <Text style={styles.description} numberOfLines={3} ellipsizeMode='tail'>{product.description}</Text>
                     <Text style={{alignSelf: 'flex-end', color: '#666', marginBottom: 10}}>Seller <Text style={{ fontWeight: '700', fontSize: 18, fontStyle: 'italic', color: '#666', textTransform: 'capitalize'}}>{product.seller}</Text></Text>
-                    <Button block rounded disabled success={product.isCheck}>
-                        <Text style={{color: '#FFF', fontSize: 16}}>Pending Censorship</Text>
-                    </Button>
+                    {
+                        isAdmin ? 
+                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                            <TouchableOpacity style={[styles.btn_admin, { backgroundColor: '#42b72a' }]}>
+                                <Text style={styles.text_btn}>Censor</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.btn_admin, { backgroundColor: '#e82b2b' }]}>
+                                <Text style={styles.text_btn}>Delete</Text>
+                            </TouchableOpacity>
+                        </View> :
+                        <Button block rounded disabled success={product.isCheck}>
+                            <Text style={styles.text_btn}>{ product.isCheck ? 'Checked' : 'Pending Censorship' }</Text>
+                        </Button>
+                    }
                 </View>
             </TouchableOpacity>
         )
@@ -86,5 +97,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         marginBottom: 5, 
         alignItems: 'center'
+    },
+    btn_admin: {
+        paddingHorizontal: 20, 
+        paddingVertical: 12,
+        borderRadius: 5
+    },
+    text_btn: {
+        color: '#FFF', 
+        fontSize: 16
     }
 })

@@ -7,7 +7,8 @@ export default class CheckProduct extends Component {
 
     state = {
         products: [],
-        msg: ''
+        msg: '',
+        isAdmin: false
     }
 
     componentDidMount() {
@@ -27,7 +28,7 @@ export default class CheckProduct extends Component {
         .then(res => res.json())
         .then(json => {
             if(json.success) {
-                this.setState({products: json.product});
+                this.setState({products: json.product, isAdmin: json.isAdmin});
             } else {
                 this.setState({msg: json.message});
             }
@@ -35,7 +36,8 @@ export default class CheckProduct extends Component {
     }
 
     render() {
-        const { products, msg } = this.state;
+        const { products, msg, isAdmin } = this.state;
+        console.log(isAdmin);
         return (
             <Container style={{backgroundColor: ColorBg}}>
                 <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>
@@ -49,7 +51,7 @@ export default class CheckProduct extends Component {
                         data={products}
                         renderItem={({ item }) => 
                             <View style={styles.wrapper}>
-                                <CheckProductItem product={item} />
+                                <CheckProductItem isAdmin={isAdmin} product={item} />
                             </View>
                         }
                         keyExtractor={(item) => `${item._id}`}

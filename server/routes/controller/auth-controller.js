@@ -155,10 +155,12 @@ module.exports.signin = (req, res, next) => {
         let userSession = new UserSession();
         const token = jwt.sign({ userId: user._id }, process.env.jwtKey)
         userSession.userId = user._id;
+        console.log('User', user.isAdmin);
         userSession.save((err, doc) => {
             if(err) {
                 return res.send({
                     success: false,
+                    isAdmin: user.isAdmin,
                     message: 'Server error'
                 })
             }
@@ -230,6 +232,7 @@ module.exports.requireToken = async (req, res, next) => {
                 })
             }
             req.userId = userId;
+            req.isAdmin = user.isAdmin;
             req.seller = user.name;
             next();
         })
