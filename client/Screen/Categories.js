@@ -53,7 +53,7 @@ class Categories extends Component {
                                 <CategoryListItem random={Math.random} category={item} onPress={() => navigation.navigate('Products', { categoryProduct: item })}/>
                             </View>
                         }
-                        keyExtractor={(item) => `${item.id}`}
+                        keyExtractor={(item) => `${item._id}`}
                         contentContainerStyle={styles.container}
                     />
                 </>

@@ -19,7 +19,7 @@ export default class ProductScreen extends Component {
 
     _handleCallApi = () => {
         const { categoryProduct }= this.props.route.params;
-        const id = categoryProduct.id;
+        const id = categoryProduct.name;
         fetch(`${HOST}/api/products?category=${id}`)
             .then(res => res.json())
             .then(json => {

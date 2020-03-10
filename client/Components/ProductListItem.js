@@ -16,7 +16,7 @@ export default class OrderScreen extends Component {
                     <Text numberOfLines={1} ellipsizeMode='tail' style={styles.name}>{product.name}</Text>
                     <Text numberOfLines={1} ellipsizeMode='tail' style={{ marginBottom: 3}}>by <Text style={styles.author}>{product.author}</Text></Text>
                     <Text style={styles.description} numberOfLines={3} ellipsizeMode='tail'>{product.description}</Text>
-                    <Text style={{alignSelf: 'flex-end', color: '#666', marginBottom: 3}}>Seller <Text style={{ fontWeight: '700', fontSize: 18, fontStyle: 'italic', color: '#666', textTransform: 'capitalize'}}>{product.seller}</Text></Text>
+                    <Text style={{alignSelf: 'flex-end', color: '#666', marginBottom: 3}}>Seller <Text style={styles.seller}>{product.seller}</Text></Text>
                     <View style={styles.star}>
                         <AirbnbRating
                             count={5}
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         width: `100%`, 
         bottom: 8, 
         left: 5,
-        borderRadius: 5
+        borderRadius: 8
     },
     content_right: {
         flex: 3/5, 
@@ -93,8 +93,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         marginBottom: 3, 
         alignItems: 'center'
+    },
+    seller: {
+        fontWeight: '700', 
+        fontSize: 18, 
+        fontStyle: 'italic', 
+        color: '#666', 
+        textTransform: 'capitalize'
     }
-
 })
 
 // export default class OrderScreen extends Component {
