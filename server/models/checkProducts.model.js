@@ -8,6 +8,7 @@ var checkProductSchema = new mongoose.Schema({
   category: String,
   description: String,
   seller: String,
+  author: String,
   date: {
     type: Date,
     default: Date.now()
