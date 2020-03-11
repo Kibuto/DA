@@ -3,23 +3,23 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Button } from "native-base";
 export default class CheckProduct extends Component {
     render() {
-        const { product, isAdmin } = this.props;
+        const { product, isAdmin, onPress } = this.props;
         console.log(isAdmin);
         return (
             <TouchableOpacity style={styles.container} activeOpacity={0.9}>
                 <View style={styles.content_left}>
                     <Image resizeMode='stretch' style={styles.productImg} source={{ uri: product.images[0].url }} />
-                    <View style={styles.boxShadow} />
+                    {/* <View style={styles.boxShadow} /> */}
                 </View>
                 <View style={styles.content_right}>
                     <Text numberOfLines={1} ellipsizeMode='tail' style={styles.name}>{product.name}</Text>
-                    {/* <Text style={{ marginBottom: 10}}>by <Text style={styles.author}>{product.author}</Text></Text> */}
-                    <Text style={styles.description} numberOfLines={3} ellipsizeMode='tail'>{product.description}</Text>
-                    <Text style={{alignSelf: 'flex-end', color: '#666', marginBottom: 10}}>Seller <Text style={{ fontWeight: '700', fontSize: 18, fontStyle: 'italic', color: '#666', textTransform: 'capitalize'}}>{product.seller}</Text></Text>
+                    <Text style={{ marginBottom: 3 }}>by <Text style={styles.author}>{product.author}</Text></Text>
+                    <Text style={styles.description} numberOfLines={1} ellipsizeMode='tail'>{product.description}</Text>
+                    <Text style={{alignSelf: 'flex-end', color: '#666', marginBottom: 3}}>Seller <Text style={{ fontWeight: '700', fontSize: 18, fontStyle: 'italic', color: '#666', textTransform: 'capitalize'}}>{product.seller}</Text></Text>
                     {
                         isAdmin ? 
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
-                            <TouchableOpacity style={[styles.btn_admin, { backgroundColor: '#42b72a' }]}>
+                            <TouchableOpacity onPress={() => onPress(product._id)} style={[styles.btn_admin, { backgroundColor: '#42b72a' }]}>
                                 <Text style={styles.text_btn}>Censor</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.btn_admin, { backgroundColor: '#e82b2b' }]}>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         position: 'absolute', 
         height: `100%`, 
         width: `100%`, 
-        bottom: -5, 
+        bottom: -4, 
         left: 6, 
         borderRadius: 5
     },
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     name: {
         fontWeight:'700', 
         fontSize: 24,
-        marginBottom: 10,
+        marginBottom: 3,
         color: '#D90368'
     },
     author: {
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     description: {
         letterSpacing: 1, 
         fontSize: 16, 
-        marginBottom: 10
+        marginBottom: 3
     },
     star: {
         flexDirection: 'row', 
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     },
     btn_admin: {
         paddingHorizontal: 20, 
-        paddingVertical: 12,
+        paddingVertical: 10,
         borderRadius: 5
     },
     text_btn: {

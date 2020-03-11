@@ -10,7 +10,7 @@ export default class OrderScreen extends Component {
             <TouchableOpacity onPress={onPress} style={styles.container} activeOpacity={0.9}>
                 <View style={styles.content_left}>
                     <Image resizeMode='stretch' style={styles.productImg} source={{ uri: product.images[0].url }} />
-                    <View style={styles.boxShadow} />
+                    {/* <View style={styles.boxShadow} /> */}
                 </View>
                 <View style={styles.content_right}>
                     <Text numberOfLines={1} ellipsizeMode='tail' style={styles.name}>{product.name}</Text>

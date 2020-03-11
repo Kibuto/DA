@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
     boxShadow: {
         backgroundColor: '#000', 
         position: "absolute", 
-        top: 5, 
-        left: 8, 
+        top: 3, 
+        left: 6, 
         height: '95%', 
         width: `100%`, 
         borderRadius: 8, 

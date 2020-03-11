@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
 import { Container, Header, Title, Body, Content } from "native-base";
 import { ColorBg, ColorHeader, HOST } from '../key';
 import CheckProductItem from '../Components/CheckProductItem';
@@ -35,6 +35,41 @@ export default class CheckProduct extends Component {
         })
     }
 
+    _handleCheckProduct = (id) => {
+        const { token } = this.props.route.params;
+        const bearer = `Bearer ${token}`;
+        fetch(`${HOST}/api/checkProduct`, {
+            method: 'PUT',
+            headers: new Headers({
+                'Authorization': bearer,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({
+                id
+            })
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(json.success) {
+                this.showAlert(json.message);
+            } else {
+                console.log('Error')
+            }
+        })
+    }
+
+    showAlert = (str) => {
+        const { navigation } = this.props;
+        Alert.alert(
+            `${str}`,
+            'You are going to be redirected to the Products Screen',
+            [
+                {text: 'OK', onPress: () => navigation.navigate('Categories')},
+            ]
+        )
+    }
+
     render() {
         const { products, msg, isAdmin } = this.state;
         console.log(isAdmin);
@@ -51,7 +86,7 @@ export default class CheckProduct extends Component {
                         data={products}
                         renderItem={({ item }) => 
                             <View style={styles.wrapper}>
-                                <CheckProductItem isAdmin={isAdmin} product={item} />
+                                <CheckProductItem onPress={this._handleCheckProduct} isAdmin={isAdmin} product={item} />
                             </View>
                         }
                         keyExtractor={(item) => `${item._id}`}
