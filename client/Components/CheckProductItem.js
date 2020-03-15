@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Button } from "native-base";
 export default class CheckProduct extends Component {
     render() {
-        const { product, isAdmin, onPress } = this.props;
+        const { product, isAdmin, onPress, index } = this.props;
         console.log(isAdmin);
         return (
             <TouchableOpacity style={styles.container} activeOpacity={0.9}>
@@ -19,7 +19,7 @@ export default class CheckProduct extends Component {
                     {
                         isAdmin ? 
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
-                            <TouchableOpacity onPress={() => onPress(product._id)} style={[styles.btn_admin, { backgroundColor: '#42b72a' }]}>
+                            <TouchableOpacity onPress={() => onPress(product._id, index)} style={[styles.btn_admin, { backgroundColor: '#42b72a' }]}>
                                 <Text style={styles.text_btn}>Censor</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.btn_admin, { backgroundColor: '#e82b2b' }]}>

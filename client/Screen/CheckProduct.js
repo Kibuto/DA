@@ -8,7 +8,8 @@ export default class CheckProduct extends Component {
     state = {
         products: [],
         msg: '',
-        isAdmin: false
+        isAdmin: false,
+        // message: ''
     }
 
     componentDidMount() {
@@ -35,7 +36,7 @@ export default class CheckProduct extends Component {
         })
     }
 
-    _handleCheckProduct = (id) => {
+    _handleCheckProduct = (id, index) => {
         const { token } = this.props.route.params;
         const bearer = `Bearer ${token}`;
         fetch(`${HOST}/api/checkProduct`, {
@@ -52,21 +53,22 @@ export default class CheckProduct extends Component {
         .then(res => res.json())
         .then(json => {
             if(json.success) {
-                this.showAlert(json.message);
+                this.state.products.splice(index, 1);
+                this.setState({products: this.state.products})
             } else {
                 console.log('Error')
             }
         })
     }
 
-    showAlert = (str) => {
-        const { navigation } = this.props;
+    showAlert = (id, index) => {
         Alert.alert(
-            `${str}`,
-            'You are going to be redirected to the Products Screen',
+            'Hello',
+            'Do you want to check this product?',
             [
-                {text: 'OK', onPress: () => navigation.navigate('Categories')},
-            ]
+                {text: 'OK', onPress: () => this._handleCheckProduct(id, index)},
+            ],
+            {cancelable: false},
         )
     }
 
@@ -84,9 +86,9 @@ export default class CheckProduct extends Component {
                     msg.length === 0 ? 
                     <FlatList
                         data={products}
-                        renderItem={({ item }) => 
+                        renderItem={({ item, index }) => 
                             <View style={styles.wrapper}>
-                                <CheckProductItem onPress={this._handleCheckProduct} isAdmin={isAdmin} product={item} />
+                                <CheckProductItem key={index} onPress={this.showAlert} isAdmin={isAdmin} product={item} />
                             </View>
                         }
                         keyExtractor={(item) => `${item._id}`}
