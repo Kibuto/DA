@@ -88,7 +88,7 @@ export default class CheckProduct extends Component {
                         data={products}
                         renderItem={({ item, index }) => 
                             <View style={styles.wrapper}>
-                                <CheckProductItem key={index} onPress={this.showAlert} isAdmin={isAdmin} product={item} />
+                                <CheckProductItem index={index} onPress={this.showAlert} isAdmin={isAdmin} product={item} />
                             </View>
                         }
                         keyExtractor={(item) => `${item._id}`}

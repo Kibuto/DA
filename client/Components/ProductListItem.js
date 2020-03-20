@@ -37,17 +37,20 @@ const styles = StyleSheet.create({
         flex: 1, 
         flexDirection: 'row', 
         marginBottom: 30, 
-        backgroundColor: '#D9DFE3', 
-        paddingVertical: 15, 
+        backgroundColor: '#FFF', 
+        paddingVertical: 0, 
         borderRadius: 10, 
         paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: '#DDD'
+        borderWidth: 3,
+        borderColor: '#EEE'
     },
     productImg: {
         height: 180,
-        borderRadius: 5,
-        zIndex: 999
+        zIndex: 999,
+        transform: [{scaleY: 1.2}],
+        borderWidth: 1,
+        borderColor: '#DDD',
+        //borderRadius: 10,
     },
     header: {
         fontSize: 24, 
@@ -57,7 +60,9 @@ const styles = StyleSheet.create({
     content_left: {
         flex: 2/5, 
         position: 'relative', 
-        justifyContent:'center'
+        justifyContent:'center',
+        marginBottom: 30,
+        borderRadius: 10
     },
     boxShadow: {
         backgroundColor: '#000', 
