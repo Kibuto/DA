@@ -16,49 +16,26 @@ export default class DetailItem extends Component {
         return (
             <WallPaper img={item.images[0].url}>
                 <ScrollView contentContainerStyle={styles.container}>
-                    
-                    {/* <View style={{ position: 'absolute', height: `20%`, width: `24%`, backgroundColor: '#000', left: `40%`, top: `9%`, zIndex: 2, opacity: .2, borderRadius: 10 }} /> */}
-                    {/* <View style={styles.component} > */}
+                    <View style={{height: 200}}/>
+                    <View style={styles.content}>
                         <Image resizeMode='contain' source={{ uri: item.images[0].url }} style={styles.img}/>
-                        <View style={styles.content}>
-                            <Text style={styles.author}>{item.author}</Text>
-                            <Text numberOfLines={3} ellipsizeMode='tail' style={styles.name}>{item.name}</Text>
-                            <Text numberOfLines={6} ellipsizeMode='tail' style={styles.description}>{item.description}</Text>
-                            <Text style={styles.price}>{_changeFormatToVND(item.price)}</Text>
-                            <TouchableOpacity onPress={() => addToCart(item)} style={styles.btn}>
-                                <Text style={styles.text_btn}>Add to cart</Text>
-                            </TouchableOpacity>
-                        </View>
-                    {/* </View> */}
+                        <Text style={styles.author}>{item.author}</Text>
+                        <Text numberOfLines={3} ellipsizeMode='tail' style={styles.name}>{item.name}</Text>
+                        <Text numberOfLines={6} ellipsizeMode='tail' style={styles.description}>{item.description}</Text>
+                        <Text style={styles.price}>{_changeFormatToVND(item.price)}</Text>
+                        <TouchableOpacity onPress={() => addToCart(item)} style={styles.btn}>
+                            <Text style={styles.text_btn}>Add to cart</Text>
+                        </TouchableOpacity>
+                    </View>
                 </ScrollView>
             </WallPaper>
-            // <ImageBackground resizeMode="cover" blurRadius={.9} source={{ uri: item.images[0].url }} style={styles.container}>
-                // <Image resizeMode='contain' source={{ uri: item.images[0].url }} style={styles.img}/>
-                // {/* <View style={{ position: 'absolute', height: `20%`, width: `24%`, backgroundColor: '#000', left: `40%`, top: `9%`, zIndex: 2, opacity: .2, borderRadius: 10 }} /> */}
-                // <View style={styles.component} >
-                //     <View style={styles.content}>
-                //         <Text style={styles.author}>{item.author}</Text>
-                //         <Text numberOfLines={3} ellipsizeMode='tail' style={styles.name}>{item.name}</Text>
-                //         <Text numberOfLines={6} ellipsizeMode='tail' style={styles.description}>{item.description}</Text>
-                //         <Text style={styles.price}>{_changeFormatToVND(item.price)}</Text>
-                //         <TouchableOpacity onPress={() => addToCart(item)} style={styles.btn}>
-                //             <Text style={styles.text_btn}>Add to cart</Text>
-                //         </TouchableOpacity>
-                //     </View>
-                // </View>
-            // </ImageBackground>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: 10
-    },
     img: {
         height: 150,
-        zIndex: 3,
-        transform: [{ translateY: 50 }],
         borderRadius: 5
     },
     content: {
