@@ -79,7 +79,7 @@ export default class Home extends Component {
     }
 
     _handleCallApi = () => {
-        fetch(`${HOST}/api/products?category=Horror`)
+        fetch(`${HOST}/api/products?category=Thriller`)
             .then(res => res.json())
             .then(json => {
                 if(json.success) {
@@ -114,6 +114,7 @@ export default class Home extends Component {
     
     render() {
         const { data, categories, like } = this.state;
+        const { navigation } = this.props;
         return (
             <Container style={{backgroundColor: ColorBg}}>
                 <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>
@@ -139,7 +140,7 @@ export default class Home extends Component {
                     <FlatList 
                         data={ data }
                         renderItem={({ item }) => 
-                            <HomeListItem category={true} product={item}/>
+                            <HomeListItem onPress={() => navigation.navigate('Detail', { product: item })} category={true} product={item}/>
                         }
                         horizontal={true}
                         keyExtractor={(item) => `${item._id}`}
@@ -147,15 +148,15 @@ export default class Home extends Component {
                         showsHorizontalScrollIndicator={false}
                     />
 
-                    <Text style={{fontSize: 18, fontWeight: '700', marginLeft: 15, marginVertical: 10}}>You may also like</Text>
+                    <Text style={{fontSize: 18, fontWeight: '700', marginLeft: 12, marginVertical: 10}}>You may also like</Text>
                     <FlatList 
                         data={ like }
-                        renderItem={({ item }) => 
-                            <HomeListItem category={false} product={item}/>
+                        renderItem={({ item, index }) => 
+                            <HomeListItem onPress={() => navigation.navigate('Detail', { product: item })} index={index} length={like.length - 1} category={false} product={item}/>
                         }
                         horizontal={true}
                         keyExtractor={(item) => `${item._id}`}
-                        contentContainerStyle={{marginLeft: 10}}
+                        contentContainerStyle={{marginLeft: 10, marginRight: 100}}
                         showsHorizontalScrollIndicator={false}
                     />
                 </View>

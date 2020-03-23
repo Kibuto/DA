@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AirbnbRating } from 'react-native-elements';
 export default class Home extends Component {
     render() {
-        const { product, category } = this.props;
+        const { product, category, index, length, onPress } = this.props;
         return (
             <>
                 {
                     category ? 
-                    <TouchableOpacity style={styles.container} activeOpacity={0.9}>
+                    <TouchableOpacity style={styles.container} activeOpacity={0.9} onPress={onPress}>
                         <View style={styles.content_left}>
                             <Image resizeMode='stretch' style={styles.productImg_true} source={{ uri: product.images[0].url }} />
                             {/* <View style={styles.boxShadow} /> */}
@@ -29,7 +29,7 @@ export default class Home extends Component {
                             </View>
                         </View>
                     </TouchableOpacity> : 
-                    <TouchableOpacity activeOpacity={0.9}>
+                    <TouchableOpacity onPress={onPress} style={length === index && {marginRight: 20}} activeOpacity={0.9}>
                         <Image resizeMode='contain' style={styles.productImg_false} source={{ uri: product.images[0].url }} />
                         <Text numberOfLines={1} ellipsizeMode='tail' style={styles.author_false}>{product.author}</Text>
                     </TouchableOpacity>
