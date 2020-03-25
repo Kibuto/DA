@@ -12,19 +12,21 @@ export default class SettingScreen extends Component {
         isLogin: false,
         tokenSettings: '',
         nameSettings: '',
-        isLoginSettings: false
+        isLoginSettings: false,
+        listSettings: []
     }
 
     _handleGetStatus = () => {
         const { tokenSettings, nameSettings, isLoginSettings } = this.state;
         const { params } = this.props.route;
         if(params) {
-            const { token, name, isLogin } = params;
+            const { token, name, isLogin, list } = params;
             if(token) {
                 this.setState({
                     tokenSettings: token,
                     nameSettings: name,
-                    isLoginSettings: isLogin
+                    isLoginSettings: isLogin,
+                    listSettings: list
                 })
             } else {
                 console.log('do not have token');
@@ -58,7 +60,7 @@ export default class SettingScreen extends Component {
     }
 
     render() {
-        const { tokenSettings, nameSettings, isLoginSettings } = this.state;
+        const { tokenSettings, nameSettings, isLoginSettings, listSettings } = this.state;
         const { navigation } = this.props;
         return (
             <Container style={{backgroundColor: ColorBg}}>
@@ -67,7 +69,7 @@ export default class SettingScreen extends Component {
                         <Title style={{fontSize: 26, color: '#D90368', fontWeight:'700', alignSelf: 'center'}}>Settings</Title>
                     </Body>
                 </Header>
-                <SettingListItem tokenSettings={tokenSettings} navigation={navigation} nameSettings={nameSettings} isLoginSettings={isLoginSettings} onPress={this._handleLogOut}/>
+                <SettingListItem list={listSettings} tokenSettings={tokenSettings} navigation={navigation} nameSettings={nameSettings} isLoginSettings={isLoginSettings} onPress={this._handleLogOut}/>
             </Container>
         )
     }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Content, Button, ListItem, Icon, Left, Body, List } from 'native-base';
+import { Content, Button, ListItem, Icon, Left, Body, List, Right, Badge } from 'native-base';
 export default class SettingListItem extends Component {
 
     render() {
-        const { navigation, nameSettings, isLoginSettings, onPress, tokenSettings } = this.props
+        const { navigation, nameSettings, isLoginSettings, onPress, tokenSettings, list } = this.props
         return (
             <Content>
                 {
@@ -12,6 +12,24 @@ export default class SettingListItem extends Component {
                     <>
                         <Text style={{ marginVertical: 10, textAlign: 'center', fontSize: 24, fontWeight: '700', fontStyle: 'italic'}}>Hello {nameSettings}</Text>
                         <List>
+                            <ListItem style={styles.list} icon>
+                                <Left>
+                                    <Button transparent>
+                                        <Icon style={styles.icon} active name="ios-notifications" />
+                                    </Button>
+                                </Left>
+                                <Body>
+                                    <Text style={styles.text}>Notifications</Text>
+                                </Body>
+                                {
+                                    list.length ? 
+                                    <Right>
+                                        <Badge style={{justifyContent: 'center'}} danger>
+                                            <Text style={{color: 'white'}}>{list.length}</Text>
+                                        </Badge>
+                                    </Right> : null
+                                }
+                            </ListItem>
                             <ListItem style={styles.list} icon onPress={() => navigation.navigate('Create', { token: tokenSettings })}>
                                 <Left>
                                     <Button transparent>

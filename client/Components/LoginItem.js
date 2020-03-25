@@ -53,7 +53,7 @@ class LoginItem extends Component {
                     })
                     await _handleSaveInStorage('token', json.token);
                     console.log("about to run call api");
-                    this.callApi(json.token);
+                    this._handleVerify(json.token);
                 }
                 else {
                     this.setState({
@@ -66,7 +66,7 @@ class LoginItem extends Component {
         }
     }
 
-    callApi = async (token) => {
+    _handleVerify = async (token) => {
         console.log('running');
         const bearer = `Bearer ${token}`;
         const { navigation } = this.props;
@@ -80,13 +80,33 @@ class LoginItem extends Component {
         .then(res => res.json())
         .then(json => {
             if(json.success) {
-                navigation.navigate('Settings', { name: json.name, token, isLogin: true });
+                navigation.navigate('Settings', { list: json.data, name: json.name, token, isLogin: true });
             } else {
-                console.log("Lỗi ở call api sign item: ", json.message);
+                console.log("Lỗi ở _handleVerify sign item: ", json.message);
             }
             
         })
     }
+
+    // _handleNotification = (bearer) => {
+    //     const { navigation } = this.props;
+    //     fetch(`${HOST}/api/notifications`, {
+    //         method: 'GET',
+    //         headers: new Headers({
+    //             'Authorization': bearer,
+    //             'Content-Type': 'application/json'
+    //         })
+    //     })
+    //     .then(res => res.json())
+    //     .then(json => {
+    //         if(json.success) {
+    //             navigation.navigate('Settings', { list: json.data });
+    //         } else {
+    //             console.log("Lỗi ở _handleNotifications sign item: ", json.message);
+    //         }
+            
+    //     })
+    // }
 
     // checkEmail = (email) => {
     //     if(validateEmail(email)) {
