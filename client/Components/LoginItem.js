@@ -80,7 +80,7 @@ class LoginItem extends Component {
         .then(res => res.json())
         .then(json => {
             if(json.success) {
-                navigation.navigate('Settings', { list: json.data, name: json.name, token, isLogin: true });
+                navigation.navigate('Settings', { list: json.data, amount: json.amount, name: json.name, token, isLogin: true });
             } else {
                 console.log("Lỗi ở _handleVerify sign item: ", json.message);
             }

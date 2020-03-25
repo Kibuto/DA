@@ -4,7 +4,8 @@ import { Content, Button, ListItem, Icon, Left, Body, List, Right, Badge } from 
 export default class SettingListItem extends Component {
 
     render() {
-        const { navigation, nameSettings, isLoginSettings, onPress, tokenSettings, list } = this.props
+        const { navigation, nameSettings, isLoginSettings, handleLogOut, tokenSettings, list, amount, handleCheckNotification } = this.props;
+        console.log(list);
         return (
             <Content>
                 {
@@ -12,7 +13,7 @@ export default class SettingListItem extends Component {
                     <>
                         <Text style={{ marginVertical: 10, textAlign: 'center', fontSize: 24, fontWeight: '700', fontStyle: 'italic'}}>Hello {nameSettings}</Text>
                         <List>
-                            <ListItem style={styles.list} icon>
+                            <ListItem style={styles.list} icon onPress={() => navigation.navigate('Notification', { products: list, fnc: handleCheckNotification })}>
                                 <Left>
                                     <Button transparent>
                                         <Icon style={styles.icon} active name="ios-notifications" />
@@ -22,10 +23,10 @@ export default class SettingListItem extends Component {
                                     <Text style={styles.text}>Notifications</Text>
                                 </Body>
                                 {
-                                    list.length ? 
+                                    amount ? 
                                     <Right>
                                         <Badge style={{justifyContent: 'center'}} danger>
-                                            <Text style={{color: 'white'}}>{list.length}</Text>
+                                            <Text style={{color: 'white'}}>{amount}</Text>
                                         </Badge>
                                     </Right> : null
                                 }
@@ -47,10 +48,10 @@ export default class SettingListItem extends Component {
                                     </Button>
                                 </Left>
                                 <Body>
-                                    <Text style={styles.text}>Info product</Text>
+                                    <Text style={styles.text}>Follow products of yours</Text>
                                 </Body>
                             </ListItem>
-                            <ListItem icon style={styles.list} onPress={onPress}>
+                            <ListItem icon style={styles.list} onPress={handleLogOut}>
                                 <Left>
                                     <Button transparent>
                                         <Icon style={styles.icon} name="exit" />

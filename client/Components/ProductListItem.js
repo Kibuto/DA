@@ -5,9 +5,10 @@ const  { width, height } = Dimensions.get('window');
 
 export default class OrderScreen extends Component {
     render() {
-        const { product, onPress } = this.props;
+        const { product, onSwitchScreen, notification, fnc } = this.props;
+        console.log("product: ", product);
         return (
-            <TouchableOpacity onPress={onPress} style={styles.container} activeOpacity={0.9}>
+            <TouchableOpacity onPress={onSwitchScreen} style={styles.container} activeOpacity={0.9}>
                 <View style={styles.content_left}>
                     <Image resizeMode='stretch' style={styles.productImg} source={{ uri: product.images[0].url }} />
                     {/* <View style={styles.boxShadow} /> */}
@@ -26,6 +27,12 @@ export default class OrderScreen extends Component {
                         />
                         <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '700' }}>4</Text>
                     </View>
+                    {
+                        notification ? 
+                        <TouchableOpacity onPress={() => fnc(product)}>
+                            <Text>Check</Text>
+                        </TouchableOpacity> : null
+                    }
                 </View>
             </TouchableOpacity>
         )

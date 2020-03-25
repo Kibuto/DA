@@ -59,7 +59,7 @@ export default class ProductScreen extends Component {
                     data={products}
                     renderItem={({ item }) => 
                         <View style={styles.wrapper}>
-                            <ProductListItem product={item} onPress={() => navigation.navigate('Detail', { product: item })} />
+                            <ProductListItem notification={false} product={item} onSwitchScreen={() => navigation.navigate('Detail', { product: item })} />
                         </View>
                     }
                     keyExtractor={(item) => `${item._id}`}

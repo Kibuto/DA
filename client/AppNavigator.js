@@ -17,6 +17,7 @@ import Settings from './Screen/Settings';
 import Orders from './Screen/Order';
 import CheckProduct from './Screen/CheckProduct';
 import LogoTitle from './Components/LogoTitle';
+import Notification from './Screen/Notifications';
 import { CartContext } from './contexts/Cart';
 import * as firebase from 'firebase';
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -104,6 +105,7 @@ export default function AppNavigator(props) {
         <Stack.Screen name='Create' component={Create} />
         <Stack.Screen name='Loading' component={Loading} />
         <Stack.Screen name='CheckProduct' component={CheckProduct} />
+        <Stack.Screen name='Notification' component={Notification} />
       </Stack.Navigator>
     </NavigationContainer>
   );
