@@ -194,11 +194,8 @@ module.exports.verify = (req, res, next) => {
             })
         }
         
-        return res.send({
-            success: true,
-            name: users[0].name,
-            message: 'Good'
-        })
+        req.userName = users[0].name;
+        next();
 
     });
 }

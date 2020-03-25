@@ -167,7 +167,7 @@ module.exports.getProduct = async (req, res, next) => {
 };
 
 module.exports.checkProduct = async (req, res, next) => {
-    const { body, userId } = req;
+    const { body, userId, token } = req;
     await checkProduct.findByIdAndUpdate({
         _id: body.id
     }, {
@@ -208,9 +208,40 @@ module.exports.checkProduct = async (req, res, next) => {
             } else {
                 return res.send({
                     success: true,
-                    message: 'Check product successfully'
+                    message: 'Your product were checked'
                 })
             }
         })
     })
 };
+
+module.exports.notifications = async (req, res, next) => {
+    const { userId, userName } = req;
+    await checkProduct.find({
+        userId,
+        isCheck: true,
+        seen: false
+    }, (err, list) => {
+        if(err) {
+            res.send({
+                success: false,
+                message: 'Server error notifications'
+            })
+        }
+        
+        if(userName) {
+            res.send({
+                success: true,
+                data: list,
+                name: userName,
+                message: 'Respond data successfully'
+            })
+        }
+
+        res.send({
+            success: true,
+            data: list,
+            message: 'Respond data successfully'
+        })
+    })
+}
