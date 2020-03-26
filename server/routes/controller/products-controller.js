@@ -174,6 +174,7 @@ module.exports.checkProduct = async (req, res, next) => {
         $set: { isCheck: true }
     },
     (err, product) => {
+        console.log(product);
         if(err) {
             res.send({
                 success: false,
@@ -217,31 +218,60 @@ module.exports.checkProduct = async (req, res, next) => {
 
 module.exports.notifications = async (req, res, next) => {
     const { userId, userName } = req;
-    await checkProduct.find({
+    const amount = await checkProduct.find({
         userId,
         isCheck: true,
         seen: false
+    })
+    
+    await checkProduct.find({
+        userId,
+        isCheck: true,
+        isDeleted: false
     }, (err, list) => {
         if(err) {
             res.send({
                 success: false,
-                message: 'Server error notifications'
-            })
-        }
-        
-        if(userName) {
-            res.send({
-                success: true,
-                data: list,
-                name: userName,
-                message: 'Respond data successfully'
+                message: 'Server error when check product'
             })
         }
 
-        res.send({
-            success: true,
-            data: list,
-            message: 'Respond data successfully'
-        })
+        if(userName) {
+            res.send({
+                success: true,
+                message: 'Respond data successfully',
+                name: userName,
+                amount: amount.length,
+                data: list
+            })
+        }
+        else {
+            res.send({
+                success: true,
+                message: 'Respond data successfully',
+                amount: amount.length,
+                data: list
+            })
+        }
+    })
+
+}
+
+module.exports.checkNotifications = async (req, res, next) => {
+    const { id } = req.body;
+    await  checkProduct.findByIdAndUpdate({
+        _id: id
+    }, {
+        $set: { seen: true }
+    }, (err, product) => {
+        console.log(product);
+        if(err) {
+            res.send({
+                success: false,
+                message: 'Server error check notifications'
+            })
+        }
+
+        next();
     })
 }
