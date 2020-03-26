@@ -17,18 +17,33 @@ export default class SettingScreen extends Component {
         amountSettings: 0
     }
 
-    _handleGetStatus = () => {
+    _handleGetStatus = async () => {
         const { tokenSettings, nameSettings, isLoginSettings } = this.state;
         const { params } = this.props.route;
         if(params) {
-            const { token, name, isLogin, list, amount } = params;
+            const { token, name, isLogin } = params;
             if(token) {
-                this.setState({
-                    tokenSettings: token,
-                    nameSettings: name,
-                    isLoginSettings: isLogin,
-                    listSettings: list,
-                    amountSettings: amount
+                const bearer = `Bearer ${token}`;
+                await fetch(`${HOST}/api/notifications`, {
+                    method: 'GET',
+                    headers: new Headers({
+                        'Authorization': bearer,
+                        'Content-Type': 'application/json'
+                    })
+                })
+                .then(res => res.json())
+                .then(json => {
+                    if(json.success) {
+                        this.setState({
+                            tokenSettings: token,
+                            nameSettings: name,
+                            isLoginSettings: isLogin,
+                            amountSettings: json.amount,
+                            listSettings: json.data
+                        })
+                    } else {
+                        console.log("Lỗi ở _handleNotification: ", json.message);
+                    }
                 })
             } else {
                 console.log('do not have token');
@@ -41,18 +56,14 @@ export default class SettingScreen extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         let { token } = nextProps.route.params;
-        console.log("nextProps: ", token);
-        console.log("curState: ", this.state.tokenSettings);
         const nextToken = token;
+        console.log('cur state: ', this.state.amountSettings);
+        console.log("next State: ", nextState.amountSettings);
         if(this.state.tokenSettings === nextToken) {
-            console.log(nextState);
-            if(this.state.amountSettings !== nextState.amountSettings){
-                return true;
+            if(nextState.amountSettings === this.state.amountSettings) {
+                return false
             }
-            else {
-                console.log('break');
-                return false;
-            }
+            return true;
         }
         return true;
     }
@@ -60,52 +71,32 @@ export default class SettingScreen extends Component {
     componentDidUpdate() {
         console.log('run did update');
         this._handleGetStatus();
-        this._handleNotification();
     }
 
-    _handleCheckNotification = (product) => {
-        console.log(product);
-        fetch(`${HOST}/api/checkNotification`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: product._id
-            })
-        })
-        .then(res => res.json())
-        .then(json => {
-            if(json.success) {
-                this._handleCheckNotification();
-            } else {
-                console.log('Error')
-            }
-        })
-    }
-
-    _handleNotification = () => {
+    _handleCheckNotification = (id) => {
+        console.log("product notification: ", id);
         const { token } = this.props.route.params;
         const bearer = `Bearer ${token}`;
-        fetch(`${HOST}/api/notifications`, {
-            method: 'GET',
+        fetch(`${HOST}/api/checkNotification`, {
+            method: 'PUT',
             headers: new Headers({
                 'Authorization': bearer,
+                'Accept': 'application/json',
                 'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({
+                id
             })
         })
         .then(res => res.json())
         .then(json => {
             if(json.success) {
                 this.setState({
-                    amountSettings: json.amount,
-                    listSettings: json.data
+                    amountSettings: this.state.amountSettings - 1
                 })
             } else {
-                console.log("Lỗi ở _handleNotification: ", json.message);
+                console.log('Error');
             }
-            
         })
     }
 
