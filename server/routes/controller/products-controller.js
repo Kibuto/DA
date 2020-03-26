@@ -218,6 +218,7 @@ module.exports.checkProduct = async (req, res, next) => {
 
 module.exports.notifications = async (req, res, next) => {
     const { userId, userName } = req;
+    console.log('run notification');
     const amount = await checkProduct.find({
         userId,
         isCheck: true,
@@ -235,6 +236,7 @@ module.exports.notifications = async (req, res, next) => {
                 message: 'Server error when check product'
             })
         }
+        console.log("List: ", list);
 
         if(userName) {
             res.send({
@@ -259,6 +261,7 @@ module.exports.notifications = async (req, res, next) => {
 
 module.exports.checkNotifications = async (req, res, next) => {
     const { id } = req.body;
+    console.log('run check notification', id);
     await  checkProduct.findByIdAndUpdate({
         _id: id
     }, {
@@ -271,7 +274,11 @@ module.exports.checkNotifications = async (req, res, next) => {
                 message: 'Server error check notifications'
             })
         }
-
-        next();
+        else {
+            res.send({
+                success: true,
+                message: 'Respond data successfully'
+            })
+        }
     })
 }
