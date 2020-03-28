@@ -11,8 +11,8 @@ export default class OrderScreen extends Component {
                         <Title style={{fontSize: 26, color: '#D90368', fontWeight:'700', alignSelf: 'center'}}>Orders</Title>
                     </Body>
                 </Header>
-                <Content>
-                    <Text style={{color: '#888'}}>Orders</Text>
+                <Content contentContainerStyle={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{color: '#888', fontSize: 20}}>Orders</Text>
                 </Content>
             </Container>
         )

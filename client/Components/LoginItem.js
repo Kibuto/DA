@@ -12,62 +12,46 @@ class LoginItem extends Component {
         email: '',
         password: '',
         errorMessage: '',
-        errorEmail: '',
-        errorPassword: ''
+        errorEmail: false,
+        errorPassword: false
     }
 
     _handleOnLogin = async () => {
         const { email, password } = this.state;
-        if(validateEmail(email)) {
-            this.setState({
-                errorEmail: true,
-                errorMessage: 'Email invalid'
+        fetch(`${HOST}/api/account/signin`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email,
+                password
             })
-        }
-
-        if(validatePassword(password)) {
-            this.setState({
-                errorPassword: true,
-                errorPassword: 'Password invalid'
-            })
-        }
-        else {
-            fetch(`${HOST}/api/account/signin`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email,
-                    password
+        })
+        .then(res => res.json())
+        .then( async (json) => {
+            if(json.success) {
+                console.log(json);
+                this.setState({
+                    errorMessage: '',
+                    errorEmail: '',
+                    errorPassword: ''
                 })
-            })
-            .then(res => res.json())
-            .then( async (json) => {
-                if(json.success) {
-                    this.setState({
-                        errorMessage: '',
-                        errorEmail: '',
-                        errorPassword: ''
-                    })
-                    await _handleSaveInStorage('token', json.token);
-                    console.log("about to run call api");
-                    this._handleVerify(json.token);
-                }
-                else {
-                    this.setState({
-                        errorMessage: json.message,
-                        errorEmail: json.errorEmail,
-                        errorPassword: json.errorPassword
-                    })
-                }
-            })
-        }
+                await _handleSaveInStorage('token', json.token);
+                this._handleVerify(json.token);
+            }
+            else {
+                this.setState({
+                    errorMessage: json.message,
+                    errorEmail: json.errorEmail,
+                    errorPassword: json.errorPassword
+                })
+            }
+        })
     }
 
     _handleVerify = async (token) => {
-        console.log('running');
         const bearer = `Bearer ${token}`;
         const { navigation } = this.props;
         await fetch(`${HOST}/api/verify`, {
@@ -88,40 +72,20 @@ class LoginItem extends Component {
         })
     }
 
-    // _handleNotification = (bearer) => {
-    //     const { navigation } = this.props;
-    //     fetch(`${HOST}/api/notifications`, {
-    //         method: 'GET',
-    //         headers: new Headers({
-    //             'Authorization': bearer,
-    //             'Content-Type': 'application/json'
-    //         })
-    //     })
-    //     .then(res => res.json())
-    //     .then(json => {
-    //         if(json.success) {
-    //             navigation.navigate('Settings', { list: json.data });
-    //         } else {
-    //             console.log("Lỗi ở _handleNotifications sign item: ", json.message);
-    //         }
-            
-    //     })
-    // }
-
-    // checkEmail = (email) => {
-    //     if(validateEmail(email)) {
-    //         this.setState({
-    //             email,
-    //             errorEmail: false,
-    //             errorMessage: ''
-    //         })
-    //     } else {
-    //         this.setState({
-    //             errorEmail: true,
-    //             errorMessage: 'Email invalid'
-    //         })
-    //     }
-    // }
+    checkEmail = (email) => {
+        if(validateEmail(email)) {
+            this.setState({
+                email,
+                errorEmail: false,
+                errorMessage: ''
+            })
+        } else {
+            this.setState({
+                errorEmail: true,
+                errorMessage: 'Email invalid'
+            })
+        }
+    }
 
     render() {
         const { email, password, errorEmail, errorPassword, errorMessage } = this.state;
@@ -137,21 +101,21 @@ class LoginItem extends Component {
                         <Input 
                             autoCapitalize='none' 
                             autoCorrect={false}
-                            onChangeText={email => this.setState({email})}
+                            onChangeText={email => this.checkEmail(email)}
                         />
                         { errorEmail ? <Icon name='close-circle' /> : null }
                     </Item>
                     <Item floatingLabel style={{marginBottom: 20}} error={errorPassword ? true : false}>
                         <Label>Password</Label>
                         <Input 
-                        secureTextEntry={true} 
-                        autoCapitalize='none' 
-                        autoCorrect={false} 
-                        onChangeText={password => this.setState({password})}    
-                    />
+                            secureTextEntry={true} 
+                            autoCapitalize='none' 
+                            autoCorrect={false} 
+                            onChangeText={password => this.setState({password})}    
+                        />
                     { errorPassword ? <Icon name='close-circle' /> : null}
                     </Item>
-                    <Button block info onPress={this._handleOnLogin}>
+                    <Button disabled={!validateEmail(email)} block info onPress={this._handleOnLogin}>
                         <Text>Login</Text>
                     </Button>
                     <TouchableOpacity activeOpacity={0.6} onPress={() => navigation.navigate('Register')} style={{marginTop: 20}}>

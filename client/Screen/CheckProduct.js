@@ -74,7 +74,6 @@ export default class CheckProduct extends Component {
 
     render() {
         const { products, msg, isAdmin } = this.state;
-        console.log(isAdmin);
         return (
             <Container style={{backgroundColor: ColorBg}}>
                 <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>

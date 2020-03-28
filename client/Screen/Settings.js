@@ -57,8 +57,6 @@ export default class SettingScreen extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         let { token } = nextProps.route.params;
         const nextToken = token;
-        console.log('cur state: ', this.state.amountSettings);
-        console.log("next State: ", nextState.amountSettings);
         if(this.state.tokenSettings === nextToken) {
             if(nextState.amountSettings === this.state.amountSettings) {
                 return false
@@ -69,12 +67,10 @@ export default class SettingScreen extends Component {
     }
 
     componentDidUpdate() {
-        console.log('run did update');
         this._handleGetStatus();
     }
 
     _handleCheckNotification = (id) => {
-        console.log("product notification: ", id);
         const { token } = this.props.route.params;
         const bearer = `Bearer ${token}`;
         fetch(`${HOST}/api/checkNotification`, {

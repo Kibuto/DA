@@ -7,7 +7,6 @@ const  { width, height } = Dimensions.get('window');
 export default class OrderScreen extends Component {
     render() {
         const { product, onSwitchScreen, notification, fnc } = this.props;
-        console.log("product list: ", product._id);
         return (
             <TouchableOpacity onPress={onSwitchScreen} style={styles.container} activeOpacity={0.9}>
                 <View style={styles.content_left}>

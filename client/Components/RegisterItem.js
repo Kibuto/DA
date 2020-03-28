@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Input, Label, Button, Item, Icon } from 'native-base';
 import { HOST } from '../key';
+import { validateEmail, validatePassword, validatePhone } from '../utils/Validation';
 import Logo from '../images/Brand-white.png';
 class RegisterItem extends Component {
 
@@ -43,7 +44,7 @@ class RegisterItem extends Component {
                     errorPhone: '',
                     errorMessage: ''
                 })
-                navigation.navigate('LogIn');
+                navigation.navigate('Login');
             }
             else {
                 this.setState({
@@ -57,9 +58,55 @@ class RegisterItem extends Component {
         })
     }
 
+    checkEmail = (email) => {
+        if(validateEmail(email)) {
+            this.setState({
+                email,
+                errorEmail: false,
+                errorMessage: ''
+            })
+        } else {
+            this.setState({
+                errorEmail: true,
+                errorMessage: 'Email invalid'
+            })
+        }
+    }
+
+    checkPass = (password) => {
+        if(validatePassword(password)) {
+            this.setState({
+                password,
+                errorPassword: false,
+                errorMessage: ''
+            })
+        } else {
+            this.setState({
+                errorPassword: true,
+                errorMessage: 'Password invalid (must be at least 6 character)'
+            })
+        }
+    }
+
+    checkPhone = (phone) => {
+        if(validatePhone(phone)) {
+            this.setState({
+                phone,
+                errorPhone: false,
+                errorMessage: ''
+            })
+        } else {
+            this.setState({
+                errorPhone: true,
+                errorMessage: 'Phone invalid (must be 10 number)'
+            })
+        }
+    }
+
     render() {
         const { name, email, phone, password, errorEmail, errorMessage, errorPassword, errorPhone, errorName } = this.state;
         const { navigation } = this.props;
+        console.log(!validatePhone(phone), !validateEmail(email), validatePhone(phone)&&validateEmail(email))
         return (
             <KeyboardAvoidingView behavior='height'>
                 <View style={styles.container}>
@@ -80,7 +127,7 @@ class RegisterItem extends Component {
                         <Input 
                             autoCapitalize='none' 
                             autoCorrect={false}
-                            onChangeText={email => this.setState({email})}
+                            onChangeText={email => this.checkEmail(email)}
                         />
                         { errorEmail ? <Icon name='close-circle' /> : null }
                     </Item>
@@ -90,7 +137,7 @@ class RegisterItem extends Component {
                             secureTextEntry={true} 
                             autoCapitalize='none' 
                             autoCorrect={false} 
-                            onChangeText={password => this.setState({password})}    
+                            onChangeText={password => this.checkPass(password)}    
                         />
                         { errorPassword ? <Icon name='close-circle' /> : null }
                     </Item>
@@ -99,11 +146,11 @@ class RegisterItem extends Component {
                         <Input 
                             autoCapitalize='none' 
                             autoCorrect={false}
-                            onChangeText={phone => this.setState({phone})}
+                            onChangeText={phone => this.checkPhone(phone)}
                         />
                         { errorPhone ? <Icon name='close-circle' /> : null }
                     </Item>
-                    <Button block info onPress={this._handleOnSignUp}>
+                    <Button block disabled={!validatePhone(phone) && !validateEmail(email)} info onPress={this._handleOnSignUp}>
                         <Text>Sign Up</Text>
                     </Button>
                     <TouchableOpacity activeOpacity={0.6} style={{marginTop: 20}} onPress={() => navigation.navigate('LogIn')}>

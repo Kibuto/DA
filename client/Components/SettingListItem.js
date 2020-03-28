@@ -5,7 +5,6 @@ export default class SettingListItem extends Component {
 
     render() {
         const { navigation, nameSettings, isLoginSettings, handleLogOut, tokenSettings, list, amount, handleCheckNotification } = this.props;
-        console.log(list);
         return (
             <Content>
                 {

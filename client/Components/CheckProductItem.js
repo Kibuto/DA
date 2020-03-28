@@ -4,7 +4,6 @@ import { Button } from "native-base";
 export default class CheckProduct extends Component {
     render() {
         const { product, isAdmin, onPress, index } = this.props;
-        console.log(isAdmin);
         return (
             <TouchableOpacity style={styles.container} activeOpacity={0.9}>
                 <View style={styles.content_left}>
