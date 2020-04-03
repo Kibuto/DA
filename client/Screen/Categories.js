@@ -3,31 +3,29 @@ import { View, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import { Header, Title, Button, Icon, Body, Right } from "native-base";
 import CategoryListItem from "../Components/CategoryListItem";
 import { HOST, ColorBg, ColorHeader } from '../key';
+import { connect } from 'react-redux';
+import { fetchCategoriesRequest } from '../actions';
 class Categories extends Component {
-
-    state = {
-        categories: []
-    }
-
     componentDidMount() {
-        this._handleCallApi();
+        //this._handleCallApi();
+        this.props.fetchAllCategories();
     }
 
-    _handleCallApi = () => {
-        fetch(`${HOST}/api/categories`)
-            .then(res => res.json())
-            .then(json => {
-                if(json.success) {
-                    this.setState({
-                        categories: json.message
-                    })
-                }
-        });
-    }
+    // _handleCallApi = () => {
+    //     fetch(`${HOST}/api/categories`)
+    //         .then(res => res.json())
+    //         .then(json => {
+    //             if(json.success) {
+    //                 this.setState({
+    //                     categories: json.message
+    //                 })
+    //             }
+    //     });
+    // }
 
     render() {
-        const { categories } = this.state;
-        const { navigation } = this.props;
+        const { categories, navigation } = this.props;
+        console.log(categories);
         return (
             <>{
                 categories.length < 1 ? 
@@ -62,6 +60,20 @@ class Categories extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        categories: state.categories
+    }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        fetchAllCategories: () => {
+            dispatch(fetchCategoriesRequest())
+        }
+    }
+}
+
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 10,
@@ -80,4 +92,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Categories;
+export default connect(mapStateToProps, mapDispatchToProps)(Categories);

@@ -9,14 +9,19 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import { CartProvider } from './contexts/Cart';
+import { Provider } from 'react-redux';
+import { store } from './store/index';
 import AppNavigator from './AppNavigator';
+
 class App extends Component {
 
   render() {
     return (
-      <CartProvider>
-        <AppNavigator />
-      </CartProvider>
+      <Provider store={store}>
+        <CartProvider>
+          <AppNavigator />
+        </CartProvider>
+      </Provider>
     )
   }
 }

@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     content: {
-        backgroundColor:'#FBF4FC',
+        backgroundColor:'#E9EBEA',
         textAlign: 'center',
         paddingVertical: 50,
         paddingHorizontal: 20,
