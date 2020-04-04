@@ -7,25 +7,11 @@ import { connect } from 'react-redux';
 import { fetchCategoriesRequest } from '../actions';
 class Categories extends Component {
     componentDidMount() {
-        //this._handleCallApi();
         this.props.fetchAllCategories();
     }
 
-    // _handleCallApi = () => {
-    //     fetch(`${HOST}/api/categories`)
-    //         .then(res => res.json())
-    //         .then(json => {
-    //             if(json.success) {
-    //                 this.setState({
-    //                     categories: json.message
-    //                 })
-    //             }
-    //     });
-    // }
-
     render() {
         const { categories, navigation } = this.props;
-        console.log(categories);
         return (
             <>{
                 categories.length < 1 ? 

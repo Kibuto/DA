@@ -33,9 +33,9 @@ const upload = multer({
 const fs = require('fs');
 
 module.exports.index = async (req, res, next) => {
-    const { category } = req.query;
+    const { body } = req.body;
     await Product.find({
-        category: category
+        category: body
     }, (err, category) => {
         if(err) {
             return res.send({
