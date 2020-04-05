@@ -37,3 +37,31 @@ export const fetchProducts = (products) => {
         products
     }
 }
+
+/* =======================Will Repair in the future======================== */ 
+export const fetchProductsHomeRequest = (id) => {
+    return (dispatch) => {
+        return fetchAPINormal('api/products', 'POST', id)
+                .then(res => res.json())
+                .then(json => {
+                    if(json.success) {
+                        dispatch(fetchProductsHome(json.message))
+                    }
+        });
+    }
+}
+
+export const fetchProductsHome = (categoriesHome) => {
+    return {
+        type: Types.FETCH_PRODUCTSHOME,
+        categoriesHome
+    }
+}
+
+export const changeTypesHome = (typesList) => {
+    return {
+        type: Types.CHANGE_TYPESHOME,
+        typesList
+    }
+}
+/* =============================================== */ 

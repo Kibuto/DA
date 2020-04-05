@@ -1,120 +1,32 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ActivityIndicator, Dimensions, Text, FlatList, TouchableOpacity, ImageBackground, Image } from 'react-native';
-import { Container, Header, Title, Content, Button, Icon, Left, Body, Right } from "native-base";
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import { Container, Header, Title, Body } from "native-base";
+import { connect } from 'react-redux';
+import { fetchProductsRequest, fetchProductsHomeRequest, changeTypesHome } from '../actions';
 import HomeListItem from '../Components/HomeListItem';
 import { ColorBg, ColorHeader, HOST } from '../key';
-const { height, width } = Dimensions.get('screen');
-export default class Home extends Component {
+class Home extends Component {
 
-    state = {
-        data: [],
-        like: [],
-        categories: [
-            {
-                id: 1,
-                title: 'All',
-                selected: true,
-                category: 'Romance'
-            }, 
-            {
-                id: 2,
-                title: 'Recommended',
-                selected: false,
-                category: 'Mystery'
-            }, 
-            {
-                id: 3,
-                title: 'Popular books',
-                selected: false,
-                category: 'History'
-            },
-            {
-                id: 4,
-                title: 'Best seller',
-                selected: false,
-                category: 'Healthy'
-            }
-        ]
-    }
-
-    // componentDidMount() {
-    //     this._handleBestSeller();
-    //     this._handleRelease();
-    // }
-
-    // _handleBestSeller = () => {
-    //     const id = 'Romance'
-    //     fetch(`${HOST}/api/products?category=${id}`)
-    //         .then(res => res.json())
-    //         .then(json => {
-    //             if(json.success) {
-    //                 this.setState({
-    //                     bestSeller: json.message
-    //                 })
-    //             }
-    //             else {
-    //                 console.log('Ko lay duoc products');
-    //             }
-    //     });
-    // }
-
-    // _handleRelease = () => {
-    //     const id = 'Mystery'
-    //     fetch(`${HOST}/api/products?category=${id}`)
-    //         .then(res => res.json())
-    //         .then(json => {
-    //             if(json.success) {
-    //                 this.setState({
-    //                     release: json.message
-    //                 })
-    //             }
-    //             else {
-    //                 console.log('Ko lay duoc products');
-    //             }
-    //     });
-    // }
     componentDidMount() {
         this._handleOnSelected(0);
-        this._handleCallApi();
-    }
-
-    _handleCallApi = () => {
-        fetch(`${HOST}/api/products?category=Thriller`)
-            .then(res => res.json())
-            .then(json => {
-                if(json.success) {
-                    this.setState({like: json.message})
-                }
-                else {
-                    console.log('Ko lay duoc products');
-                }
-        });
+        this.props.fetchAllLike();
     }
 
     _handleOnSelected = (key) => {
-        this.state.categories.map((item, index) => {
+        const { types, changeTypesHome } = this.props;
+        types.map((item, index) => {
             if(key === index) {
-                fetch(`${HOST}/api/products?category=${item.category}`)
-                    .then(res => res.json())
-                    .then(json => {
-                        if(json.success) {
-                            this.setState({data: json.message})
-                        }
-                        else {
-                            console.log('Ko lay duoc products');
-                        }
-                });
+                this.props.fetchAllCategoires(item.category);
                 item.selected = true;
             } else {
-                item.selected = false
+                item.selected = false;
             }
         })
-        this.setState({categories: this.state.categories})
+        changeTypesHome(types);
     }
     
     render() {
-        const { data, categories, like } = this.state;
-        const { navigation } = this.props;
+        const { navigation, like, categories, types } = this.props;
         return (
             <Container style={{backgroundColor: ColorBg}}>
                 <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>
@@ -125,7 +37,7 @@ export default class Home extends Component {
                 <Image resizeMode='stretch' style={{height: 150, borderRadius: 20, marginBottom: 15}} source={{uri: 'https://www.netguru.co/hubfs/Blog_posts_-_images/pexels-photo-46274.jpeg'}}/>
                 <View>
                     <FlatList 
-                        data={ categories }
+                        data={ types }
                         renderItem={({ item, index, separators }) => 
                             <TouchableOpacity onPress={() => this._handleOnSelected(index)} >
                                 <Text style={[item.selected&&{fontWeight: '700'}, {fontSize: 17, marginHorizontal: 7}]}>{item.title}</Text>
@@ -138,7 +50,7 @@ export default class Home extends Component {
                     />
 
                     <FlatList 
-                        data={ data }
+                        data={ categories }
                         renderItem={({ item }) => 
                             <HomeListItem onPress={() => navigation.navigate('Detail', { product: item })} category={true} product={item}/>
                         }
@@ -188,4 +100,28 @@ const styles = StyleSheet.create({
     wrapper: {
         marginHorizontal: 10
     }
-})
+});
+
+const mapStateToProps = (state) => {
+    return {
+        like: state.products,
+        categories: state.categoriesHome,
+        types: state.typesHome
+    }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        fetchAllLike: () => {
+            dispatch(fetchProductsRequest('Thriller'))
+        },
+        fetchAllCategoires: (id) => {
+            dispatch(fetchProductsHomeRequest(id))
+        },
+        changeTypesHome: (typesList) => {
+            dispatch(changeTypesHome(typesList))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

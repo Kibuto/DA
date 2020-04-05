@@ -14,6 +14,21 @@ export default (state, action) => {
                 products: action.products
             };
         }
+        /* ======================Will Repair in the future========================= */ 
+        case Types.FETCH_PRODUCTSHOME: {
+            return {
+                ...state,
+                categoriesHome: action.categoriesHome
+            };
+        }
+
+        case Types.CHANGE_TYPESHOME: {
+            return {
+                ...state,
+                typesHome: action.typesList
+            }
+        }
+        /* =============================================== */ 
        default:
            return state;
     }
