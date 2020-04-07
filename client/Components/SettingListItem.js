@@ -4,7 +4,7 @@ import { Content, Button, ListItem, Icon, Left, Body, List, Right, Badge } from 
 export default class SettingListItem extends Component {
 
     render() {
-        const { navigation, nameSettings, isLoginSettings, handleLogOut, tokenSettings, list, amount, handleCheckNotification } = this.props;
+        const { navigation, nameSettings, isLoginSettings, handleLogOut, tokenSettings, amount } = this.props;
         return (
             <Content>
                 {
@@ -12,7 +12,7 @@ export default class SettingListItem extends Component {
                     <>
                         <Text style={{ marginVertical: 10, textAlign: 'center', fontSize: 24, fontWeight: '700', fontStyle: 'italic'}}>Hello {nameSettings}</Text>
                         <List>
-                            <ListItem style={styles.list} icon onPress={() => navigation.navigate('Notification', { products: list, fnc: handleCheckNotification })}>
+                            <ListItem style={styles.list} icon>
                                 <Left>
                                     <Button transparent>
                                         <Icon style={styles.icon} active name="ios-notifications" />

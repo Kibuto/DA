@@ -237,7 +237,7 @@ module.exports.notifications = async (req, res, next) => {
             })
         }
         console.log("List: ", list);
-
+        
         if(userName) {
             res.send({
                 success: true,

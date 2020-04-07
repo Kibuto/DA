@@ -4,3 +4,6 @@ export const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
 export const FETCH_PRODUCTSHOME = 'FETCH_PRODUCTSHOME';
 export const CHANGE_TYPESHOME = 'CHANGe_TYPESHOME';
 /* =============================================== */ 
+export const GET_NOTIFICATIONS = 'GET_NOTIFICATIONS';
+export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
+export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';

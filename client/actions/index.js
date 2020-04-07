@@ -1,5 +1,6 @@
 import * as Types from '../constants/ActionTypes';
-import { fetchAPINormal } from '../utils/Request';
+import { HOST } from '../key';
+import { fetchAPINormal, fetchAPIAuthentication } from '../utils/Request';
 export const fetchCategoriesRequest = () => {
     return (dispatch) => {
         return fetchAPINormal('api/categories', 'GET', null)
@@ -65,3 +66,27 @@ export const changeTypesHome = (typesList) => {
     }
 }
 /* =============================================== */ 
+
+export const fetchNotificationsRequest = (bearer) => {
+    return (dispatch) => {
+        return fetchAPIAuthentication('api/notifications', 'GET', null, bearer)
+                .then(res => res.json())
+                .then(json => {
+                    if(json.success) {
+                        console.log("Notification request");
+                        dispatch(fetchNotifications(json.amount, json.data))
+                    }
+                    else {
+                        console.log('Mission fail', json);
+                    }
+        });
+    }
+}
+
+export const fetchNotifications = (amountNotifications, listNotifications) => {
+    return {
+        type: Types.FETCH_NOTIFICATIONS,
+        amountNotifications,
+        listNotifications
+    }
+}

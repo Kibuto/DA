@@ -30,6 +30,8 @@ const initialState = {
             selected: false,
             category: 'Healthy'
         }
-    ]
+    ],
+    amountNotifications: 0,
+    listNotifications: []
 };
 export const store = createStore(reducer, initialState, applyMiddleware(thunk));
