@@ -12,7 +12,7 @@ export default class SettingListItem extends Component {
                     <>
                         <Text style={{ marginVertical: 10, textAlign: 'center', fontSize: 24, fontWeight: '700', fontStyle: 'italic'}}>Hello {nameSettings}</Text>
                         <List>
-                            <ListItem style={styles.list} icon>
+                            <ListItem style={styles.list} icon onPress={() => navigation.navigate("Notification")}>
                                 <Left>
                                     <Button transparent>
                                         <Icon style={styles.icon} active name="ios-notifications" />

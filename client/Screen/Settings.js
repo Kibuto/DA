@@ -91,7 +91,7 @@ class SettingScreen extends Component {
 
     render() {
         const { tokenSettings, nameSettings, isLoginSettings } = this.state;
-        const { navigation, amount, list } = this.props;
+        const { navigation, amount } = this.props;
         console.log(amount);
         return (
             <Container style={{backgroundColor: ColorBg}}>
@@ -108,8 +108,7 @@ class SettingScreen extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        amount: state.amountNotifications,
-        list: state.listNotifications
+        amount: state.amountNotifications
     }
 }
 

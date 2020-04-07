@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 import ProductListItem from '../Components/ProductListItem';
-export default class Notifications extends Component {
+class Notifications extends Component {
 
     render() {
-        const { products, fnc } = this.props.route.params;
+        const { list } = this.props;
         return (
             <FlatList
-                data={products}
+                data={list}
                 renderItem={({ item }) => 
                     <View style={styles.wrapper}>
-                        <ProductListItem fnc={fnc} notification={true} product={item} />
+                        <ProductListItem notification={true} product={item} />
                     </View>
                 }
                 keyExtractor={(item) => `${item._id}`}
@@ -33,7 +34,13 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 10,
         paddingTop: 30,
-    },
-    wrapper: {
     }
 })
+
+const mapStateToProps = (state) => {
+    return {
+        list: state.listNotifications
+    }
+}
+
+export default connect(mapStateToProps, null)(Notifications);
