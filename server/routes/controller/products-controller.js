@@ -260,10 +260,10 @@ module.exports.notifications = async (req, res, next) => {
 }
 
 module.exports.checkNotifications = async (req, res, next) => {
-    const { id } = req.body;
-    console.log('run check notification', id);
-    await  checkProduct.findByIdAndUpdate({
-        _id: id
+    const { userId } = req;
+    await checkProduct.updateMany({
+        userId,
+        isCheck: true
     }, {
         $set: { seen: true }
     }, (err, product) => {
