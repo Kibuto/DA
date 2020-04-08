@@ -73,11 +73,10 @@ export const fetchNotificationsRequest = (bearer) => {
                 .then(res => res.json())
                 .then(json => {
                     if(json.success) {
-                        console.log("Notification request");
                         dispatch(fetchNotifications(json.amount, json.data))
                     }
                     else {
-                        console.log('Mission fail', json);
+                        console.log('Mission fail fetch notification', json);
                     }
         });
     }
@@ -88,5 +87,27 @@ export const fetchNotifications = (amountNotifications, listNotifications) => {
         type: Types.FETCH_NOTIFICATIONS,
         amountNotifications,
         listNotifications
+    }
+}
+
+export const fetchCheckNotificationsRequest = (bearer) => {
+    return (dispatch) => {
+        return fetchAPIAuthentication('api/checkNotification', 'PUT', null, bearer)
+                .then(res => res.json())
+                .then(json => {
+                    if(json.success) {
+                        console.log("Notification request");
+                        dispatch(fetchCheckNotifications());
+                    }
+                    else {
+                        console.log('Mission fail fetch check notification', json);
+                    }
+        });
+    }
+}
+
+export const fetchCheckNotifications = () => {
+    return {
+        type: Types.FETCH_CHECKNOTIFICATIONS
     }
 }

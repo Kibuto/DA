@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native';
 import { Avatar } from "react-native-elements";
 import SettingListItem from '../Components/SettingListItem';
 import { connect } from 'react-redux';
-import { fetchNotificationsRequest } from '../actions';
+import { fetchNotificationsRequest, fetchCheckNotificationsRequest } from '../actions';
 import { Container, Header, Title, Body } from "native-base";
 import { _handleGetFromStorage, _handleRemoveStorage } from '../utils/Storage';
 import { ColorBg, ColorHeader, HOST } from '../key';
@@ -41,8 +41,6 @@ class SettingScreen extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         let { token } = nextProps.route.params;
         const nextToken = token;
-        console.log('Cur props: ', this.props.amount);
-        console.log("next props: ", nextProps.amount);
         if(this.state.tokenSettings === nextToken) {
             if(this.props.amount !== nextProps.amount) {
                 return true;
@@ -56,31 +54,12 @@ class SettingScreen extends Component {
         this._handleGetStatus();
     }
 
-    // _handleCheckNotification = (id) => {
-    //     const { token } = this.props.route.params;
-    //     const bearer = `Bearer ${token}`;
-    //     fetch(`${HOST}/api/checkNotification`, {
-    //         method: 'PUT',
-    //         headers: new Headers({
-    //             'Authorization': bearer,
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         }),
-    //         body: JSON.stringify({
-    //             id
-    //         })
-    //     })
-    //     .then(res => res.json())
-    //     .then(json => {
-    //         if(json.success) {
-    //             this.setState({
-    //                 amountSettings: this.state.amountSettings - 1
-    //             })
-    //         } else {
-    //             console.log('Error');
-    //         }
-    //     })
-    // }
+    _handleCheckNotification = () => {
+        const { token } = this.props.route.params;
+        const bearer = `Bearer ${token}`;
+        this.props.fetchCheckNotification(bearer);
+        this.props.navigation.navigate('Notification');
+    }
 
     _handleLogOut = async() => {
         await AsyncStorage.removeItem('token').then(() => {
@@ -92,7 +71,6 @@ class SettingScreen extends Component {
     render() {
         const { tokenSettings, nameSettings, isLoginSettings } = this.state;
         const { navigation, amount } = this.props;
-        console.log(amount);
         return (
             <Container style={{backgroundColor: ColorBg}}>
                 <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>
@@ -100,7 +78,7 @@ class SettingScreen extends Component {
                         <Title style={{fontSize: 26, color: '#D90368', fontWeight:'700', alignSelf: 'center'}}>Settings</Title>
                     </Body>
                 </Header>
-                <SettingListItem amount={amount} tokenSettings={tokenSettings} navigation={navigation} nameSettings={nameSettings} isLoginSettings={isLoginSettings} handleLogOut={this._handleLogOut}/>
+                <SettingListItem onCheckNotification={this._handleCheckNotification} amount={amount} tokenSettings={tokenSettings} navigation={navigation} nameSettings={nameSettings} isLoginSettings={isLoginSettings} handleLogOut={this._handleLogOut}/>
             </Container>
         )
     }
@@ -116,6 +94,9 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         fetchNotification: (bearer) => {
             dispatch(fetchNotificationsRequest(bearer));
+        },
+        fetchCheckNotification: (bearer) => {
+            dispatch(fetchCheckNotificationsRequest(bearer))
         }
     }
 }

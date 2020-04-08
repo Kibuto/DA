@@ -11,7 +11,7 @@ class Notifications extends Component {
                 data={list}
                 renderItem={({ item }) => 
                     <View style={styles.wrapper}>
-                        <ProductListItem notification={true} product={item} />
+                        <ProductListItem notification={true} product={item}/>
                     </View>
                 }
                 keyExtractor={(item) => `${item._id}`}

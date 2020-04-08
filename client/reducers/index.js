@@ -31,11 +31,17 @@ export default (state, action) => {
         /* =============================================== */ 
 
         case Types.FETCH_NOTIFICATIONS: {
-            console.log("Action: ", action);
             return {
                 ...state,
                 amountNotifications: action.amountNotifications,
                 listNotifications: action.listNotifications
+            }
+        }
+
+        case Types.FETCH_CHECKNOTIFICATIONS: {
+            return {
+                ...state,
+                amountNotifications: 0
             }
         }
        default:

@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
-import { Button } from 'native-base';
 import { AirbnbRating } from 'react-native-elements';
-const  { width, height } = Dimensions.get('window');
 
 export default class OrderScreen extends Component {
     render() {
-        const { product, onSwitchScreen, notification, fnc } = this.props;
+        const { product, onSwitchScreen } = this.props;
         return (
-            <TouchableOpacity onPress={onSwitchScreen} style={styles.container} activeOpacity={0.9}>
+            <TouchableOpacity onPress={ onSwitchScreen } style={styles.container} activeOpacity={0.9}>
                 <View style={styles.content_left}>
                     <Image resizeMode='stretch' style={styles.productImg} source={{ uri: product.images[0].url }} />
                     {/* <View style={styles.boxShadow} /> */}
@@ -27,12 +25,12 @@ export default class OrderScreen extends Component {
                         />
                         <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '700' }}>4</Text>
                     </View>
-                    {
+                    {/* {
                         notification ? 
-                        <Button disabled={product.seen} primary={!product.seen} onPress={() => fnc(product._id)} >
+                        <Button block disabled={product.seen} primary={!product.seen} onPress={() => fnc(product._id, `Bearer ${token}`)} >
                             <Text style={{color: 'white'}}>Check</Text>
                         </Button> : null
-                    }
+                    } */}
                 </View>
             </TouchableOpacity>
         )
