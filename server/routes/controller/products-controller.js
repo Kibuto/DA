@@ -1,30 +1,30 @@
 const Product = require("../../models/product.model.js");
 const checkProduct = require('../../models/checkProducts.model');
-const multer  = require('multer');
+const multer = require('multer');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const storage = multer.diskStorage({
     destination: './public/uploads/',
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 })
 
 function checkFileType(file, cb) {
-    const filetypes = /jpeg|jpg|png|gif/;
+    const filetypes = /jpeg|jpg|png/;
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = filetypes.test(file.mimetype);
-    if(mimetype && extname) {
+    if (mimetype && extname) {
         return cb(null, true);
     } else {
         cb('Error: Images Only!!!')
     }
 }
 
-const upload = multer({ 
+const upload = multer({
     storage,
-    fileFilter: function(req, file, cb) {
+    fileFilter: function (req, file, cb) {
         checkFileType(file, cb);
     }
 }).single('avatar');
@@ -37,13 +37,13 @@ module.exports.index = async (req, res, next) => {
     await Product.find({
         category: body
     }, (err, category) => {
-        if(err) {
+        if (err) {
             return res.send({
                 success: false,
                 message: 'Error: Server error'
             })
         }
-        if(category.length < 1) {
+        if (category.length < 1) {
             return res.send({
                 success: false,
                 message: 'Error: Category Invalid'
@@ -60,7 +60,7 @@ module.exports.create = (req, res, next) => {
     upload(req, res, (err) => {
         const { body, file, userId, seller } = req;
         const { name, price, category, description } = body;
-        if(err) {
+        if (err) {
             res.send({
                 success: false,
                 msg: err
@@ -72,10 +72,10 @@ module.exports.create = (req, res, next) => {
             newProduct.seller = seller;
             newProduct.price = price;
             newProduct.category = category;
-            newProduct.images = [{url: `${process.env.HOST}/api/open_image?image_name=${file.filename}`}];
+            newProduct.images = [{ url: `${process.env.HOST}/api/open_image?image_name=${file.filename}` }];
             newProduct.description = description;
             newProduct.save((err, checkProduct) => {
-                if(err) {
+                if (err) {
                     return res.send({
                         success: false,
                         message: 'Error: Server error.'
@@ -94,32 +94,32 @@ module.exports.create = (req, res, next) => {
 module.exports.getImage = async (req, res, next) => {
     let imageName = 'public/uploads/' + req.query.image_name;
     fs.readFile(imageName, (err, imageData) => {
-        if(err) {
+        if (err) {
             res.send({
                 success: false,
                 message: `Can't read image ${err}`
             });
             return;
         }
-        res.writeHead(200, {'Content-Type': 'image/jpeg'});
+        res.writeHead(200, { 'Content-Type': 'image/jpeg' });
         res.end(imageData);
     })
 };
 
 module.exports.getProduct = async (req, res, next) => {
     const { userId, isAdmin } = req;
-    if(isAdmin) {
+    if (isAdmin) {
         await checkProduct.find({
             isCheck: false
         }, (err, product) => {
-            if(err) {
+            if (err) {
                 res.send({
                     success: false,
                     message: 'Server error when get product'
                 })
             }
 
-            if(product.length) {
+            if (product.length) {
                 res.send({
                     success: true,
                     isAdmin,
@@ -127,7 +127,7 @@ module.exports.getProduct = async (req, res, next) => {
                     message: "Get product successfully"
                 })
             }
-            
+
             else {
                 res.send({
                     success: false,
@@ -139,13 +139,13 @@ module.exports.getProduct = async (req, res, next) => {
         await checkProduct.find({
             userId: userId
         }, (err, product) => {
-            if(err) {
+            if (err) {
                 return res.send({
                     success: false,
                     message: 'Error: Server error'
                 })
             }
-            if(product.length) {
+            if (product.length) {
                 product.map(item => {
                     item.userId = jwt.sign({ userId: item.userId }, process.env.jwtKey)
                 })
@@ -163,57 +163,80 @@ module.exports.getProduct = async (req, res, next) => {
             }
         });
     }
-    
+
 };
 
 module.exports.checkProduct = async (req, res, next) => {
-    const { body, userId, token } = req;
+    const { body } = req;
+    console.log('run check');
     await checkProduct.findByIdAndUpdate({
         _id: body.id
     }, {
         $set: { isCheck: true }
     },
-    (err, product) => {
-        console.log(product);
-        if(err) {
-            res.send({
-                success: false,
-                message: 'Server error when check product'
-            })
-        }
-
-        if(product.length < 1) {
-            res.send({
-                success: false,
-                message: 'Product invalid'
-            })
-        }
-
-        let newProduct = new Product();
-        newProduct.images = product.images;
-        newProduct.name = product.name;
-        newProduct.price = product.price;
-        newProduct.author = product.author;
-        newProduct.description = product.description;
-        newProduct.category = product.category;
-        newProduct.isDeleted = product.isDeleted;
-        newProduct.seller = product.seller;
-        console.log("Product: ", product.author);
-        console.log("New product: ", newProduct.author);
-        newProduct.save((err, curProduct) => {
-            if(err) {
-                return res.send({
+        (err, product) => {
+            console.log(product);
+            if (err) {
+                res.send({
                     success: false,
-                    message: 'Server error when save product'
+                    message: 'Server error when check product'
+                })
+            }
+
+            if (product.length < 1) {
+                res.send({
+                    success: false,
+                    message: 'Product invalid'
+                })
+            }
+
+            let newProduct = new Product();
+            newProduct.images = product.images;
+            newProduct.name = product.name;
+            newProduct.price = product.price;
+            newProduct.author = product.author;
+            newProduct.description = product.description;
+            newProduct.category = product.category;
+            newProduct.isDeleted = product.isDeleted;
+            newProduct.seller = product.seller;
+            console.log("Create new product ");
+            newProduct.save((err, curProduct) => {
+                if (err) {
+                    return res.send({
+                        success: false,
+                        message: 'Server error when save product'
+                    })
+                } else {
+                    return res.send({
+                        success: true,
+                        message: 'Your product were checked'
+                    })
+                }
+            })
+        })
+};
+
+module.exports.refuseProduct = async (req, res, next) => {
+    const { body } = req;
+    console.log('run refuse');
+    await checkProduct.findByIdAndUpdate({
+        _id: body.id
+    }, {
+        $set: { isCheck: true, isDeleted: true }
+    },
+        (err, product) => {
+            if (err) {
+                res.send({
+                    success: false,
+                    message: 'Server error when check product'
                 })
             } else {
-                return res.send({
+                res.send({
                     success: true,
-                    message: 'Your product were checked'
+                    message: 'Your product is invalid'
                 })
             }
         })
-    })
 };
 
 module.exports.notifications = async (req, res, next) => {
@@ -224,21 +247,19 @@ module.exports.notifications = async (req, res, next) => {
         isCheck: true,
         seen: false
     })
-    
+
     await checkProduct.find({
         userId,
-        isCheck: true,
-        isDeleted: false
+        isCheck: true
     }, (err, list) => {
-        if(err) {
+        if (err) {
             res.send({
                 success: false,
                 message: 'Server error when check product'
             })
         }
-        console.log("List: ", list);
-        
-        if(userName) {
+
+        if (userName) {
             res.send({
                 success: true,
                 message: 'Respond data successfully',
@@ -268,7 +289,7 @@ module.exports.checkNotifications = async (req, res, next) => {
         $set: { seen: true }
     }, (err, product) => {
         console.log(product);
-        if(err) {
+        if (err) {
             res.send({
                 success: false,
                 message: 'Server error check notifications'
