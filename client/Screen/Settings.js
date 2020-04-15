@@ -20,9 +20,9 @@ class SettingScreen extends Component {
     _handleGetStatus = async () => {
         const { tokenSettings, nameSettings, isLoginSettings } = this.state;
         const { params } = this.props.route;
-        if(params) {
+        if (params) {
             const { token, name, isLogin } = params;
-            if(token) {
+            if (token) {
                 this.props.fetchNotification(`Bearer ${token}`);
                 this.setState({
                     tokenSettings: token,
@@ -41,8 +41,8 @@ class SettingScreen extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         let { token } = nextProps.route.params;
         const nextToken = token;
-        if(this.state.tokenSettings === nextToken) {
-            if(this.props.amount !== nextProps.amount) {
+        if (this.state.tokenSettings === nextToken) {
+            if (this.props.amount !== nextProps.amount) {
                 return true;
             }
             return false;
@@ -61,10 +61,10 @@ class SettingScreen extends Component {
         this.props.navigation.navigate('Notification');
     }
 
-    _handleLogOut = async() => {
+    _handleLogOut = async () => {
         await AsyncStorage.removeItem('token').then(() => {
             this.props.route.params.token = '';
-            this.setState({tokenSettings: '', nameSettings: '', isLoginSettings: false})
+            this.setState({ tokenSettings: '', nameSettings: '', isLoginSettings: false })
         })
     }
 
@@ -72,13 +72,13 @@ class SettingScreen extends Component {
         const { tokenSettings, nameSettings, isLoginSettings } = this.state;
         const { navigation, amount } = this.props;
         return (
-            <Container style={{backgroundColor: ColorBg}}>
-                <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>
+            <Container style={{ backgroundColor: ColorBg }}>
+                <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
                     <Body>
-                        <Title style={{fontSize: 26, color: '#D90368', fontWeight:'700', alignSelf: 'center'}}>Settings</Title>
+                        <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700', alignSelf: 'center' }}>Settings</Title>
                     </Body>
                 </Header>
-                <SettingListItem onCheckNotification={this._handleCheckNotification} amount={amount} tokenSettings={tokenSettings} navigation={navigation} nameSettings={nameSettings} isLoginSettings={isLoginSettings} handleLogOut={this._handleLogOut}/>
+                <SettingListItem onCheckNotification={this._handleCheckNotification} amount={amount} tokenSettings={tokenSettings} navigation={navigation} nameSettings={nameSettings} isLoginSettings={isLoginSettings} handleLogOut={this._handleLogOut} />
             </Container>
         )
     }

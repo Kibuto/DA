@@ -8,8 +8,7 @@ export default class CheckProduct extends Component {
     state = {
         products: [],
         msg: '',
-        isAdmin: false,
-        // message: ''
+        isAdmin: false
     }
 
     componentDidMount() {
@@ -26,14 +25,14 @@ export default class CheckProduct extends Component {
                 'Content-Type': 'application/json'
             })
         })
-        .then(res => res.json())
-        .then(json => {
-            if(json.success) {
-                this.setState({products: json.product, isAdmin: json.isAdmin});
-            } else {
-                this.setState({msg: json.message});
-            }
-        })
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    this.setState({ products: json.product, isAdmin: json.isAdmin });
+                } else {
+                    this.setState({ msg: json.message });
+                }
+            })
     }
 
     _handleCheckProduct = (id, index) => {
@@ -50,52 +49,85 @@ export default class CheckProduct extends Component {
                 id
             })
         })
-        .then(res => res.json())
-        .then(json => {
-            if(json.success) {
-                this.state.products.splice(index, 1);
-                this.setState({products: this.state.products})
-            } else {
-                console.log('Error')
-            }
-        })
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    this.state.products.splice(index, 1);
+                    this.setState({ products: this.state.products })
+                } else {
+                    console.log('Error')
+                }
+            })
     }
 
-    showAlert = (id, index) => {
+    _handleRefuseProduct = (id, index) => {
+        const { token } = this.props.route.params;
+        const bearer = `Bearer ${token}`;
+        fetch(`${HOST}/api/refuseProduct`, {
+            method: 'PUT',
+            headers: new Headers({
+                'Authorization': bearer,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({
+                id
+            })
+        })
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    this.state.products.splice(index, 1);
+                    this.setState({ products: this.state.products })
+                } else {
+                    console.log('Error')
+                }
+            })
+    }
+
+    showAlert = (id, index, type) => {
         Alert.alert(
             'Hello',
-            'Do you want to check this product?',
+            `Do you want to ${type ? 'check' : 'refuse'} this product?`,
             [
-                {text: 'OK', onPress: () => this._handleCheckProduct(id, index)},
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                },
+                {
+                    text: 'OK',
+                    onPress: () => type ? this._handleCheckProduct(id, index) : this._handleRefuseProduct(id, index)
+                },
             ],
-            {cancelable: false},
+            { cancelable: false },
         )
     }
 
     render() {
         const { products, msg, isAdmin } = this.state;
         return (
-            <Container style={{backgroundColor: ColorBg}}>
-                <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>
+            <Container style={{ backgroundColor: ColorBg }}>
+                <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
                     <Body>
-                        <Title style={{fontSize: 26, color: '#D90368', fontWeight:'700', alignSelf: 'center'}}>Info Product</Title>
+                        <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700', alignSelf: 'center' }}>Info Product</Title>
                     </Body>
                 </Header>
                 {
-                    msg.length === 0 ? 
-                    <FlatList
-                        data={products}
-                        renderItem={({ item, index }) => 
-                            <View style={styles.wrapper}>
-                                <CheckProductItem index={index} onPress={this.showAlert} isAdmin={isAdmin} product={item} />
-                            </View>
-                        }
-                        keyExtractor={(item) => `${item._id}`}
-                        contentContainerStyle={styles.container}
-                    /> : 
-                    <View style={styles.err}>
-                        <Text style={styles.text}>{msg}</Text>
-                    </View>
+                    msg.length === 0 ?
+                        <FlatList
+                            data={products}
+                            renderItem={({ item, index }) =>
+                                <View style={styles.wrapper}>
+                                    <CheckProductItem index={index} onPress={this.showAlert} isAdmin={isAdmin} product={item} />
+                                </View>
+                            }
+                            keyExtractor={(item) => `${item._id}`}
+                            contentContainerStyle={styles.container}
+                        /> :
+                        <View style={styles.err}>
+                            <Text style={styles.text}>{msg}</Text>
+                        </View>
                 }
             </Container>
         )
@@ -105,7 +137,7 @@ export default class CheckProduct extends Component {
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 10,
-        paddingTop: 20,
+        paddingTop: 30,
         backgroundColor: ColorBg
     },
     err: {
@@ -114,8 +146,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-        fontSize: 22, 
-        fontStyle: 'italic', 
+        fontSize: 22,
+        fontStyle: 'italic',
         fontWeight: '700'
     }
 })
