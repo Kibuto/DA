@@ -19,11 +19,11 @@ export default class OrderScreen extends Component {
                     <View style={styles.star}>
                         <AirbnbRating
                             count={5}
-                            defaultRating={4}
+                            defaultRating={notification ? 0 : 4}
                             size={20}
                             showRating={false}
                         />
-                        <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '700' }}>4</Text>
+                        <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '700' }}>{notification ? 0 : 4}</Text>
                     </View>
                     {
                         notification ? product.isDeleted ?
@@ -45,8 +45,13 @@ const styles = StyleSheet.create({
         paddingVertical: 0,
         borderRadius: 10,
         paddingHorizontal: 10,
-        borderWidth: 3,
-        borderColor: '#EEE'
+        shadowOffset: {
+            width: 0,
+            height: 0
+        },
+        shadowOpacity: .9,
+        shadowRadius: 10,
+        elevation: 4
     },
     productImg: {
         height: 180,

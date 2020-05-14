@@ -16,9 +16,9 @@ export default class DetailItem extends Component {
         return (
             <WallPaper img={item.images[0].url}>
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
-                    <View style={{height: 200}}/>
+                    <View style={{ height: 200 }} />
                     <View style={styles.content}>
-                        <Image resizeMode='contain' source={{ uri: item.images[0].url }} style={styles.img}/>
+                        <Image resizeMode='contain' source={{ uri: item.images[0].url }} style={styles.img} />
                         <Text style={styles.author}>{item.author}</Text>
                         <Text numberOfLines={3} ellipsizeMode='tail' style={styles.name}>{item.name}</Text>
                         <Text numberOfLines={6} ellipsizeMode='tail' style={styles.description}>{item.description}</Text>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     content: {
-        backgroundColor:'#E9EBEA',
+        backgroundColor: '#E9EBEA',
         textAlign: 'center',
         paddingVertical: 50,
         paddingHorizontal: 20,
@@ -81,7 +81,14 @@ const styles = StyleSheet.create({
         marginTop: 15,
         borderRadius: 10,
         backgroundColor: '#D90368',
-        paddingVertical: 12
+        paddingVertical: 12,
+        shadowOffset: {
+            width: 0,
+            height: 0
+        },
+        shadowOpacity: .9,
+        shadowRadius: 10,
+        elevation: 10
     },
     text_btn: {
         color: '#000',

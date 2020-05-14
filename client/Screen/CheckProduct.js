@@ -110,7 +110,7 @@ export default class CheckProduct extends Component {
             <Container style={{ backgroundColor: ColorBg }}>
                 <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
                     <Body>
-                        <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700', alignSelf: 'center' }}>Info Product</Title>
+                        <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700', alignSelf: 'center' }}>Follow Product</Title>
                     </Body>
                 </Header>
                 {

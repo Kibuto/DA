@@ -4,11 +4,11 @@ export default class CategoryListItem extends Component {
 
     _handleRandomColor = () => {
         const { random } = this.props;
-        let index = Math.round(random()*10);
-        if(index < 3) {
+        let index = Math.round(random() * 10);
+        if (index < 3) {
             return '#4C7C9B';
         }
-        else if(index < 7) {
+        else if (index < 7) {
             return '#B9314F';
         }
         else {
@@ -19,9 +19,9 @@ export default class CategoryListItem extends Component {
     render() {
         const { category, onPress } = this.props;
         return (
-            <TouchableOpacity onPress={onPress} style={[styles.container, {backgroundColor: this._handleRandomColor()}]} activeOpacity={0.5}>
+            <TouchableOpacity onPress={onPress} style={[styles.container, { backgroundColor: this._handleRandomColor() }]} activeOpacity={0.5}>
                 <Text style={styles.header}>{category.name}</Text>
-                <View style={{elevation: 1, position: 'relative'}}>
+                <View style={{ elevation: 1, position: 'relative' }}>
                     <View style={styles.boxShadow} />
                     <Image resizeMode='stretch' style={styles.categoryImg} source={{ uri: category.img }} />
                 </View>
@@ -35,7 +35,14 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         paddingHorizontal: 32,
         borderRadius: 10,
-        marginBottom: 16
+        marginBottom: 16,
+        shadowOffset: {
+            width: 0,
+            height: 0
+        },
+        shadowOpacity: .9,
+        shadowRadius: 10,
+        elevation: 4
     },
     header: {
         textAlign: 'center',
@@ -50,14 +57,14 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     boxShadow: {
-        backgroundColor: '#000', 
-        position: "absolute", 
-        top: 3, 
-        left: 6, 
-        height: '95%', 
-        width: `100%`, 
-        borderRadius: 8, 
-        opacity: 0.3 
+        backgroundColor: '#000',
+        position: "absolute",
+        top: 3,
+        left: 6,
+        height: '95%',
+        width: `100%`,
+        borderRadius: 8,
+        opacity: 0.3
     }
 });
 // import React from 'react';
