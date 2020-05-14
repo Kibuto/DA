@@ -15,59 +15,69 @@ export class CartProvider extends Component {
     this.addToCart = this.addToCart.bind(this);
     this.countIncrease = this.countIncrease.bind(this);
     this.removeFromCart = this.removeFromCart.bind(this);
+    this.deleteFromCart = this.deleteFromCart.bind(this);
   }
 
   countIncrease(product) {
-    // const { cartItems, sum, amount } = this.state;
     this.setState({
-        cartItems: this.state.cartItems.map(item => {
-            if (item.id === product.id) {
-                item.quantity = item.quantity + 1;
-            }
-            return item;
-        }),
-        sum: this.state.sum += parseFloat(product.price.split('.').join('')),
-        amount: this.state.amount + 1
+      cartItems: this.state.cartItems.map(item => {
+        if (item._id === product._id) {
+          item.quantity = item.quantity + 1;
+        }
+        return item;
+      }),
+      sum: this.state.sum += parseFloat(product.price.split('.').join('')),
+      amount: this.state.amount + 1
     });
   }
- 
-  removeFromCart(product){
-    // const { cartItems, sum, amount } = this.state;
-    if(product.quantity >= 2) {
+
+  removeFromCart(product) {
+    if (product.quantity >= 2) {
       this.setState({
-          cartItems: this.state.cartItems.map(item => {
-              if (item.name.toLowerCase() === product.name.toLowerCase()) {
-                  item.quantity = item.quantity - 1;
-              }
-              return item;
-          }),
-          sum: this.state.sum -= parseFloat(product.price.split('.').join('')),
-          amount: this.state.amount - 1
+        cartItems: this.state.cartItems.map(item => {
+          if (item._id === product._id) {
+            item.quantity = item.quantity - 1;
+          }
+          return item;
+        }),
+        sum: this.state.sum -= parseFloat(product.price.split('.').join('')),
+        amount: this.state.amount - 1
       });
     } else {
-      const filt = this.state.cartItems.filter( item =>  item.id !== product.id )
-        this.setState({
-          cartItems: filt,
-          amount: this.state.amount - 1,
-          sum: this.state.sum -= parseFloat(product.price.split('.').join(''))
-        })
+      const filt = this.state.cartItems.filter(item => item._id !== product._id);
+      this.setState({
+        cartItems: filt,
+        amount: this.state.amount - 1,
+        sum: this.state.sum -= parseFloat(product.price.split('.').join(''))
+      })
     }
   }
 
+  deleteFromCart(product) {
+    console.log("delete product: ", product);
+    const filt = this.state.cartItems.filter(item => item._id !== product._id);
+    console.log("filt: ", filt);
+    this.setState({
+      cartItems: filt,
+      amount: this.state.amount - product.quantity,
+      sum: this.state.sum -= parseFloat(product.price.split('.').join('') * product.quantity)
+    })
+  }
+
   addToCart(product) {
-    //const { cartItems, amount, sum } = this.state;
     let find = this.state.cartItems.find(
-        item => item.name.toLowerCase() === product.name.toLowerCase()
+      item => item._id === product._id
     );
-    if(find === undefined) {
-        const productWithQuantity = { ...product, quantity: 1 };
-        this.setState({
-            cartItems: [...this.state.cartItems, productWithQuantity],
-            amount: this.state.amount + 1,
-            sum: this.state.sum += parseFloat(product.price.split('.').join(''))
-        });
+    console.log('find: ', find);
+    if (!find) {
+      const productWithQuantity = { ...product, quantity: 1 };
+      this.setState({
+        cartItems: [...this.state.cartItems, productWithQuantity],
+        amount: this.state.amount + 1,
+        sum: this.state.sum += parseFloat(product.price.split('.').join(''))
+      });
     } else {
-        this.countIncrease(product);
+      this.countIncrease(product);
     }
   }
 
@@ -105,6 +115,7 @@ export class CartProvider extends Component {
           addToCart: this.addToCart,
           countIncrease: this.countIncrease,
           removeFromCart: this.removeFromCart,
+          deleteFromCart: this.deleteFromCart,
           amount: this.state.amount,
           sum: this.state.sum
         }}

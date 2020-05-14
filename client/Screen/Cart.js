@@ -7,46 +7,44 @@ import CartListItem from '../Components/CartListItem';
 import { ColorHeader } from '../key';
 export default class CartScreen extends Component {
 
-    static navigationOptions = {
-        headerTitleAlign: {
-            textAlign: 'center'
-        }
-    };
+    // _handleOnOrder = () => {
+
+    // }
 
     render() {
         return (
             <CartContext.Consumer>
-                {   
-                    ({ cartItems, countIncrease, removeFromCart, sum }) => (
-                        cartItems.length < 1 ? 
-                        <View style={[styles.container_indicator, styles.horizontal]}>
-                            <ActivityIndicator size='large' color="#0000ff"/>
-                            <Text style={styles.text}>Thêm đồ vào giỏ hàng đi nào</Text>
-                        </View> : 
-                        <>
-                            <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>
-                                <Body>
-                                    <Title style={{fontSize: 26, color: '#D90368', fontWeight:'700', alignSelf: 'center'}}>Cart</Title>
-                                </Body>
-                            </Header>
-                            <FlatList 
-                                data={cartItems}
-                                renderItem={({ item }) =>
-                                    <CartListItem item={item} countIncrease={countIncrease} removeFromCart={removeFromCart}/>
-                                }
-                                keyExtractor={(item) => `${item.id}`}
-                                contentContainerStyle={styles.container}
-                            />
-                            <View style={styles.footer}>
-                                <Text style={styles.total}>{_changeFormatToVND(sum)}</Text>
-                                <TouchableOpacity style={styles.btn}>
-                                    <Text style={styles.text_btn}>Order</Text>
-                                </TouchableOpacity> 
-                            </View>
-                            {/* <TouchableOpacity style={styles.btn}>
+                {
+                    ({ cartItems, countIncrease, removeFromCart, deleteFromCart, sum }) => (
+                        cartItems.length < 1 ?
+                            <View style={[styles.container_indicator, styles.horizontal]}>
+                                <ActivityIndicator size='large' color="#0000ff" />
+                                <Text style={styles.text}>Thêm đồ vào giỏ hàng đi nào</Text>
+                            </View> :
+                            <>
+                                <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
+                                    <Body>
+                                        <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700', alignSelf: 'center' }}>Cart</Title>
+                                    </Body>
+                                </Header>
+                                <FlatList
+                                    data={cartItems}
+                                    renderItem={({ item }) =>
+                                        <CartListItem item={item} countIncrease={countIncrease} removeFromCart={removeFromCart} deleteFromCart={deleteFromCart} />
+                                    }
+                                    keyExtractor={(item) => `${item._id}`}
+                                    contentContainerStyle={styles.container}
+                                />
+                                <View style={styles.footer}>
+                                    <Text style={styles.total}>{_changeFormatToVND(sum)}</Text>
+                                    <TouchableOpacity style={styles.btn}>
+                                        <Text style={styles.text_btn}>Order</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                {/* <TouchableOpacity style={styles.btn}>
                                 <Text style={styles.text_btn}>Order - <Text style={styles.total}>{_changeFormatToVND(sum)}</Text></Text>
                             </TouchableOpacity> */}
-                        </>
+                            </>
                     )
                 }
             </CartContext.Consumer>
@@ -65,7 +63,7 @@ const styles = StyleSheet.create({
     },
     container: {
         paddingTop: 16,
-        paddingHorizontal: 8
+        paddingHorizontal: 12
     },
     btn: {
         width: `40%`,
