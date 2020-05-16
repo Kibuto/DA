@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { _changeFormatToK } from '../utils/Number';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function CartListItem(props) {
     const { item, countIncrease, removeFromCart, deleteFromCart } = props;
@@ -74,7 +73,8 @@ const styles = StyleSheet.create({
         shadowOpacity: .9,
         shadowRadius: 10,
         elevation: 4,
-        position: "relative"
+        position: "relative",
+        height: 110
     },
     content: {
         flex: 1,

@@ -35,11 +35,11 @@ export default class DetailItem extends Component {
 
 const styles = StyleSheet.create({
     img: {
-        height: 150,
+        height: 200,
         borderRadius: 5
     },
     content: {
-        backgroundColor: '#E9EBEA',
+        backgroundColor: '#fdf0d5', //d6e3f8
         textAlign: 'center',
         paddingVertical: 50,
         paddingHorizontal: 20,
