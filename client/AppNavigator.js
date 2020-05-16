@@ -16,7 +16,7 @@ import Cart from './Screen/Cart';
 import Settings from './Screen/Settings';
 import Orders from './Screen/Order';
 import CheckProduct from './Screen/CheckProduct';
-import LogoTitle from './Components/LogoTitle';
+import Welcome from './Screen/Welcome';
 import Notification from './Screen/Notifications';
 import { CartContext } from './contexts/Cart';
 import * as firebase from 'firebase';
@@ -46,8 +46,8 @@ function getHeaderTitle(route) {
 
 function TabNavigator(props) {
   return (
-    <TabBottom.Navigator 
-      tabBarOptions={{style: {backgroundColor: '#000'}}}
+    <TabBottom.Navigator
+      tabBarOptions={{ style: { backgroundColor: '#000' } }}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ size, color }) => {
           let iconName;
@@ -67,18 +67,18 @@ function TabNavigator(props) {
       <TabBottom.Screen name='Home' component={Home} />
       <TabBottom.Screen name="Categories" component={Categories} />
       <TabBottom.Screen name="Cart" component={Cart} options={{
-        tabBarIcon: ({size, color}) => 
-        <View style={{position: 'relative'}}>
-          <Ionicons name='ios-cart' size={size} color={color}/>
-          <CartContext.Consumer>
-            {({ amount }) => (
-              <Badge status='error' value={amount} containerStyle={{ position: 'absolute', top: -4, right: -10 }} />
-            )}
-          </CartContext.Consumer>
-        </View>
-      }}/>
+        tabBarIcon: ({ size, color }) =>
+          <View style={{ position: 'relative' }}>
+            <Ionicons name='ios-cart' size={size} color={color} />
+            <CartContext.Consumer>
+              {({ amount }) => (
+                <Badge status='error' value={amount} containerStyle={{ position: 'absolute', top: -4, right: -10 }} />
+              )}
+            </CartContext.Consumer>
+          </View>
+      }} />
       <TabBottom.Screen name="Orders" component={Orders} />
-      <TabBottom.Screen name="Settings" component={Settings}/>
+      <TabBottom.Screen name="Settings" component={Settings} />
     </TabBottom.Navigator>
   )
 }
@@ -88,19 +88,20 @@ const Stack = createStackNavigator();
 export default function AppNavigator(props) {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerTransparent: true, headerTitle: null, headerTintColor: '#D90368'}}>
-        <Stack.Screen 
-          name='Home' 
-          component={TabNavigator} 
-          options={{ headerTitle: null, headerTransparent: true}}
-          // options={({ route }) => ({
-          //   headerTitle: getHeaderTitle(route),
-          //   headerTitleAlign: 'center'
-          // })}
+      <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: null, headerTintColor: '#D90368' }}>
+        <Stack.Screen name='Welcome' component={Welcome} />
+        <Stack.Screen
+          name='Home'
+          component={TabNavigator}
+          options={{ headerTitle: null, headerTransparent: true, headerLeft: null }}
+        // options={({ route }) => ({
+        //   headerTitle: getHeaderTitle(route),
+        //   headerTitleAlign: 'center'
+        // })}
         />
-        <Stack.Screen name='Login' component={LogIn} options={{headerTitle: null, headerTransparent: true}}/>
-        <Stack.Screen name='Products' component={Products}/>
-        <Stack.Screen name='Detail' component={Detail} options={{headerTitle: null, headerTransparent: true}}/>
+        <Stack.Screen name='Login' component={LogIn} options={{ headerTitle: null, headerTransparent: true }} />
+        <Stack.Screen name='Products' component={Products} />
+        <Stack.Screen name='Detail' component={Detail} options={{ headerTitle: null, headerTransparent: true }} />
         <Stack.Screen name='Register' component={Register} />
         <Stack.Screen name='Create' component={Create} />
         <Stack.Screen name='Loading' component={Loading} />
