@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image } from 'react-native';
-import { Container, Header, Title, Body } from "native-base";
+import { Container, Header, Title, Body, Content } from "native-base";
 import { connect } from 'react-redux';
 import { fetchProductsLikeRequest, fetchProductsHomeRequest, changeTypesHome } from '../actions';
 import HomeListItem from '../Components/HomeListItem';
@@ -30,11 +30,11 @@ class Home extends Component {
             <Container style={{ backgroundColor: ColorBg }}>
                 <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
                     <Body>
-                        <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700', alignSelf: 'center' }}>Home</Title>
+                        <Title style={styles.title_header}>Home</Title>
                     </Body>
                 </Header>
-                <Image resizeMode='stretch' style={{ height: 150, borderRadius: 20, marginBottom: 15 }} source={{ uri: 'https://www.netguru.co/hubfs/Blog_posts_-_images/pexels-photo-46274.jpeg' }} />
-                <View>
+                <Content>
+                    <Image resizeMode='stretch' style={styles.image} source={{ uri: 'https://www.netguru.co/hubfs/Blog_posts_-_images/pexels-photo-46274.jpeg' }} />
                     <FlatList
                         data={types}
                         renderItem={({ item, index, separators }) =>
@@ -60,7 +60,7 @@ class Home extends Component {
                         showsHorizontalScrollIndicator={false}
                     />
 
-                    <Text style={{ fontSize: 18, fontWeight: '700', marginLeft: 12, marginVertical: 10 }}>You may also like</Text>
+                    <Text style={styles.title}>You may also like</Text>
                     <FlatList
                         data={like}
                         renderItem={({ item, index }) =>
@@ -71,7 +71,7 @@ class Home extends Component {
                         contentContainerStyle={{ marginLeft: 5 }}
                         showsHorizontalScrollIndicator={false}
                     />
-                </View>
+                </Content>
             </Container>
         )
     }
@@ -87,10 +87,27 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    title_header: {
+        fontSize: 26,
+        color: '#D90368',
+        fontWeight: '700',
+        alignSelf: 'center'
+    },
+    image: {
+        height: 150,
+        borderRadius: 20,
+        marginBottom: 15
+    },
     horizontal: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 10
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: '700',
+        marginLeft: 12,
+        marginVertical: 10
     },
     err: {
         flex: 1,

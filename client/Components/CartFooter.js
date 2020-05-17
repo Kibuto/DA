@@ -8,8 +8,8 @@ export default function CartFooter(props) {
     const { amount, sum, navigation } = props;
     return (
         <View style={styles.footer}>
-            <View style={{position: 'relative'}}>
-                <Ionicons name='ios-folder-open' size={24} color='#ddd'/>
+            <View style={{ position: 'relative' }}>
+                <Ionicons name='ios-folder-open' size={24} color='#ddd' />
                 <Badge status='error' value={amount} containerStyle={{ position: 'absolute', top: -4, right: -10 }} />
             </View>
             <Text style={styles.total}>{_changeFormatToVND(sum)}</Text>

@@ -18,39 +18,45 @@ class ProductScreen extends Component {
         const { navigation, route, products } = this.props;
         const { categoryProduct } = route.params;
         return (
-            <SafeAreaView style={{flex: 1}}>
-                <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>
+            <SafeAreaView style={{ flex: 1 }}>
+                <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
                     <Left>
                         <Button transparent >
-                            <Icon style={{color: '#D90368'}} name='arrow-back' />
+                            <Icon style={{ color: '#D90368' }} name='arrow-back' />
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{fontSize: 26, fontWeight: '700', color: '#D90368'}}>{categoryProduct.name}</Title>
+                        <Title style={{ fontSize: 26, fontWeight: '700', color: '#D90368' }}>{categoryProduct.name}</Title>
                     </Body>
                     <Right>
                         <Button transparent>
-                            <Icon style={{color: '#D90368'}} name='search' />
+                            <Icon style={{ color: '#D90368' }} name='search' />
                         </Button>
                     </Right>
                 </Header>
-                <FlatList
-                    data={products}
-                    renderItem={({ item }) => 
-                        <View style={styles.wrapper}>
-                            <ProductListItem notification={false} product={item} onSwitchScreen={() => navigation.navigate('Detail', { product: item })} />
-                        </View>
-                    }
-                    keyExtractor={(item) => `${item._id}`}
-                    contentContainerStyle={styles.container}
-                />
-                {/* <CartContext.Consumer>
+                {
+                    products.length === 0 ?
+                        <View style={[styles.container_indicator, styles.horizontal]}>
+                            <ActivityIndicator size='large' color="#0000ff" />
+                        </View> :
+                        <FlatList
+                            data={products}
+                            renderItem={({ item }) =>
+                                <View style={styles.wrapper}>
+                                    <ProductListItem notification={false} product={item} onSwitchScreen={() => navigation.navigate('Detail', { product: item })} />
+                                </View>
+                            }
+                            keyExtractor={(item) => `${item._id}`}
+                            contentContainerStyle={styles.container}
+                        />
+                }
+                <CartContext.Consumer>
                     {
                         ({ amount, sum }) => (
                             sum ? <CartFooter navigation={navigation} amount={amount} sum={sum} /> : null
                         )
                     }
-                </CartContext.Consumer> */}
+                </CartContext.Consumer>
             </SafeAreaView>
         )
     }

@@ -20,7 +20,7 @@ export default class CategoryListItem extends Component {
         const { category, onPress } = this.props;
         return (
             <TouchableOpacity onPress={onPress} style={[styles.container, { backgroundColor: this._handleRandomColor() }]} activeOpacity={0.5}>
-                <Text style={styles.header}>{category.name}</Text>
+                <Text numberOfLines={1} style={styles.header}>{category.name}</Text>
                 <View style={{ elevation: 1, position: 'relative' }}>
                     <View style={styles.boxShadow} />
                     <Image resizeMode='stretch' style={styles.categoryImg} source={{ uri: category.img }} />
