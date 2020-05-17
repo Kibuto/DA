@@ -14,7 +14,7 @@ export default (state, action) => {
                 products: action.products
             };
         }
-        /* ======================Will Repair in the future========================= */ 
+        /* ======================Will Repair in the future========================= */
         case Types.FETCH_PRODUCTSHOME: {
             return {
                 ...state,
@@ -28,7 +28,14 @@ export default (state, action) => {
                 typesHome: action.typesList
             }
         }
-        /* =============================================== */ 
+
+        case Types.FETCH_PRODUCTSLIKE: {
+            return {
+                ...state,
+                categoriesLike: action.categoriesLike
+            }
+        }
+        /* =============================================== */
 
         case Types.FETCH_NOTIFICATIONS: {
             return {
@@ -44,7 +51,14 @@ export default (state, action) => {
                 amountNotifications: 0
             }
         }
-       default:
-           return state;
+
+        case Types.ADDTOCART: {
+            return {
+                ...state,
+                cartItem: [...state.cartItem, action.product]
+            }
+        }
+        default:
+            return state;
     }
 }

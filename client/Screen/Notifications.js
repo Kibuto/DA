@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Title, Button, Icon, Left, Body, Right } from "native-base";
 import ProductListItem from '../Components/ProductListItem';
@@ -25,16 +25,22 @@ class Notifications extends Component {
                         </Button>
                     </Right>
                 </Header>
-                <FlatList
-                    data={list}
-                    renderItem={({ item }) =>
-                        <View style={styles.wrapper}>
-                            <ProductListItem notification={true} product={item} />
+                {
+                    list.length ?
+                        <FlatList
+                            data={list}
+                            renderItem={({ item }) =>
+                                <View style={styles.wrapper}>
+                                    <ProductListItem notification={true} product={item} />
+                                </View>
+                            }
+                            keyExtractor={(item) => `${item._id}`}
+                            contentContainerStyle={styles.container}
+                        /> :
+                        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                            <Text style={{ fontSize: 18 }}>Don't have notification</Text>
                         </View>
-                    }
-                    keyExtractor={(item) => `${item._id}`}
-                    contentContainerStyle={styles.container}
-                />
+                }
             </Container>
         )
     }

@@ -24,8 +24,8 @@ export default class CheckProduct extends Component {
                                     <Text style={styles.text_btn}>Refuse</Text>
                                 </TouchableOpacity>
                             </View> :
-                            <Button block rounded disabled success={product.isCheck}>
-                                <Text style={styles.text_btn}>{product.isCheck ? 'Checked' : product.isDeleted ? "Refused" : "Pending..."}</Text>
+                            <Button block rounded disabled danger={product.isDeleted ? true : false} success={product.isCheck ? product.isDeleted ? false : true : false}>
+                                <Text style={styles.text_btn}>{product.isCheck ? product.isDeleted ? "Refused" : "Checked" : "Pending..."}</Text>
                             </Button>
                     }
                 </View>

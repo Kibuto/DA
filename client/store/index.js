@@ -4,6 +4,7 @@ import reducer from '../reducers';
 const initialState = {
     categories: [],
     products: [],
+    categoriesLike: [],
     categoriesHome: [],
     typesHome: [
         {
@@ -11,13 +12,13 @@ const initialState = {
             title: 'All',
             selected: true,
             category: 'Romance'
-        }, 
+        },
         {
             id: 2,
             title: 'Recommended',
             selected: false,
             category: 'Mystery'
-        }, 
+        },
         {
             id: 3,
             title: 'Popular books',
@@ -32,6 +33,7 @@ const initialState = {
         }
     ],
     amountNotifications: 0,
-    listNotifications: []
+    listNotifications: [],
+    cartItem: []
 };
 export const store = createStore(reducer, initialState, applyMiddleware(thunk));
