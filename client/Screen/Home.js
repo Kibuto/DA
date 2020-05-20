@@ -64,11 +64,11 @@ class Home extends Component {
                     <FlatList
                         data={like}
                         renderItem={({ item, index }) =>
-                            <HomeListItem onPress={() => navigation.navigate('Detail', { product: item })} index={index} length={like.length - 1} category={false} product={item} />
+                            <HomeListItem onPress={() => navigation.navigate('Detail', { product: item })} index={index} length={like.length - 1} category={false} order={false} product={item} />
                         }
                         horizontal={true}
                         keyExtractor={(item) => `${item._id}`}
-                        contentContainerStyle={{ marginLeft: 5 }}
+                        contentContainerStyle={{ paddingHorizontal: 10 }}
                         showsHorizontalScrollIndicator={false}
                     />
                 </Content>

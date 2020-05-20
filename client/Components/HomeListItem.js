@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { AirbnbRating } from 'react-native-elements';
+import { AirbnbRating, Button, Icon } from 'react-native-elements';
 export default class Home extends Component {
     render() {
-        const { product, category, index, length, onPress } = this.props;
+        const { product, category, index, length, onPress, order, deleteFromCart } = this.props;
         return (
             <>
                 {
@@ -29,9 +29,23 @@ export default class Home extends Component {
                                 </View>
                             </View>
                         </TouchableOpacity> :
-                        <TouchableOpacity onPress={onPress} style={length === index && { marginRight: 10 }} activeOpacity={0.9}>
+                        <TouchableOpacity onPress={order ? null : onPress} style={{ position: 'relative' }} activeOpacity={0.9}>
+                            {order ? <Button
+                                onPress={() => deleteFromCart(product)}
+                                containerStyle={{ backgroundColor: 'red', position: 'absolute', top: 0, right: '6%', zIndex: 2 }}
+                                buttonStyle={{ backgroundColor: 'red', borderRadius: 5 }}
+                                icon={
+                                    <Icon
+                                        name="ios-close"
+                                        size={12}
+                                        type='ionicon'
+                                        color="white"
+                                    />
+                                }
+                            /> : null}
                             <Image resizeMode='contain' style={styles.productImg_false} source={{ uri: product.images[0].url }} />
                             <Text numberOfLines={1} ellipsizeMode='tail' style={styles.author_false}>{product.author}</Text>
+                            {order ? <Text style={styles.author_false}>x{product.quantity}</Text> : null}
                         </TouchableOpacity>
                 }
             </>
@@ -58,7 +72,8 @@ const styles = StyleSheet.create({
             width: 0
         },
         elevation: 5,
-        margin: 5
+        margin: 5,
+        marginBottom: 10
     },
     productImg_true: {
         height: 160,
@@ -69,7 +84,7 @@ const styles = StyleSheet.create({
     productImg_false: {
         height: 160,
         width: 120,
-        borderRadius: 10
+        borderRadius: 5
     },
     header: {
         fontSize: 24,

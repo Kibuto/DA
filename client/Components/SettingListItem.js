@@ -10,7 +10,7 @@ export default class SettingListItem extends Component {
             <Content>
                 <View style={{ backgroundColor: '#ff9f1c', borderRadius: 10, alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, width: '70%', marginVertical: 10, shadowRadius: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: .9 }}>
                     {isLoginSettings ? <Image source={Avatar} style={{ height: 60, width: 60, borderRadius: 10 }} /> : null}
-                    <Text style={{ fontSize: 19, textAlign: 'center', fontWeight: 'bold', marginLeft: 10 }}>Hi <Text style={{ fontStyle: 'italic' }}>{isLoginSettings ? nameSettings : 'There'}</Text></Text>
+                    <Text style={{ fontSize: 19, textAlign: 'center', fontWeight: 'bold', marginLeft: 10 }}>Hi <Text style={{ fontStyle: 'italic', textTransform: 'capitalize' }}>{isLoginSettings ? nameSettings : 'There'}</Text></Text>
                 </View>
                 <Text style={styles.title}>Account</Text>
                 <View style={styles.container}>

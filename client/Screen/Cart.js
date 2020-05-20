@@ -1,12 +1,34 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, ImageBackground, Alert } from 'react-native';
 import { CartContext } from '../contexts/Cart';
 import { _changeFormatToVND } from '../utils/Number';
 import { Container, Header, Title, Body } from "native-base";
 import CartListItem from '../Components/CartListItem';
 import { ColorHeader } from '../key';
+import { _handleGetFromStorage } from '../utils/Storage';
 import EmptyCart from '../images/emptyCart.png';
 export default class CartScreen extends Component {
+
+    _handleOrder = async () => {
+        const token = await _handleGetFromStorage('token');
+        if (token) {
+            this.props.navigation.navigate('OrderConfirmation');
+        } else {
+            this.showAlert();
+        }
+    }
+
+    showAlert = () => {
+        const { navigation } = this.props;
+        Alert.alert(
+            `TiTi Store says:`,
+            'You must login to order products',
+            [
+                { text: 'OK', onPress: () => navigation.navigate('Login') },
+            ]
+        )
+    }
+
     render() {
         return (
             <CartContext.Consumer>
@@ -33,7 +55,7 @@ export default class CartScreen extends Component {
                                         />
                                         <View style={styles.footer}>
                                             <Text style={styles.total}>{_changeFormatToVND(sum)}</Text>
-                                            <TouchableOpacity style={styles.btn}>
+                                            <TouchableOpacity onPress={this._handleOrder} style={styles.btn}>
                                                 <Text style={styles.text_btn}>Order</Text>
                                             </TouchableOpacity>
                                         </View>

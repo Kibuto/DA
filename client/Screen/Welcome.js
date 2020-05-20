@@ -10,7 +10,7 @@ export default class Welcome extends PureComponent {
                     <Text style={styles.text}>We make it for you.</Text>
                 </View>
                 <View style={styles.wrapper_bottom}>
-                    <Text style={styles.text}>You read it for youself.</Text>
+                    <Text style={styles.text}>You read it for yourself.</Text>
                 </View>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')} activeOpacity={.6} style={styles.btn}>
                     <Text style={styles.text_btn}>Get Started</Text>
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     },
     btn: {
         position: 'absolute',
-        bottom: '2%',
+        bottom: '1%',
         backgroundColor: '#f4a261',
         paddingVertical: 15,
         width: '90%',
