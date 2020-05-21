@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Container, Header, Content } from "native-base";
 import { ColorBg, ColorHeader, HOST } from '../key';
 import { _changeFormatToVND } from '../utils/Number';
 import { CartContext } from '../contexts/Cart';
 import HomeListItem from '../Components/HomeListItem';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 export default class OrderConfirmation extends PureComponent {
     render() {
         return (
@@ -22,7 +21,15 @@ export default class OrderConfirmation extends PureComponent {
                                     <FlatList
                                         data={cartItems}
                                         renderItem={({ item, index }) =>
-                                            <HomeListItem onPress={() => navigation.navigate('Detail', { product: item })} index={index} length={cartItems.length - 1} category={false} order={true} product={item} deleteFromCart={deleteFromCart} />
+                                            <HomeListItem
+                                                onPress={() => navigation.navigate('Detail', { product: item })}
+                                                index={index}
+                                                length={cartItems.length - 1}
+                                                category={false}
+                                                order={true}
+                                                product={item}
+                                                deleteFromCart={deleteFromCart}
+                                            />
                                         }
                                         horizontal={true}
                                         keyExtractor={(item) => `${item._id}`}
@@ -53,7 +60,11 @@ export default class OrderConfirmation extends PureComponent {
                             )
                         }
                     </CartContext.Consumer>
-                    <TouchableOpacity activeOpacity={.6} style={styles.btn}>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('ConfirmInfo')}
+                        activeOpacity={.6}
+                        style={styles.btn}
+                    >
                         <Text style={styles.btn_text}>Confirm info</Text>
                     </TouchableOpacity>
                 </Content>

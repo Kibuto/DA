@@ -11,13 +11,10 @@ export default class Home extends Component {
                         <TouchableOpacity style={styles.container} activeOpacity={0.9} onPress={onPress}>
                             <View style={styles.content_left}>
                                 <Image resizeMode='stretch' style={styles.productImg_true} source={{ uri: product.images[0].url }} />
-                                {/* <View style={styles.boxShadow} /> */}
                             </View>
                             <View style={styles.content_right}>
                                 <Text numberOfLines={1} ellipsizeMode='tail' style={styles.name}>{product.name}</Text>
-                                {/* <Text numberOfLines={1} ellipsizeMode='tail' style={{ marginBottom: 3}}>by <Text style={styles.author_true}>{product.author}</Text></Text> */}
                                 <Text style={styles.description} numberOfLines={3} ellipsizeMode='tail'>{product.description}</Text>
-                                {/* <Text style={{alignSelf: 'flex-end', color: '#666', marginBottom: 3}}>Seller <Text style={styles.seller}>{product.seller}</Text></Text> */}
                                 <View style={styles.star}>
                                     <AirbnbRating
                                         count={5}
@@ -96,16 +93,6 @@ const styles = StyleSheet.create({
         position: 'relative',
         justifyContent: 'center',
         borderRadius: 10
-    },
-    boxShadow: {
-        backgroundColor: '#000',
-        opacity: .5,
-        position: 'absolute',
-        height: `88%`,
-        width: `100%`,
-        bottom: 8,
-        left: 5,
-        borderRadius: 8
     },
     content_right: {
         flex: 3 / 5,

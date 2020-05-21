@@ -52,7 +52,11 @@ class Home extends Component {
                     <FlatList
                         data={categories}
                         renderItem={({ item }) =>
-                            <HomeListItem onPress={() => navigation.navigate('Detail', { product: item })} category={true} product={item} />
+                            <HomeListItem
+                                onPress={() => navigation.navigate('Detail', { product: item })}
+                                category={true}
+                                product={item}
+                            />
                         }
                         horizontal={true}
                         keyExtractor={(item) => `${item._id}`}
@@ -64,7 +68,14 @@ class Home extends Component {
                     <FlatList
                         data={like}
                         renderItem={({ item, index }) =>
-                            <HomeListItem onPress={() => navigation.navigate('Detail', { product: item })} index={index} length={like.length - 1} category={false} order={false} product={item} />
+                            <HomeListItem
+                                onPress={() => navigation.navigate('Detail', { product: item })}
+                                index={index}
+                                length={like.length - 1}
+                                category={false}
+                                order={false}
+                                product={item}
+                            />
                         }
                         horizontal={true}
                         keyExtractor={(item) => `${item._id}`}

@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 4,
         position: "relative",
-        height: 110
+        height: 120
     },
     content: {
         flex: 1,

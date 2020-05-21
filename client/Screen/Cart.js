@@ -4,7 +4,7 @@ import { CartContext } from '../contexts/Cart';
 import { _changeFormatToVND } from '../utils/Number';
 import { Container, Header, Title, Body } from "native-base";
 import CartListItem from '../Components/CartListItem';
-import { ColorHeader } from '../key';
+import { ColorHeader, ColorBg } from '../key';
 import { _handleGetFromStorage } from '../utils/Storage';
 import EmptyCart from '../images/emptyCart.png';
 export default class CartScreen extends Component {
@@ -31,40 +31,47 @@ export default class CartScreen extends Component {
 
     render() {
         return (
-            <CartContext.Consumer>
-                {
-                    ({ cartItems, countIncrease, removeFromCart, deleteFromCart, sum }) => (
+            <Container style={{ backgroundColor: ColorBg }}>
+                <CartContext.Consumer>
+                    {
+                        ({ cartItems, countIncrease, removeFromCart, deleteFromCart, sum }) => (
 
-                        <>
-                            <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
-                                <Body>
-                                    <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700', alignSelf: 'center' }}>Cart</Title>
-                                </Body>
-                            </Header>
-                            {
-                                cartItems.length < 1 ?
-                                    <ImageBackground resizeMode='contain' style={{ flex: 1 }} source={EmptyCart} /> :
-                                    <>
-                                        <FlatList
-                                            data={cartItems}
-                                            renderItem={({ item }) =>
-                                                <CartListItem item={item} countIncrease={countIncrease} removeFromCart={removeFromCart} deleteFromCart={deleteFromCart} />
-                                            }
-                                            keyExtractor={(item) => `${item._id}`}
-                                            contentContainerStyle={styles.container}
-                                        />
-                                        <View style={styles.footer}>
-                                            <Text style={styles.total}>{_changeFormatToVND(sum)}</Text>
-                                            <TouchableOpacity onPress={this._handleOrder} style={styles.btn}>
-                                                <Text style={styles.text_btn}>Order</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </>
-                            }
-                        </>
-                    )
-                }
-            </CartContext.Consumer>
+                            <>
+                                <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
+                                    <Body>
+                                        <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700', alignSelf: 'center' }}>Cart</Title>
+                                    </Body>
+                                </Header>
+                                {
+                                    cartItems.length < 1 ?
+                                        <ImageBackground resizeMode='contain' style={{ flex: 1 }} source={EmptyCart} /> :
+                                        <>
+                                            <FlatList
+                                                data={cartItems}
+                                                renderItem={({ item }) =>
+                                                    <CartListItem
+                                                        item={item}
+                                                        countIncrease={countIncrease}
+                                                        removeFromCart={removeFromCart}
+                                                        deleteFromCart={deleteFromCart}
+                                                    />
+                                                }
+                                                keyExtractor={(item) => `${item._id}`}
+                                                contentContainerStyle={styles.container}
+                                            />
+                                            <View style={styles.footer}>
+                                                <Text style={styles.total}>{_changeFormatToVND(sum)}</Text>
+                                                <TouchableOpacity onPress={this._handleOrder} style={styles.btn}>
+                                                    <Text style={styles.text_btn}>Order</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </>
+                                }
+                            </>
+                        )
+                    }
+                </CartContext.Consumer>
+            </Container>
         )
     }
 }
@@ -79,10 +86,8 @@ const styles = StyleSheet.create({
         padding: 10
     },
     container: {
-        flex: 1,
         paddingTop: 16,
-        paddingHorizontal: 12,
-        backgroundColor: '#fdf0d5'
+        paddingHorizontal: 12
     },
     btn: {
         width: `40%`,

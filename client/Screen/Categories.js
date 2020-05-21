@@ -14,33 +14,37 @@ class Categories extends Component {
         const { categories, navigation } = this.props;
         return (
             <>{
-                categories.length < 1 ? 
-                <View style={[styles.container_indicator, styles.horizontal]}>
-                    <ActivityIndicator size="large" color="#0000ff" />
-                </View> :
-                <>
-                    <Header style={{backgroundColor: ColorHeader}} androidStatusBarColor='#000' transparent>
-                        <Body>
-                            <Title style={{fontSize: 26, color: '#D90368', fontWeight:'700'}}>Categories</Title>
-                        </Body>
-                        <Right>
-                            <Button transparent>
-                                <Icon style={{color: '#D90368'}} name='menu' />
-                            </Button>
-                        </Right>
-                    </Header>
-                    <FlatList 
-                        data={categories}
-                        numColumns={2}
-                        renderItem={({ item }) =>
-                            <View style={{flex: 1, paddingHorizontal: 10}}>
-                                <CategoryListItem random={Math.random} category={item} onPress={() => navigation.navigate('Products', { categoryProduct: item })}/>
-                            </View>
-                        }
-                        keyExtractor={(item) => `${item._id}`}
-                        contentContainerStyle={styles.container}
-                    />
-                </>
+                categories.length < 1 ?
+                    <View style={[styles.container_indicator, styles.horizontal]}>
+                        <ActivityIndicator size="large" color="#0000ff" />
+                    </View> :
+                    <>
+                        <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
+                            <Body>
+                                <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700' }}>Categories</Title>
+                            </Body>
+                            <Right>
+                                <Button transparent>
+                                    <Icon style={{ color: '#D90368' }} name='menu' />
+                                </Button>
+                            </Right>
+                        </Header>
+                        <FlatList
+                            data={categories}
+                            numColumns={2}
+                            renderItem={({ item }) =>
+                                <View style={{ flex: 1, paddingHorizontal: 10 }}>
+                                    <CategoryListItem
+                                        random={Math.random}
+                                        category={item}
+                                        onPress={() => navigation.navigate('Products', { categoryProduct: item })}
+                                    />
+                                </View>
+                            }
+                            keyExtractor={(item) => `${item._id}`}
+                            contentContainerStyle={styles.container}
+                        />
+                    </>
             }</>
         )
     }
