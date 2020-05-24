@@ -12,6 +12,7 @@ const indexRoutesCategory = require('./routes/api/categories');
 const signInRoutes = require('./routes/api/auth');
 const signUpRoutes = require('./routes/api/auth');
 const verifyRoutes = require('./routes/api/auth');
+const order = require('./routes/api/order');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -21,7 +22,7 @@ app.use('/api', indexRoutesCategory);
 app.use('/api', signInRoutes);
 app.use('/api', signUpRoutes);
 app.use('/api', verifyRoutes);
-
+app.use('/api', order);
 app.listen(port, () => {
     console.log(`App running port ${port}`);
 });
