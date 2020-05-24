@@ -81,6 +81,14 @@ export class CartProvider extends Component {
     }
   }
 
+  clearCart = () => {
+    this.setState({
+      cartItems: [],
+      sum: 0,
+      amount: 0
+    })
+  }
+
   componentDidMount() {
     this._handleGetStorage();
   }
@@ -116,6 +124,7 @@ export class CartProvider extends Component {
           countIncrease: this.countIncrease,
           removeFromCart: this.removeFromCart,
           deleteFromCart: this.deleteFromCart,
+          clearCart: this.clearCart,
           amount: this.state.amount,
           sum: this.state.sum
         }}
