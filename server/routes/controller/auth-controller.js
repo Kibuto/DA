@@ -6,49 +6,6 @@ module.exports.signup = (req, res, next) => {
     const { body } = req;
     let { name, email, password, phone } = body;
 
-    // if(!name && !email && !password && !phone) {
-    //     return res.send({
-    //         success: false,
-    //         errorName: true,
-    //         errorEmail: true,
-    //         errorPassword: true,
-    //         errorPhone: true,
-    //         message: 'Fields cannot be blank'
-    //     })
-    // }
-
-    // if(!name) {
-    //     return res.send({
-    //         success: false,
-    //         errorName: true,
-    //         message: 'Name cannot be blank'
-    //     })
-    // }
-
-    // if(!email) {
-    //     return res.send({
-    //         success: false,
-    //         errorEmail: true,
-    //         message: 'Email cannot be blank'
-    //     })
-    // }
-
-    // if(!password) {
-    //     return res.send({
-    //         success: false,
-    //         errorPassword: true,
-    //         message: 'Password cannot be blank'
-    //     })
-    // }
-
-    // if(!phone) {
-    //     return res.send({
-    //         success: false,
-    //         errorPhone: true,
-    //         message: 'Phone cannot be blank'
-    //     })
-    // }
-
     email = email.toLowerCase();
 
     User.find({
@@ -64,7 +21,7 @@ module.exports.signup = (req, res, next) => {
             return res.send({
                 success: false,
                 errorEmail: true,
-                message: 'Error: Account already exist.'
+                errorMessage: 'Error: Account already exist.'
             })
         }
         else {
@@ -82,7 +39,7 @@ module.exports.signup = (req, res, next) => {
                 } else {
                     return res.send({
                         success: true,
-                        message: 'Signed Up'
+                        errorMessage: 'Signed Up'
                     })
                 }
             })
@@ -94,31 +51,6 @@ module.exports.signin = (req, res, next) => {
     const { body } = req;
     let email = body.body.email;
     let password = body.body.password;
-    console.log(email, password);
-    // if(!email && !password) {
-    //     return res.send({
-    //         success: false,
-    //         errorEmail: true,
-    //         errorPassword: true,
-    //         message: 'Email & Password cannot be blank'
-    //     })
-    // }
-
-    // if(!email) {
-    //     return res.send({
-    //         success: false,
-    //         errorEmail: true,
-    //         message: 'Email cannot be blank'
-    //     })
-    // }
-
-    // if(!password) {
-    //     return res.send({
-    //         success: false,
-    //         errorPassword: true,
-    //         message: 'Password cannot be blank'
-    //     })
-    // }
 
     email = email.toLowerCase();
 
@@ -137,7 +69,8 @@ module.exports.signin = (req, res, next) => {
             return res.send({
                 success: false,
                 errorEmail: true,
-                message: 'Email Invalid'
+                errorPassword: false,
+                errorMessage: 'Email Invalid'
             })
         }
 
@@ -146,8 +79,9 @@ module.exports.signin = (req, res, next) => {
         if (!user.validPassword(password)) {
             return res.send({
                 success: false,
+                errorEmail: false,
                 errorPassword: true,
-                message: 'Password Invalid'
+                errorMessage: 'Password Invalid'
             })
         }
 
@@ -166,7 +100,9 @@ module.exports.signin = (req, res, next) => {
 
             return res.send({
                 success: true,
-                message: 'Valid sign in',
+                errorEmail: false,
+                errorPassword: false,
+                errorMessage: 'Valid sign in',
                 token
             })
         })
