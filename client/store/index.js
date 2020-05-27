@@ -36,6 +36,9 @@ const initialState = {
         }
     ],
     amountNotifications: 0,
-    listNotifications: []
+    listNotifications: [],
+    errorEmailServer: false,
+    errorPasswordServer: false,
+    errorMessageServer: ''
 };
 export const store = createStore(reducer, initialState, applyMiddleware(thunk));

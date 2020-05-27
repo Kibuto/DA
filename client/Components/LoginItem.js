@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView } from 'react-native';
-import { Icon } from 'native-base';
-import { Input, Label, Button, Item } from 'native-base';
-import { validateEmail, validatePassword } from '../utils/Validation';
+import { Input, Item, Container, Header } from 'native-base';
+import { validateEmail } from '../utils/Validation';
 import { connect } from 'react-redux';
 import { fetchLoginRequest } from '../actions';
 import { _handleSaveInStorage, _handleGetFromStorage } from '../utils/Storage';
-import { HOST } from '../key';
-import Logo from '../images/Brand-white.png';
+import { ColorBg } from '../key';
+import Logo from '../images/logo.jpg';
 class LoginItem extends Component {
 
     state = {
@@ -18,130 +17,106 @@ class LoginItem extends Component {
         errorPassword: false
     }
 
-    // _handleOnLogin = async () => {
-    //     const { email, password } = this.state;
-    //     fetch(`${HOST}/api/account/signin`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({
-    //             email,
-    //             password
-    //         })
-    //     })
-    //         .then(res => res.json())
-    //         .then(async (json) => {
-    //             if (json.success) {
-    //                 console.log(json);
-    //                 this.setState({
-    //                     errorMessage: '',
-    //                     errorEmail: '',
-    //                     errorPassword: ''
-    //                 })
-    //                 await _handleSaveInStorage('token', json.token);
-    //                 this._handleVerify(json.token);
-    //             }
-    //             else {
-    //                 this.setState({
-    //                     errorMessage: json.message,
-    //                     errorEmail: json.errorEmail,
-    //                     errorPassword: json.errorPassword
-    //                 })
-    //             }
-    //         })
-    // }
-
-    // _handleVerify = async (token) => {
-    //     const bearer = `Bearer ${token}`;
-    //     const { navigation } = this.props;
-    //     await fetch(`${HOST}/api/verify`, {
-    //         method: 'GET',
-    //         headers: new Headers({
-    //             'Authorization': bearer,
-    //             'Content-Type': 'application/json'
-    //         })
-    //     })
-    //         .then(res => res.json())
-    //         .then(json => {
-    //             if (json.success) {
-    //                 navigation.navigate('Settings', { name: json.name, token, isLogin: true });
-    //             } else {
-    //                 console.log("Lỗi ở _handleVerify sign item: ", json.message);
-    //             }
-
-    //         })
-    // }
-
     _handleOnLogin = () => {
         const { email, password } = this.state;
         const obj = {
             email,
             password
         }
-        this.props.fetchLogin(obj, this._handleSwitchScreen);
+        if (email === "" && password === "") {
+            this.setState({
+                errorEmail: true,
+                errorPassword: true,
+                errorMessage: 'These fields can not be blank'
+            })
+        }
+        else if (!validateEmail(email)) {
+            this.setState({
+                errorEmail: true,
+                errorPassword: false,
+                errorMessage: 'Email is invalid'
+            })
+        }
+        else {
+            this.setState({
+                errorEmail: false,
+                errorPassword: false,
+                errorMessage: ''
+            })
+            this.props.fetchLogin(obj, this._handleSwitchScreen);
+        }
     }
 
     _handleSwitchScreen = (name, token) => {
         this.props.navigation.navigate('Settings', { name, token, isLogin: true })
     }
 
-    checkEmail = (email) => {
-        if (validateEmail(email)) {
-            this.setState({
-                email,
-                errorEmail: false,
-                errorMessage: ''
-            })
-        } else {
-            this.setState({
-                errorEmail: true,
-                errorMessage: 'Email invalid'
-            })
-        }
-    }
-
     render() {
         const { email, password, errorEmail, errorPassword, errorMessage } = this.state;
-        const { navigation } = this.props;
-        //console.log(this.props);
+        const { navigation, errorMessageServer, errorEmailServer, errorPasswordServer } = this.props;
         return (
-            <KeyboardAvoidingView behavior='height'>
-                <View style={styles.container}>
+            <Container style={{ backgroundColor: ColorBg }}>
+                <Header
+                    style={{ backgroundColor: ColorBg }}
+                    androidStatusBarColor='#000'
+                    transparent
+                />
+                <KeyboardAvoidingView behavior='height' >
                     <Image resizeMode='contain' source={Logo} style={styles.logo} />
-                    <Text style={{ color: '#BEDCFE', fontSize: 18, fontWeight: '700' }}>Login</Text>
-                    {errorMessage ? <Text style={{ color: '#E9446A', fontSize: 16, fontWeight: '700', marginVertical: 10 }}>{errorMessage}</Text> : null}
-                    <Item floatingLabel style={{ marginBottom: 20 }} error={errorEmail ? true : false}>
-                        <Label>Email</Label>
+                    {errorMessage ? <Text style={styles.text_err}>{errorMessage}</Text> : errorMessageServer ? <Text style={styles.text_err}>{errorMessageServer}</Text> : null}
+                    <Item
+                        stackedLabel
+                        rounded
+                        bordered
+                        style={styles.wrapper_input}
+                        error={errorEmail ? true : errorEmailServer ? true : false}
+                    >
                         <Input
                             autoCapitalize='none'
-                            autoCorrect={false}
-                            onChangeText={email => this.checkEmail(email)}
+                            placeholder='Email'
+                            style={styles.input}
+                            onChangeText={email => this.setState({ email })}
                         />
-                        {errorEmail ? <Icon name='close-circle' /> : null}
                     </Item>
-                    <Item floatingLabel style={{ marginBottom: 20 }} error={errorPassword ? true : false}>
-                        <Label>Password</Label>
+                    <Item
+                        stackedLabel
+                        rounded
+                        bordered
+                        style={styles.wrapper_input}
+                        error={errorPassword ? true : errorPasswordServer ? true : false}
+                    >
                         <Input
-                            secureTextEntry={true}
-                            autoCapitalize='none'
-                            autoCorrect={false}
+                            placeholder='Password'
+                            secureTextEntry
+                            style={styles.input}
                             onChangeText={password => this.setState({ password })}
                         />
-                        {errorPassword ? <Icon name='close-circle' /> : null}
                     </Item>
-                    <Button disabled={!validateEmail(email)} block info onPress={this._handleOnLogin}>
-                        <Text>Login</Text>
-                    </Button>
-                    <TouchableOpacity activeOpacity={0.6} onPress={() => navigation.navigate('Register')} style={{ marginTop: 20 }}>
-                        <Text>New to TiTiStore ? <Text style={{ color: '#E9446A' }}>Register</Text></Text>
+                    <TouchableOpacity
+                        style={[styles.link, { marginTop: 20 }]}
+                        activeOpacity={.6}
+                    >
+                        <Text style={styles.link_text}>Forget Password?</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.6} style={{ marginTop: 20 }}>
-                        <Text style={{ color: '#E9446A' }}>Forgot the password</Text>
+                    <TouchableOpacity
+                        onPress={this._handleOnLogin}
+                        style={styles.btn}
+                        activeOpacity={.6}
+                    >
+                        <Text style={styles.btn_text}>LOGIN</Text>
                     </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Register')}
+                        style={styles.link}
+                        activeOpacity={.6}
+                    >
+                        <Text style={styles.link_text}>
+                            Not a member ?
+                            <Text style={styles.register}>Join Now</Text>
+                        </Text>
+                    </TouchableOpacity>
+                </KeyboardAvoidingView>
+            </Container>
         )
     }
 }
@@ -157,15 +132,65 @@ const styles = StyleSheet.create({
     },
     logo: {
         width: `100%`,
-        height: `15%`
+        height: `30%`
+    },
+    wrapper_input: {
+        backgroundColor: 'white',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: .9,
+        shadowRadius: 10,
+        elevation: 3,
+        marginTop: 20,
+        width: '90%',
+        alignSelf: 'center'
+    },
+    input: {
+        fontStyle: 'italic',
+        letterSpacing: 1,
+        marginLeft: 10,
+        width: '90%'
+    },
+    btn: {
+        alignSelf: 'center',
+        marginTop: 20,
+        width: '60%',
+        backgroundColor: '#8DCDE3',
+        paddingVertical: 15,
+        borderRadius: 999
+    },
+    btn_text: {
+        fontSize: 18,
+        letterSpacing: 1,
+        textAlign: 'center',
+        color: '#FFF',
+        fontWeight: 'bold'
+    },
+    link: {
+        alignSelf: 'center', marginTop: 10
+    },
+    link_text: {
+        fontSize: 14, letterSpacing: 1
+    },
+    text_err: {
+        color: '#E9446A',
+        fontSize: 16,
+        marginTop: 10,
+        textAlign: 'center',
+        fontStyle: 'italic'
+    },
+    register: {
+        color: '#ff8811',
+        fontWeight: 'bold'
     }
 });
 
-// const mapStateToProps = (state) => {
-//     return {
-//         token: state.token
-//     }
-// }
+const mapStateToProps = (state) => {
+    return {
+        errorEmailServer: state.errorEmailServer,
+        errorPasswordServer: state.errorPasswordServer,
+        errorMessageServer: state.errorMessageServer
+    }
+}
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
@@ -175,4 +200,4 @@ const mapDispatchToProps = (dispatch, props) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(LoginItem);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginItem);

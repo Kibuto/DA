@@ -131,6 +131,7 @@ export const fetchCheckNotifications = () => {
 }
 
 export const fetchLoginRequest = (obj, fnc) => {
+    console.log('run login');
     return (dispatch) => {
         return fetchAPINormal('api/account/signin', 'POST', obj)
             .then(res => res.json())
@@ -139,6 +140,8 @@ export const fetchLoginRequest = (obj, fnc) => {
                     const bearer = `Bearer ${json.token}`;
                     await _handleSaveInStorage('token', json.token);
                     dispatch(fetchVerifyRequest(json.token, bearer, fnc))
+                } else {
+                    dispatch(fetchLoginError(json.errorEmail, json.errorPassword, json.errorMessage))
                 }
             });
     }
@@ -161,6 +164,15 @@ export const fetchLogin = (token) => {
     return {
         type: Types.FETCH_LOGIN,
         token
+    }
+}
+
+export const fetchLoginError = (email, password, message) => {
+    return {
+        type: Types.FETCH_LOGINERROR,
+        email,
+        password,
+        message
     }
 }
 

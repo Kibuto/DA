@@ -59,6 +59,15 @@ export default (state, action) => {
             }
         }
 
+        case Types.FETCH_LOGINERROR: {
+            return {
+                ...state,
+                errorEmailServer: action.email,
+                errorPasswordServer: action.password,
+                errorMessageServer: action.message
+            }
+        }
+
         case Types.FETCH_LOGOUT: {
             return {
                 ...state,
