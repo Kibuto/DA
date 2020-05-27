@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native';
 import { Avatar } from "react-native-elements";
 import SettingListItem from '../Components/SettingListItem';
 import { connect } from 'react-redux';
-import { fetchNotificationsRequest, fetchCheckNotificationsRequest } from '../actions';
+import { fetchNotificationsRequest, fetchCheckNotificationsRequest, fetchLogout } from '../actions';
 import { Container, Header, Title, Body } from "native-base";
 import { _handleGetFromStorage, _handleRemoveStorage } from '../utils/Storage';
 import { ColorBg, ColorHeader, HOST } from '../key';
@@ -64,6 +64,7 @@ class SettingScreen extends Component {
     _handleLogOut = async () => {
         await AsyncStorage.removeItem('token').then(() => {
             this.props.route.params.token = '';
+            this.props.fetchLogOut();
             this.setState({ tokenSettings: '', nameSettings: '', isLoginSettings: false })
         })
     }
@@ -97,6 +98,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchCheckNotification: (bearer) => {
             dispatch(fetchCheckNotificationsRequest(bearer))
+        },
+        fetchLogOut: () => {
+            dispatch(fetchLogout());
         }
     }
 }

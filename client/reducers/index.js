@@ -52,12 +52,30 @@ export default (state, action) => {
             }
         }
 
-        case Types.ADDTOCART: {
+        case Types.FETCH_LOGIN: {
             return {
                 ...state,
-                cartItem: [...state.cartItem, action.product]
+                token: action.token
             }
         }
+
+        case Types.FETCH_LOGOUT: {
+            return {
+                ...state,
+                token: '',
+                isAdmin: false,
+                listOrder: []
+            }
+        }
+
+        case Types.FETCH_GETORDER: {
+            return {
+                ...state,
+                listOrder: action.listOrder,
+                isAdmin: action.isAdmin
+            }
+        }
+
         default:
             return state;
     }

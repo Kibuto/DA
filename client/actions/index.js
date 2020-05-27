@@ -1,5 +1,5 @@
 import * as Types from '../constants/ActionTypes';
-import { HOST } from '../key';
+import { _handleSaveInStorage } from '../utils/Storage';
 import { fetchAPINormal, fetchAPIAuthentication } from '../utils/Request';
 export const fetchCategoriesRequest = () => {
     return (dispatch) => {
@@ -131,9 +131,62 @@ export const fetchCheckNotifications = () => {
     }
 }
 
-export const addToCart = (product) => {
+export const fetchLoginRequest = (obj, fnc) => {
+    return (dispatch) => {
+        return fetchAPINormal('api/account/signin', 'POST', obj)
+            .then(res => res.json())
+            .then(async json => {
+                if (json.success) {
+                    const bearer = `Bearer ${json.token}`;
+                    await _handleSaveInStorage('token', json.token);
+                    dispatch(fetchVerifyRequest(json.token, bearer, fnc))
+                }
+            });
+    }
+}
+
+export const fetchVerifyRequest = (token, bearer, fnc) => {
+    return (dispatch) => {
+        return fetchAPIAuthentication('api/verify', 'GET', null, bearer)
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    dispatch(fetchLogin(token));
+                    fnc(json.name, token);
+                }
+            });
+    }
+}
+
+export const fetchLogin = (token) => {
     return {
-        type: Types.ADDTOCART,
-        product
+        type: Types.FETCH_LOGIN,
+        token
+    }
+}
+
+export const fetchLogout = () => {
+    return {
+        type: Types.FETCH_LOGOUT
+    }
+}
+
+export const fetchGetOrderRequest = (bearer) => {
+    return (dispatch) => {
+        return fetchAPIAuthentication('api/order/getOrder', 'GET', null, bearer)
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    dispatch(fetchGetOrder(json.order, json.isAdmin));
+                }
+            });
+    }
+}
+
+export const fetchGetOrder = (listOrder, isAdmin) => {
+    return {
+        type: Types.FETCH_GETORDER,
+        listOrder,
+        isAdmin
     }
 }

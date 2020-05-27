@@ -2,6 +2,9 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducer from '../reducers';
 const initialState = {
+    token: '',
+    listOrder: [],
+    isAdmin: false,
     categories: [],
     products: [],
     categoriesLike: [],
@@ -33,7 +36,6 @@ const initialState = {
         }
     ],
     amountNotifications: 0,
-    listNotifications: [],
-    cartItem: []
+    listNotifications: []
 };
 export const store = createStore(reducer, initialState, applyMiddleware(thunk));
