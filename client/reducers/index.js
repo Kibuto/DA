@@ -76,6 +76,13 @@ export default (state, action) => {
             }
         }
 
+        case Types.FETCH_CHECKANDREFUSEORDER: {
+            return {
+                ...state,
+                listOrder: state.listOrder.splice(action.index, 1)
+            }
+        }
+
         default:
             return state;
     }

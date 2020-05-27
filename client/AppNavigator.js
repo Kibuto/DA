@@ -20,6 +20,7 @@ import Welcome from './Screen/Welcome';
 import Notification from './Screen/Notifications';
 import OrderConfirmation from './Screen/OrderConfirmation';
 import ConfirmInfo from './Screen/ConfirmInfo';
+import OrderDetails from './Screen/OrderDetails'
 import { CartContext } from './contexts/Cart';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Badge } from 'react-native-elements';
@@ -110,6 +111,7 @@ export default function AppNavigator(props) {
         <Stack.Screen name='Notification' component={Notification} />
         <Stack.Screen name='OrderConfirmation' component={OrderConfirmation} />
         <Stack.Screen name='ConfirmInfo' component={ConfirmInfo} />
+        <Stack.Screen name='OrderDetails' component={OrderDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

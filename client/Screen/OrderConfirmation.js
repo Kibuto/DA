@@ -28,6 +28,7 @@ export default class OrderConfirmation extends PureComponent {
                                                     length={cartItems.length - 1}
                                                     category={false}
                                                     order={true}
+                                                    detail={false}
                                                     product={item}
                                                     deleteFromCart={deleteFromCart}
                                                 />

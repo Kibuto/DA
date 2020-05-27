@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Container, Header, Title, Body, Content, Item, Input, Label } from "native-base";
-import { _handleGetFromStorage, _handleRemoveStorage } from '../utils/Storage';
+import { fetchGetOrderRequest } from '../actions';
+import { connect } from 'react-redux';
+import { _handleGetFromStorage } from '../utils/Storage';
 import { ColorBg, ColorHeader, HOST } from '../key';
 
-export default class ConfirmInfo extends PureComponent {
+class ConfirmInfo extends PureComponent {
 
     state = {
         name: '',
@@ -70,7 +72,8 @@ export default class ConfirmInfo extends PureComponent {
             .then(async json => {
                 if (json.success) {
                     fnc();
-                    this.props.navigation.navigate('Orders');
+                    this.props.fetchGetOrder(bearer);
+                    this.props.navigation.navigate('Home');
                 } else {
                     console.log("Lỗi ở _handleOnConFirm sign item: ", json);
                 }
@@ -184,3 +187,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     }
 })
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        fetchGetOrder: (bearer) => {
+            dispatch(fetchGetOrderRequest(bearer));
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(ConfirmInfo);

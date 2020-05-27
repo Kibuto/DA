@@ -115,7 +115,6 @@ export const fetchCheckNotificationsRequest = (bearer) => {
             .then(res => res.json())
             .then(json => {
                 if (json.success) {
-                    console.log("Notification request");
                     dispatch(fetchCheckNotifications());
                 }
                 else {
@@ -188,5 +187,36 @@ export const fetchGetOrder = (listOrder, isAdmin) => {
         type: Types.FETCH_GETORDER,
         listOrder,
         isAdmin
+    }
+}
+
+export const fetchCheckOrderRequest = (bearer, id, index) => {
+    return (dispatch) => {
+        return fetchAPIAuthentication('api/order/checkOrder', 'PUT', id, bearer)
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    dispatch(fetchCheckAndRefuseOrder(index));
+                }
+            });
+    }
+}
+
+export const fetchCheckAndRefuseOrder = (index) => {
+    return {
+        type: Types.FETCH_CHECKANDREFUSEORDER,
+        index
+    }
+}
+
+export const fetchRefuseOrderRequest = (bearer, id, index) => {
+    return (dispatch) => {
+        return fetchAPIAuthentication('api/order/refuseOrder', 'PUT', id, bearer)
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    dispatch(fetchCheckAndRefuseOrder(index));
+                }
+            });
     }
 }

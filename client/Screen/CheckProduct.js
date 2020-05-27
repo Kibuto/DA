@@ -108,7 +108,11 @@ export default class CheckProduct extends Component {
         const { products, msg, isAdmin } = this.state;
         return (
             <Container style={{ backgroundColor: ColorBg }}>
-                <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
+                <Header
+                    style={{ backgroundColor: ColorHeader }}
+                    androidStatusBarColor='#000'
+                    transparent
+                >
                     <Body>
                         <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700', alignSelf: 'center' }}>Follow Product</Title>
                     </Body>
@@ -119,7 +123,12 @@ export default class CheckProduct extends Component {
                             data={products}
                             renderItem={({ item, index }) =>
                                 <View style={styles.wrapper}>
-                                    <CheckProductItem index={index} onPress={this.showAlert} isAdmin={isAdmin} product={item} />
+                                    <CheckProductItem
+                                        index={index}
+                                        onPress={this.showAlert}
+                                        isAdmin={isAdmin}
+                                        product={item}
+                                    />
                                 </View>
                             }
                             keyExtractor={(item) => `${item._id}`}

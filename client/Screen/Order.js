@@ -1,9 +1,53 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, FlatList } from 'react-native';
 import { Container, Header, Title, Content, Button, Icon, Left, Body, Right } from "native-base";
 import { HOST, ColorBg, ColorHeader } from '../key';
-export default class OrderScreen extends Component {
+import { fetchGetOrderRequest } from '../actions';
+import { _handleGetFromStorage } from '../utils/Storage';
+import { connect } from 'react-redux';
+import OrderListItem from '../Components/OrderListItem';
+class OrderScreen extends Component {
+
+    componentDidMount() {
+        this._handleGetOrder();
+    }
+
+    _handleGetOrder = async () => {
+        console.log('Run function');
+        const { token } = this.props;
+        if (token) {
+            const bearer = `Bearer ${token}`;
+            this.props.fetchGetOrder(bearer);
+        } else {
+            console.log(`Don't have token in Order screen`);
+        }
+
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        console.log('Run should component');
+        console.log("cur props: ", this.props.token);
+        console.log('next props: ', nextProps.token);
+        if (this.props.token !== nextProps.token) {
+            return true;
+        }
+        if (this.props.listOrder.length !== nextProps.listOrder.length) {
+            return true;
+        }
+        if (this.props.isAdmin !== nextProps.isAdmin) {
+            return true;
+        }
+        return false;
+    }
+
+    componentDidUpdate() {
+        console.log('Run did update');
+        this._handleGetOrder();
+    }
+
     render() {
+        const { listOrder, isAdmin } = this.props;
+        console.log("list: ", listOrder)
         return (
             <Container style={{ backgroundColor: ColorBg }}>
                 <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
@@ -11,10 +55,27 @@ export default class OrderScreen extends Component {
                         <Title style={{ fontSize: 26, color: '#D90368', fontWeight: '700', alignSelf: 'center' }}>Orders</Title>
                     </Body>
                 </Header>
-                {/* <Content contentContainerStyle={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style={{color: '#888', fontSize: 20}}>Orders</Text>
-                </Content> */}
-                <ImageBackground source={{ uri: 'https://cdn.dribbble.com/users/357929/screenshots/2276751/orderup-emptystate-sadbag.png' }} style={{ flex: 1 }} />
+                {
+                    listOrder.length === 0 ?
+                        <ImageBackground
+                            source={{ uri: 'https://cdn.dribbble.com/users/357929/screenshots/2276751/orderup-emptystate-sadbag.png' }}
+                            style={{ flex: 1 }}
+                        /> :
+                        <FlatList
+                            data={listOrder}
+                            renderItem={({ item, index }) =>
+                                <OrderListItem
+                                    item={item}
+                                    navigation={this.props.navigation}
+                                    isAdmin={isAdmin}
+                                    index={index}
+                                />
+                            }
+                            keyExtractor={(item) => `${item._id}`}
+                            contentContainerStyle={styles.container}
+                        />
+
+                }
             </Container>
         )
     }
@@ -22,8 +83,25 @@ export default class OrderScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        paddingTop: 15,
+        paddingHorizontal: 15
     }
 })
+
+const mapStateToProps = (state) => {
+    return {
+        token: state.token,
+        listOrder: state.listOrder,
+        isAdmin: state.isAdmin
+    }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        fetchGetOrder: (bearer) => {
+            dispatch(fetchGetOrderRequest(bearer));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderScreen);
