@@ -4,7 +4,6 @@ var router = require("express").Router();
 
 router.post('/order/create', authController.requireToken, controller.create);
 router.get('/order/getOrder', authController.requireToken, controller.getOrder);
-// router.put('/refuseProduct', authController.requireToken, controller.refuseProduct);
-// router.get('/notifications', authController.requireToken, controller.notifications);
-// router.put('/checkNotification', authController.requireToken, controller.checkNotifications);
+router.put('/order/refuseOrder', authController.requireToken, controller.refuseOrder);
+router.put('/order/checkOrder', authController.requireToken, controller.checkOrder);
 module.exports = router;

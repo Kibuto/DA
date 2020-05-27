@@ -1,6 +1,6 @@
 const Order = require('../../models/orders.model');
 require('dotenv').config();
-
+const jwt = require('jsonwebtoken');
 module.exports.create = (req, res, next) => {
     const { body, userId } = req;
     const { cartItems, name, phone, address, sum, amount } = body;
@@ -13,7 +13,6 @@ module.exports.create = (req, res, next) => {
     newOrder.address = address;
     newOrder.amount = amount;
     newOrder.save((err, order) => {
-        console.log(order);
         if (err) {
             return res.send({
                 success: false,
@@ -40,12 +39,11 @@ module.exports.getOrder = async (req, res, next) => {
                     message: 'Server error when get order'
                 })
             }
-            console.log("order admin: ", order);
             if (order.length) {
                 res.send({
                     success: true,
                     isAdmin,
-                    product,
+                    order,
                     message: "Get order successfully"
                 })
             }
@@ -67,23 +65,74 @@ module.exports.getOrder = async (req, res, next) => {
                     message: 'Error: Server error'
                 })
             }
-            console.log("order user: ", order);
-            // if (order.length) {
-            //     order.map(item => {
-            //         item.userId = jwt.sign({ userId: item.userId }, process.env.jwtKey)
-            //     })
-            //     res.send({
-            //         success: true,
-            //         order: order,
-            //         message: 'get data successfully'
-            //     })
-            // }
-            // else {
-            //     res.send({
-            //         success: false,
-            //         message: 'You do not sell any product'
-            //     })
-            // }
+            if (order.length) {
+                order.map(item => {
+                    item.userId = jwt.sign({ userId: item.userId }, process.env.jwtKey)
+                })
+                res.send({
+                    success: true,
+                    order: order,
+                    isAdmin: false,
+                    message: 'get data successfully'
+                })
+            }
+            else {
+                res.send({
+                    success: false,
+                    message: 'You do not sell any product'
+                })
+            }
         });
     }
 }
+
+module.exports.checkOrder = async (req, res, next) => {
+    const { body } = req;
+    await Order.findByIdAndUpdate({
+        _id: body.body
+    }, {
+        $set: { isCheck: true }
+    },
+        (err, order) => {
+            if (err) {
+                res.send({
+                    success: false,
+                    message: 'Server error when check order'
+                })
+            }
+
+            if (order.length < 1) {
+                res.send({
+                    success: false,
+                    message: 'Order invalid'
+                })
+            }
+
+            res.send({
+                success: true,
+                message: 'Order checked successfully'
+            })
+        })
+};
+
+module.exports.refuseOrder = async (req, res, next) => {
+    const { body } = req;
+    await Order.findByIdAndUpdate({
+        _id: body.body
+    }, {
+        $set: { isCheck: true, isDeleted: true }
+    },
+        (err, order) => {
+            if (err) {
+                res.send({
+                    success: false,
+                    message: 'Server error when check order'
+                })
+            } else {
+                res.send({
+                    success: true,
+                    message: 'Your order is invalid'
+                })
+            }
+        })
+};
