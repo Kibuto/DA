@@ -64,11 +64,6 @@ class RegisterItem extends Component {
             `TiTi Store says:`,
             'You have just registered successfully. You will be redirected Login',
             [
-                {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel'
-                },
                 { text: 'OK', onPress: () => navigation.navigate('Login') },
             ]
         )

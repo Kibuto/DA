@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Alert } from 'react-native';
 import { Input, Item, Container, Header } from 'native-base';
 import { validateEmail } from '../utils/Validation';
 import { connect } from 'react-redux';
@@ -48,7 +48,14 @@ class LoginItem extends Component {
     }
 
     _handleSwitchScreen = (name, token) => {
-        this.props.navigation.navigate('Settings', { name, token, isLogin: true })
+        const { navigation } = this.props;
+        Alert.alert(
+            `TiTi Store says:`,
+            'You login successfully. You will be redirected Settings',
+            [
+                { text: 'OK', onPress: () => navigation.navigate('Settings', { name, token, isLogin: true }) },
+            ]
+        )
     }
 
     render() {
