@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView } from 'react-native';
-import { Input, Label, Button, Item, Icon } from 'native-base';
-import { HOST } from '../key';
+import { Input, Item, Container, Header, Content } from 'native-base';
+import { HOST, ColorBg } from '../key';
 import { validateEmail, validatePassword, validatePhone } from '../utils/Validation';
-import Logo from '../images/Brand-white.png';
+import Logo from '../images/logo.jpg';
 class RegisterItem extends Component {
 
     state = {
@@ -34,130 +34,187 @@ class RegisterItem extends Component {
                 phone
             })
         })
-        .then(res => res.json())
-        .then(json => {
-            if(json.success) {
-                this.setState({
-                    errorEmail: '',
-                    errorPassword: '',
-                    errorName: '',
-                    errorPhone: '',
-                    errorMessage: ''
-                })
-                navigation.navigate('Login');
-            }
-            else {
-                this.setState({
-                    errorEmail: json.errorEmail,
-                    errorPassword: json.errorPassword,
-                    errorName: json.errorName,
-                    errorPhone: json.errorPhone,
-                    errorMessage: json.message
-                })
-            }
-        })
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    this.setState({
+                        errorEmail: '',
+                        errorPassword: '',
+                        errorName: '',
+                        errorPhone: '',
+                        errorMessage: ''
+                    })
+                    this.showAlert();
+                }
+                else {
+                    this.setState({
+                        errorEmail: json.errorEmail,
+                        errorPassword: json.errorPassword,
+                        errorName: json.errorName,
+                        errorPhone: json.errorPhone,
+                        errorMessage: json.errorMessage
+                    })
+                }
+            })
     }
 
-    checkEmail = (email) => {
-        if(validateEmail(email)) {
-            this.setState({
-                email,
-                errorEmail: false,
-                errorMessage: ''
-            })
-        } else {
+    showAlert = () => {
+        const { navigation } = this.props;
+        Alert.alert(
+            `TiTi Store says:`,
+            'You have just registered successfully. You will be redirected Login',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                },
+                { text: 'OK', onPress: () => navigation.navigate('Login') },
+            ]
+        )
+    }
+
+    _handleCheckRegister = () => {
+        const { name, phone, password, email, errorEmail, errorName, errorMessage, errorPassword, errorPhone } = this.state;
+        if (name === '' && phone === '' && password === '' && email === '') {
             this.setState({
                 errorEmail: true,
-                errorMessage: 'Email invalid'
-            })
-        }
-    }
-
-    checkPass = (password) => {
-        if(validatePassword(password)) {
-            this.setState({
-                password,
-                errorPassword: false,
-                errorMessage: ''
-            })
-        } else {
-            this.setState({
                 errorPassword: true,
-                errorMessage: 'Password invalid (must be at least 6 character)'
+                errorPhone: true,
+                errorName: true,
+                errorMessage: 'These fields can not be blank'
             })
         }
-    }
-
-    checkPhone = (phone) => {
-        if(validatePhone(phone)) {
+        else if (!validateEmail(email)) {
             this.setState({
-                phone,
+                errorEmail: true,
+                errorPassword: false,
                 errorPhone: false,
-                errorMessage: ''
+                errorName: false,
+                errorMessage: 'Email is invalid'
             })
-        } else {
+        }
+        else if (!validatePhone(phone)) {
             this.setState({
+                errorEmail: false,
+                errorPassword: false,
                 errorPhone: true,
-                errorMessage: 'Phone invalid (must be 10 number)'
+                errorName: false,
+                errorMessage: 'Phone is invalid'
             })
+        }
+        else if (!validatePassword(password)) {
+            this.setState({
+                errorEmail: false,
+                errorPassword: true,
+                errorPhone: false,
+                errorName: false,
+                errorMessage: 'Password is invalid'
+            })
+        }
+        else if (name === '') {
+            this.setState({
+                errorEmail: false,
+                errorPassword: false,
+                errorPhone: false,
+                errorName: true,
+                errorMessage: 'Field name can not be blank'
+            })
+        }
+        else {
+            this._handleOnSignUp();
         }
     }
 
     render() {
         const { name, email, phone, password, errorEmail, errorMessage, errorPassword, errorPhone, errorName } = this.state;
         const { navigation } = this.props;
-        console.log(!validatePhone(phone), !validateEmail(email), validatePhone(phone)&&validateEmail(email))
         return (
-            <KeyboardAvoidingView behavior='height'>
-                <View style={styles.container}>
-                    <Image resizeMode='contain' source={Logo} style={styles.logo}/>
-                    <Text style={{color: '#BEDCFE', fontSize: 18, fontWeight: '700'}}>Register</Text>
-                    { errorMessage ? <Text style={{color: '#E9446A', fontSize: 16, fontWeight: '700', marginVertical: 10}}>{errorMessage}</Text> : null }
-                    <Item floatingLabel style={{marginBottom: 20}} error={ errorName ? true : false }>
-                        <Label>Name</Label>
-                        <Input 
-                            autoCapitalize='none' 
-                            autoCorrect={false}
-                            onChangeText={name => this.setState({name})}
-                        />
-                        { errorName ? <Icon name='close-circle' /> : null }
-                    </Item>
-                    <Item floatingLabel style={{marginBottom: 20}} error={ errorEmail ? true : false }>
-                        <Label>Email</Label>
-                        <Input 
-                            autoCapitalize='none' 
-                            autoCorrect={false}
-                            onChangeText={email => this.checkEmail(email)}
-                        />
-                        { errorEmail ? <Icon name='close-circle' /> : null }
-                    </Item>
-                    <Item floatingLabel style={{marginBottom: 20}} error={ errorPassword ? true : false }>
-                        <Label>Password</Label>
-                        <Input 
-                            secureTextEntry={true} 
-                            autoCapitalize='none' 
-                            autoCorrect={false} 
-                            onChangeText={password => this.checkPass(password)}    
-                        />
-                        { errorPassword ? <Icon name='close-circle' /> : null }
-                    </Item>
-                    <Item floatingLabel style={{marginBottom: 20}} error={ errorPhone ? true : false }>
-                        <Label>Phone</Label>
-                        <Input 
-                            autoCapitalize='none' 
-                            autoCorrect={false}
-                            onChangeText={phone => this.checkPhone(phone)}
-                        />
-                        { errorPhone ? <Icon name='close-circle' /> : null }
-                    </Item>
-                    <Button block disabled={!validatePhone(phone) && !validateEmail(email)} info onPress={this._handleOnSignUp}>
-                        <Text>Sign Up</Text>
-                    </Button>
-                    <TouchableOpacity activeOpacity={0.6} style={{marginTop: 20}} onPress={() => navigation.navigate('LogIn')}>
-                        <Text>Old to TiTiStore ? <Text style={{color: '#E9446A'}}>Sign In</Text></Text>
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView>
+            <Container style={{ backgroundColor: ColorBg }}>
+                <Header
+                    style={{ backgroundColor: ColorBg }}
+                    androidStatusBarColor='#000'
+                    transparent
+                />
+                <Content>
+                    <KeyboardAvoidingView behavior='padding' >
+                        <Image resizeMode='contain' source={Logo} style={styles.logo} />
+                        {errorMessage ? <Text style={styles.text_err}>{errorMessage}</Text> : null}
+                        <Item
+                            stackedLabel
+                            rounded
+                            bordered
+                            style={styles.wrapper_input}
+                            error={errorName ? true : false}
+                        >
+                            <Input
+                                placeholder='Full name'
+                                style={styles.input}
+                                onChangeText={name => this.setState({ name })}
+                            />
+                        </Item>
+                        <Item
+                            stackedLabel
+                            rounded
+                            bordered
+                            style={styles.wrapper_input}
+                            error={errorEmail ? true : false}
+                        >
+                            <Input
+                                autoCapitalize='none'
+                                placeholder='Email'
+                                style={styles.input}
+                                onChangeText={email => this.setState({ email })}
+                            />
+                        </Item>
+                        <Item
+                            stackedLabel
+                            rounded
+                            bordered
+                            style={styles.wrapper_input}
+                            error={errorPhone ? true : false}
+                        >
+                            <Input
+                                autoCapitalize='none'
+                                placeholder='Phone'
+                                style={styles.input}
+                                onChangeText={phone => this.setState({ phone })}
+                            />
+                        </Item>
+                        <Item
+                            stackedLabel
+                            rounded
+                            bordered
+                            style={styles.wrapper_input}
+                            error={errorPassword ? true : false}
+                        >
+                            <Input
+                                placeholder='Password'
+                                secureTextEntry
+                                style={styles.input}
+                                onChangeText={password => this.setState({ password })}
+                            />
+                        </Item>
+                        <TouchableOpacity
+                            onPress={this._handleCheckRegister}
+                            style={styles.btn}
+                            activeOpacity={.6}
+                        >
+                            <Text style={styles.btn_text}>REGISTER</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            //onPress={() => navigation.navigate('LogIn')}
+                            style={styles.link}
+                            activeOpacity={.6}
+                        >
+                            <Text style={styles.link_text}>
+                                Not a member ?
+                                <Text style={styles.register}>Join Now</Text>
+                            </Text>
+                        </TouchableOpacity>
+                    </KeyboardAvoidingView>
+                </Content>
+            </Container>
         )
     }
 }
@@ -172,8 +229,57 @@ const styles = StyleSheet.create({
         height: `100%`
     },
     logo: {
-        width: `100%`,
-        height: `15%`
+        width: 100,
+        height: 100,
+        alignSelf: 'center'
+    },
+    wrapper_input: {
+        backgroundColor: 'white',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: .9,
+        shadowRadius: 10,
+        elevation: 3,
+        marginTop: 20,
+        width: '90%',
+        alignSelf: 'center'
+    },
+    input: {
+        fontStyle: 'italic',
+        letterSpacing: 1,
+        marginLeft: 10,
+        width: '90%'
+    },
+    btn: {
+        alignSelf: 'center',
+        marginTop: 20,
+        width: '60%',
+        backgroundColor: '#8DCDE3',
+        paddingVertical: 15,
+        borderRadius: 999
+    },
+    btn_text: {
+        fontSize: 18,
+        letterSpacing: 1,
+        textAlign: 'center',
+        color: '#FFF',
+        fontWeight: 'bold'
+    },
+    link: {
+        alignSelf: 'center', marginTop: 10
+    },
+    link_text: {
+        fontSize: 14, letterSpacing: 1
+    },
+    text_err: {
+        color: '#E9446A',
+        fontSize: 16,
+        marginTop: 10,
+        textAlign: 'center',
+        fontStyle: 'italic'
+    },
+    register: {
+        color: '#ff8811',
+        fontWeight: 'bold'
     }
 });
 

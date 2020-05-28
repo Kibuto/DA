@@ -53,7 +53,7 @@ module.exports.signin = (req, res, next) => {
     let password = body.body.password;
 
     email = email.toLowerCase();
-
+    console.log(email, password);
     User.find({
         email: email
     }, (err, users) => {
