@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Alert, Picker, Dimensions } from 'react-native';
 import ActionSheet from 'react-native-actionsheet';
 import ImagePicker from 'react-native-image-picker';
-import { Input, Item, Label, Form, Icon, Textarea } from 'native-base';
-import Logo from '../images/Brand-white.png';
+import { Input, Item, Label, Textarea } from 'native-base';
+import Logo from '../images/logo.jpg';
 import { validateMoney } from '../utils/Validation';
-import { HOST } from '../key';
+import { HOST, ColorBg } from '../key';
 const { width, height } = Dimensions.get('window');
 class CreateItem extends Component {
 
@@ -17,6 +17,8 @@ class CreateItem extends Component {
         price: '',
         errorName: '',
         errorPrice: '',
+        errorDescription: '',
+        errorCategory: '',
         category: 'category',
         description: '',
     }
@@ -104,6 +106,67 @@ class CreateItem extends Component {
             })
     };
 
+    _handleCheckCreate = () => {
+        const {
+            name,
+            price,
+            category,
+            description,
+            errorName,
+            errorPrice,
+            errorPhone,
+            errorMessage,
+            errorCategory } = this.state;
+        if (!name && !price && category === 'category' && !description) {
+            this.setState({
+                errorName: true,
+                errorPrice: true,
+                errorDescription: true,
+                errorCategory: true,
+                errorMessage: 'These fields can not be blank'
+            })
+        }
+        else if (!name) {
+            this.setState({
+                errorName: true,
+                errorPrice: false,
+                errorDescription: false,
+                errorCategory: false,
+                errorMessage: 'Email Invalid'
+            })
+        }
+        else if (!validateMoney(price)) {
+            this.setState({
+                errorName: false,
+                errorPrice: true,
+                errorDescription: false,
+                errorCategory: false,
+                errorMessage: 'Price Invalid (must be at least 5 number)'
+            })
+        }
+        else if (category === 'category') {
+            this.setState({
+                errorName: false,
+                errorPrice: false,
+                errorDescription: false,
+                errorCategory: true,
+                errorMessage: 'Category Invalid'
+            })
+        }
+        else if (!description) {
+            this.setState({
+                errorName: false,
+                errorPrice: false,
+                errorDescription: true,
+                errorCategory: false,
+                errorMessage: 'Description Invalid'
+            })
+        }
+        else {
+            this._handleOnSale();
+        }
+    }
+
     showAlert = (str) => {
         const { navigation } = this.props;
         Alert.alert(
@@ -115,54 +178,48 @@ class CreateItem extends Component {
         )
     }
 
-    validatePrice = (money) => {
-        const { price } = this.state;
-        if (validateMoney(money)) {
-            console.log('Money');
-            this.setState({
-                price,
-                errorPrice: false,
-                errorMessage: ''
-            })
-        } else {
-            this.setState({
-                errorPrice: true,
-                errorMessage: 'Price invalid (Must be at least 5 number)'
-            })
-        }
-    }
-
     render() {
-        const { name, price, errorPrice, errorName, image, category, description, errorMessage } = this.state;
+        const { name, price, errorPrice, errorName, errorCategory, errorDescription, image, category, description, errorMessage } = this.state;
         return (
-            <KeyboardAvoidingView>
+            <View>
                 <View style={styles.container}>
                     <Image resizeMode='contain' source={Logo} style={styles.logo} />
                     <Text style={{ textAlign: 'center', fontSize: 18, fontWeight: '700', marginBottom: 15 }}>What would you like to sell?</Text>
-                    {errorMessage ? <Text style={{ color: '#E9446A', fontSize: 16, fontWeight: '700', marginVertical: 10 }}>{errorMessage}</Text> : null}
-                    <Item floatingLabel style={{ marginBottom: 20 }}>
-                        <Label>Name Product</Label>
+                    {errorMessage ? <Text style={styles.text_err}>{errorMessage}</Text> : null}
+                    <Item
+                        stackedLabel
+                        bordered
+                        rounded
+                        style={styles.wrapper_input}
+                        error={errorName ? true : false}
+                    >
                         <Input
-                            autoCapitalize='none'
-                            autoCorrect={false}
+                            placeholder='Name'
+                            style={styles.input}
                             onChangeText={name => this.setState({ name })}
                         />
                     </Item>
-                    <Item floatingLabel style={{ marginBottom: 20 }} error={errorPrice.length ? true : false}>
-                        <Label>Price product</Label>
+                    <Item
+                        stackedLabel
+                        rounded
+                        bordered
+                        style={styles.wrapper_input}
+                        error={errorPrice ? true : false}
+                    >
                         <Input
-                            autoCapitalize='none'
-                            autoCorrect={false}
-                            onChangeText={price => this.validatePrice(price)}
+                            placeholder='Price'
+                            style={styles.input}
+                            onChangeText={price => this.setState({ price })}
                         />
                     </Item>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginBottom: 10 }}>
-                        <Text style={{ flex: 2 / 5, fontSize: 18 }}>Category: </Text>
-                        <Text style={{ flex: 2 / 5, fontSize: 18 }}>{category}</Text>
+                    <View style={styles.category}>
+                        <Text style={styles.category_text}>Category: </Text>
+                        <Text style={[styles.category_text, errorCategory && { color: 'red' }]}>{category}</Text>
                         <Picker
-                            style={{ borderColor: 'red', borderWidth: 1, height: 32, width: 32, flex: 1 / 5 }}
+                            style={styles.picker}
                             selectedValue={category}
-                            onValueChange={(itemValue, itemIndex) => this.setState({ category: itemValue })}>
+                            onValueChange={(itemValue, itemIndex) => this.setState({ category: itemValue })}
+                        >
                             <Picker.Item label="History" value="History" />
                             <Picker.Item label="Adventure" value="Adventure" />
                             <Picker.Item label="Mystery" value="Mystery" />
@@ -171,7 +228,13 @@ class CreateItem extends Component {
                             <Picker.Item label="Different..." value="Different..." />
                         </Picker>
                     </View>
-                    <Textarea onChangeText={description => this.setState({ description })} rowSpan={3} style={{ width: (width / 100) * 85 }} bordered placeholder="Description product" />
+                    <Textarea
+                        onChangeText={description => this.setState({ description })}
+                        rowSpan={3}
+                        style={[styles.description, errorDescription && { borderColor: 'red' }]}
+                        bordered
+                        placeholder="Describe product"
+                    />
 
 
                     <TouchableOpacity style={styles.btn} activeOpacity={0.5} onPress={this.showActionSheet}>
@@ -182,7 +245,11 @@ class CreateItem extends Component {
 
                     {
                         image ?
-                            <TouchableOpacity style={styles.btn} activeOpacity={0.5} onPress={this._handleOnSale}>
+                            <TouchableOpacity
+                                style={styles.btn}
+                                activeOpacity={0.5}
+                                onPress={this._handleCheckCreate}
+                            >
                                 <Text style={styles.btn_text} >Sell</Text>
                             </TouchableOpacity> : null
                     }
@@ -198,7 +265,7 @@ class CreateItem extends Component {
                         }}
                     />
                 </View>
-            </KeyboardAvoidingView>
+            </View>
         )
     }
 }
@@ -208,36 +275,84 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 16,
-        backgroundColor: '#FFF',
+        backgroundColor: ColorBg,
         borderRadius: 10,
         width: '92%',
         alignSelf: 'center',
+        marginBottom: 10
+    },
+    logo: {
+        width: `100%`,
+        height: 120
+    },
+    btn: {
+        width: `60%`,
+        backgroundColor: `#8DCDE3`,
+        borderRadius: 10,
+        marginTop: 20,
+        marginBottom: 10,
+        paddingVertical: 15,
         shadowRadius: 10,
         shadowOpacity: .9,
         shadowOffset: {
             width: 0,
             hieght: 2
         },
-        elevation: 3,
-        marginBottom: 20
-    },
-    logo: {
-        width: `100%`,
-        height: 100
-    },
-    btn: {
-        width: `50%`,
-        backgroundColor: `#2089dc`,
-        borderRadius: 5,
-        marginTop: 20,
-        marginBottom: 20
+        elevation: 2,
     },
     btn_text: {
         textAlign: 'center',
-        padding: 12,
         fontSize: 16,
-        color: '#FFF'
+        color: '#FFF',
+        fontWeight: 'bold'
+    },
+    category: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        marginVertical: 10
+    },
+    picker: {
+        height: 32,
+        width: 32,
+        flex: 1 / 5
+    },
+    text_err: {
+        color: '#E9446A',
+        fontSize: 16,
+        fontWeight: '700',
+        marginVertical: 10
+    },
+    description: {
+        width: (width / 100) * 85,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: .9,
+        shadowRadius: 10,
+        elevation: 2,
+    },
+    category_text: {
+        flex: 2 / 5,
+        fontSize: 18
+    },
+    wrapper_input: {
+        backgroundColor: 'white',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: .9,
+        shadowRadius: 10,
+        elevation: 2,
+        marginTop: 10,
+        width: '100%',
+        alignSelf: 'center'
+    },
+    input: {
+        fontStyle: 'italic',
+        letterSpacing: 1,
+        marginLeft: 10,
+        width: '90%'
     }
+
 });
 
 export default CreateItem;

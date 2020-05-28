@@ -28,7 +28,7 @@ export default class OrderListItem extends PureComponent {
                     </View>
                     <View style={styles.Wrapper_tax}>
                         <Text style={styles.key}>Status:</Text>
-                        <Text style={[styles.key, { marginRight: 10 }]}>{item.isCheck ? 'Checked' : 'Pending'}</Text>
+                        <Text style={[styles.key, { marginRight: 10 }]}>{item.isCheck ? item.isDeleted ? 'Refused' : 'Checked' : 'Pending'}</Text>
                     </View>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('OrderDetails', { listOrder: item, isAdmin, index })}

@@ -69,6 +69,7 @@ module.exports.create = (req, res, next) => {
             let newProduct = new checkProduct();
             newProduct.userId = userId;
             newProduct.name = name;
+            newProduct.author = seller;
             newProduct.seller = seller;
             newProduct.price = price;
             newProduct.category = category;
