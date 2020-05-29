@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { Container, Header, Title, Body, Content, Item, Input, Label } from "native-base";
+import { Container, Header, Content, Item, Input, Label } from "native-base";
 import { fetchGetOrderRequest } from '../actions';
 import { connect } from 'react-redux';
+import { validatePhone } from '../utils/Validation';
 import { _handleGetFromStorage } from '../utils/Storage';
 import { ColorBg, ColorHeader, HOST } from '../key';
 
@@ -14,7 +15,8 @@ class ConfirmInfo extends PureComponent {
         phone: '',
         errorName: false,
         errorAddress: false,
-        errorPhone: false
+        errorPhone: false,
+        errorMessage: ''
     }
 
     componentDidMount() {
@@ -96,15 +98,67 @@ class ConfirmInfo extends PureComponent {
         )
     }
 
+    _handleCheckConfirm = () => {
+        const { name, address, phone, errorAddress, errorName, errorPhone, errorMessage } = this.state;
+        if (!name && !address && !phone) {
+            this.setState({
+                errorName: true,
+                errorAddress: true,
+                errorPhone: true,
+                errorMessage: 'These fields can not be blank'
+            })
+        }
+        else if (!name) {
+            this.setState({
+                errorName: true,
+                errorAddress: false,
+                errorPhone: false,
+                errorMessage: 'Field name can not be blank'
+            })
+        }
+        else if (!address) {
+            this.setState({
+                errorName: false,
+                errorAddress: true,
+                errorPhone: false,
+                errorMessage: 'Field address can not be blank'
+            })
+        }
+        else if (!validatePhone(phone)) {
+            this.setState({
+                errorName: false,
+                errorAddress: false,
+                errorPhone: true,
+                errorMessage: 'Field phone can not be blank or invalid'
+            })
+        }
+        else {
+            this.showAlert();
+        }
+    }
+
     render() {
-        const { name, address, phone, errorAddress, errorName, errorPhone } = this.state;
+        const { name, address, phone, errorAddress, errorName, errorPhone, errorMessage } = this.state;
         return (
             <Container style={{ backgroundColor: ColorBg }}>
-                <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent />
+                <Header
+                    style={{ backgroundColor: ColorHeader }}
+                    androidStatusBarColor='#000'
+                    transparent
+                />
                 <Content>
                     <Text style={styles.title}>Confirm Information</Text>
+                    {
+                        errorMessage ? <Text style={styles.text_err}>{errorMessage}</Text> : null
+                    }
                     <Label style={styles.label}>Name:</Label>
-                    <Item stackedLabel rounded bordered style={{ backgroundColor: 'white', shadowOffset: { width: 0, height: 0 }, shadowOpacity: .9, shadowRadius: 10, elevation: 3 }} error={errorName ? true : false}>
+                    <Item
+                        stackedLabel
+                        rounded
+                        bordered
+                        style={styles.wrapper_input}
+                        error={errorName ? true : false}
+                    >
                         <Input
                             placeholder='Fill name in this field'
                             style={styles.input}
@@ -113,7 +167,13 @@ class ConfirmInfo extends PureComponent {
                         />
                     </Item>
                     <Label style={[styles.label, { marginTop: 15 }]} error={errorAddress ? true : false}>Address:</Label>
-                    <Item stackedLabel rounded bordered style={{ backgroundColor: 'white', shadowOffset: { width: 0, height: 0 }, shadowOpacity: .9, shadowRadius: 10, elevation: 3 }}>
+                    <Item
+                        stackedLabel
+                        rounded
+                        bordered
+                        style={styles.wrapper_input}
+                        error={errorAddress ? true : false}
+                    >
                         <Input
                             autoCapitalize='none'
                             placeholder='Fill address in this field'
@@ -122,7 +182,13 @@ class ConfirmInfo extends PureComponent {
                         />
                     </Item>
                     <Label style={[styles.label, { marginTop: 15 }]} error={errorPhone ? true : false}>Phone:</Label>
-                    <Item stackedLabel rounded bordered style={{ backgroundColor: 'white', shadowOffset: { width: 0, height: 0 }, shadowOpacity: .9, shadowRadius: 10, elevation: 3 }}>
+                    <Item
+                        stackedLabel
+                        rounded
+                        bordered
+                        style={styles.wrapper_input}
+                        error={errorPhone ? true : false}
+                    >
                         <Input
                             placeholder='Fill phone in this field'
                             style={styles.input}
@@ -131,7 +197,7 @@ class ConfirmInfo extends PureComponent {
                         />
                     </Item>
                     <TouchableOpacity
-                        onPress={this.showAlert}
+                        onPress={this._handleCheckConfirm}
                         activeOpacity={.6}
                         style={styles.btn}
                     >
@@ -149,6 +215,16 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         fontStyle: 'italic',
         letterSpacing: 1
+    },
+    wrapper_input: {
+        backgroundColor: 'white',
+        shadowOffset: {
+            width: 0,
+            height: 0
+        },
+        shadowOpacity: .9,
+        shadowRadius: 10,
+        elevation: 3
     },
     input: {
         fontStyle: 'italic',
@@ -185,6 +261,13 @@ const styles = StyleSheet.create({
         textTransform: 'capitalize',
         fontSize: 20,
         fontWeight: 'bold'
+    },
+    text_err: {
+        fontSize: 16,
+        textAlign: "center",
+        marginBottom: 10,
+        color: 'red',
+        fontStyle: 'italic'
     }
 })
 

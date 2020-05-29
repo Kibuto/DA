@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     content_right: {
         flex: 3 / 5,
         paddingVertical: 15,
-        marginLeft: 15
+        marginLeft: 7
     },
     name: {
         fontWeight: '700',
@@ -130,7 +130,8 @@ const styles = StyleSheet.create({
     },
     author: {
         color: '#888',
-        fontSize: 15
+        fontSize: 15,
+        textTransform: 'capitalize'
     },
     description: {
         letterSpacing: 1,
@@ -147,13 +148,14 @@ const styles = StyleSheet.create({
         elevation: 3
     },
     btn_admin: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 15,
         paddingVertical: 10,
         borderRadius: 5
     },
     text_btn: {
         color: '#FFF',
-        fontSize: 16
+        fontSize: 16,
+        fontWeight: 'bold'
     },
     wrapper_content: {
         flexDirection: 'row',
