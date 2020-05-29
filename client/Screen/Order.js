@@ -13,8 +13,10 @@ class OrderScreen extends Component {
     }
 
     _handleGetOrder = async () => {
-        console.log('Run function');
-        const { token } = this.props;
+        let { token } = this.props;
+        if (!token) {
+            token = await _handleGetFromStorage('token');
+        }
         if (token) {
             const bearer = `Bearer ${token}`;
             this.props.fetchGetOrder(bearer);
@@ -25,9 +27,6 @@ class OrderScreen extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log('Run should component');
-        console.log("cur props: ", this.props.token);
-        console.log('next props: ', nextProps.token);
         if (this.props.token !== nextProps.token) {
             return true;
         }
@@ -41,13 +40,11 @@ class OrderScreen extends Component {
     }
 
     componentDidUpdate() {
-        console.log('Run did update');
         this._handleGetOrder();
     }
 
     render() {
         const { listOrder, isAdmin } = this.props;
-        console.log("list: ", listOrder)
         return (
             <Container style={{ backgroundColor: ColorBg }}>
                 <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>

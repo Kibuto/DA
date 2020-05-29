@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
 import { Container, Header, Title, Body, Content } from "native-base";
+import { _handleGetFromStorage } from '../utils/Storage';
 import { ColorBg, ColorHeader, HOST } from '../key';
 import CheckProductItem from '../Components/CheckProductItem';
 export default class CheckProduct extends Component {
@@ -15,8 +16,9 @@ export default class CheckProduct extends Component {
         this._handleCallApi();
     }
 
-    _handleCallApi = () => {
-        const { token } = this.props.route.params;
+    _handleCallApi = async () => {
+        // const { token } = this.props.route.params;
+        const token = await _handleGetFromStorage('token');
         const bearer = `Bearer ${token}`;
         fetch(`${HOST}/api/getProduct`, {
             method: 'GET',
@@ -35,8 +37,9 @@ export default class CheckProduct extends Component {
             })
     }
 
-    _handleCheckProduct = (id, index) => {
-        const { token } = this.props.route.params;
+    _handleCheckProduct = async (id, index) => {
+        // const { token } = this.props.route.params;
+        const token = await _handleGetFromStorage('token');
         const bearer = `Bearer ${token}`;
         fetch(`${HOST}/api/checkProduct`, {
             method: 'PUT',
@@ -60,8 +63,9 @@ export default class CheckProduct extends Component {
             })
     }
 
-    _handleRefuseProduct = (id, index) => {
-        const { token } = this.props.route.params;
+    _handleRefuseProduct = async (id, index) => {
+        // const { token } = this.props.route.params;
+        const token = await _handleGetFromStorage('token');
         const bearer = `Bearer ${token}`;
         fetch(`${HOST}/api/refuseProduct`, {
             method: 'PUT',

@@ -242,7 +242,6 @@ module.exports.refuseProduct = async (req, res, next) => {
 
 module.exports.notifications = async (req, res, next) => {
     const { userId, userName } = req;
-    console.log('run notification');
     const amount = await checkProduct.find({
         userId,
         isCheck: true,
