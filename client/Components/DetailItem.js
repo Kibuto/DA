@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import WallPaper from '../Components/WallPaper';
 import { _changeFormatToVND } from '../utils/Number';
-import { ScrollView } from 'react-native-gesture-handler';
+import { HOST } from 'react-native-gesture-handler';
 export default class DetailItem extends Component {
-
-    static navigationOptions = {
-        headerTitleAlign: {
-            textAlign: 'center'
-        }
-    };
 
     render() {
         const { item, addToCart } = this.props;
         return (
-            <WallPaper img={item.images[0].url}>
+            <WallPaper img={item.images[0].url.split('https://').length > 1 ? item.images[0].url : `${HOST}${item.images[0].url}`}>
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
                     <View style={{ height: 200 }} />
                     <View style={styles.content}>
-                        <Image resizeMode='contain' source={{ uri: item.images[0].url }} style={styles.img} />
+                        <Image
+                            resizeMode='contain'
+                            source={{
+                                uri: item.images[0].url.split('https://').length > 1 ? item.images[0].url : `${HOST}${item.images[0].url}`
+                            }}
+                            style={styles.img}
+                        />
                         <Text style={styles.author}>{item.author}</Text>
                         <Text numberOfLines={3} ellipsizeMode='tail' style={styles.name}>{item.name}</Text>
                         <Text numberOfLines={6} ellipsizeMode='tail' style={styles.description}>{item.description}</Text>

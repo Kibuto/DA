@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, SafeAreaView } from 'react-native';
-import { Header, Title, Button, Icon, Left, Body, Right } from "native-base";
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { Header, Title, Button, Icon, Left, Body, Right, Container } from "native-base";
 import ProductListItem from '../Components/ProductListItem';
 import CartFooter from '../Components/CartFooter';
 import { CartContext } from '../contexts/Cart';
@@ -18,7 +18,7 @@ class ProductScreen extends Component {
         const { navigation, route, products } = this.props;
         const { categoryProduct } = route.params;
         return (
-            <SafeAreaView style={{ flex: 1 }}>
+            <Container style={{ flex: 1, backgroundColor: ColorBg }}>
                 <Header style={{ backgroundColor: ColorHeader }} androidStatusBarColor='#000' transparent>
                     <Left>
                         <Button transparent >
@@ -57,7 +57,7 @@ class ProductScreen extends Component {
                         )
                     }
                 </CartContext.Consumer>
-            </SafeAreaView>
+            </Container>
         )
     }
 }

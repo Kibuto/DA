@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AirbnbRating, Button, Icon } from 'react-native-elements';
+import { HOST } from '../key';
 export default class Home extends Component {
     render() {
         const { product, category, index, length, onPress, order, deleteFromCart, detail } = this.props;
@@ -10,7 +11,13 @@ export default class Home extends Component {
                     category ?
                         <TouchableOpacity style={styles.container} activeOpacity={0.9} onPress={onPress}>
                             <View style={styles.content_left}>
-                                <Image resizeMode='stretch' style={styles.productImg_true} source={{ uri: product.images[0].url }} />
+                                <Image
+                                    resizeMode='stretch'
+                                    style={styles.productImg_true}
+                                    source={{
+                                        uri: product.images[0].url.split('https://').length > 1 ? product.images[0].url : `${HOST}${product.images[0].url}`
+                                    }}
+                                />
                             </View>
                             <View style={styles.content_right}>
                                 <Text numberOfLines={1} ellipsizeMode='tail' style={styles.name}>{product.name}</Text>
@@ -42,7 +49,13 @@ export default class Home extends Component {
                                     }
                                 /> : null
                             }
-                            <Image resizeMode='contain' style={styles.productImg_false} source={{ uri: product.images[0].url }} />
+                            <Image
+                                resizeMode='contain'
+                                style={styles.productImg_false}
+                                source={{
+                                    uri: product.images[0].url.split('https://').length > 1 ? product.images[0].url : `${HOST}${product.images[0].url}`
+                                }}
+                            />
                             <Text numberOfLines={1} ellipsizeMode='tail' style={styles.author_false}>{product.author}</Text>
                             {order ? <Text style={styles.author_false}>x{product.quantity}</Text> : null}
                         </TouchableOpacity>

@@ -18,7 +18,6 @@ class SettingScreen extends Component {
     }
 
     async componentDidMount() {
-        console.log('run did mount');
         const token = await _handleGetFromStorage('token');
         if (token) {
             const bearer = `Bearer ${token}`;
@@ -72,7 +71,6 @@ class SettingScreen extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log('Run should update');
         const { params } = nextProps.route;
         if (!params) {
             return true;

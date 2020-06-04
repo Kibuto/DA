@@ -5,10 +5,8 @@ export default class LoadingScreen extends Component {
 
     _loadData = () => {
         const { navigation } = this.props;
-        const { index, token } = this.props.route.params;
-        if(index === 2) {
-            token ? navigation.navigate("Create", { token }) : navigation.navigate('Login');
-        }
+        const { token } = this.props.route.params;
+        token ? navigation.navigate("Create", { token }) : navigation.navigate('Login');
     }
 
     componentDidMount() {

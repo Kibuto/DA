@@ -131,7 +131,6 @@ export const fetchCheckNotifications = () => {
 }
 
 export const fetchLoginRequest = (obj, fnc) => {
-    console.log('run login');
     return (dispatch) => {
         return fetchAPINormal('api/account/signin', 'POST', obj)
             .then(res => res.json())

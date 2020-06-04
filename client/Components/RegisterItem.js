@@ -203,8 +203,8 @@ class RegisterItem extends Component {
                             activeOpacity={.6}
                         >
                             <Text style={styles.link_text}>
-                                Not a member ?
-                                <Text style={styles.register}>Join Now</Text>
+                                Old to TiTi Store ?
+                                <Text style={styles.register}> Sign In</Text>
                             </Text>
                         </TouchableOpacity>
                     </KeyboardAvoidingView>

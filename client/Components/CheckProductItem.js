@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { HOST } from '../key';
 import { Button } from "native-base";
 export default class CheckProduct extends Component {
     render() {
@@ -8,9 +9,9 @@ export default class CheckProduct extends Component {
             <TouchableOpacity style={styles.container} activeOpacity={0.9}>
                 <View style={styles.content_left}>
                     <Image
-                        resizeMode='contain'
+                        resizeMode='stretch'
                         style={styles.productImg}
-                        source={{ uri: product.images[0].url }}
+                        source={{ uri: `${HOST}${product.images[0].url}` }}
                     />
                 </View>
                 <View style={styles.content_right}>
@@ -34,7 +35,7 @@ export default class CheckProduct extends Component {
                         isAdmin ?
                             <View style={styles.wrapper_content}>
                                 <TouchableOpacity
-                                    onPress={() => onPress(product._id, index, true)}
+                                    onPress={() => onPress(product._id, index, product.userId, true)}
                                     style={[styles.btn_admin, { backgroundColor: '#42b72a' }]}
                                 >
                                     <Text style={styles.text_btn}>Accept</Text>
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 30,
         backgroundColor: '#FFF',
-        paddingVertical: 0,
+        paddingVertical: 15,
         borderRadius: 10,
         paddingHorizontal: 10,
         shadowOffset: {
@@ -81,10 +82,8 @@ const styles = StyleSheet.create({
         elevation: 3
     },
     productImg: {
-        height: 150,
-        //transform: [{ scaleY: 1.2 }],
-        // borderWidth: 1,
-        // borderColor: '#DDD'
+        height: 160,
+        width: 120
     },
     header: {
         fontSize: 24,
@@ -92,20 +91,21 @@ const styles = StyleSheet.create({
         marginBottom: 7
     },
     content_left: {
-        flex: 2 / 5,
-        position: 'relative',
-        justifyContent: 'center',
+        flex: 1 / 3,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         borderRadius: 10,
+        marginLeft: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
         shadowOffset: {
-            height: 2,
-            width: 0
+            width: 0,
+            height: 0
         },
         shadowOpacity: .9,
         shadowRadius: 10,
-        elevation: 3,
-        paddingHorizontal: 10,
-        marginVertical: 10
-
+        elevation: 3
     },
     boxShadow: {
         backgroundColor: '#000',
@@ -118,9 +118,8 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     content_right: {
-        flex: 3 / 5,
-        paddingVertical: 15,
-        marginLeft: 7
+        flex: 2 / 3,
+        marginLeft: 10
     },
     name: {
         fontWeight: '700',

@@ -97,7 +97,6 @@ class CreateItem extends Component {
         })
             .then(res => res.json())
             .then(json => {
-                console.log(json);
                 if (json.success) {
                     this.showAlert(json.message);
                 } else {

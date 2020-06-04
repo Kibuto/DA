@@ -73,7 +73,7 @@ module.exports.create = (req, res, next) => {
             newProduct.seller = seller;
             newProduct.price = price;
             newProduct.category = category;
-            newProduct.images = [{ url: `${process.env.HOST}/api/open_image?image_name=${file.filename}` }];
+            newProduct.images = [{ url: `/api/open_image?image_name=${file.filename}` }];
             newProduct.description = description;
             newProduct.save((err, checkProduct) => {
                 if (err) {
@@ -121,6 +121,9 @@ module.exports.getProduct = async (req, res, next) => {
             }
 
             if (product.length) {
+                product.map(item => {
+                    item.userId = jwt.sign({ userId: item.userId }, process.env.jwtKey)
+                })
                 res.send({
                     success: true,
                     isAdmin,

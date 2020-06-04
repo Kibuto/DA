@@ -18,23 +18,11 @@ export default class DetailScreen extends Component {
     render() {
         const { product } = this.props.route.params;
         return (
-            // <>
-            // {
-            //     product.length ? 
-            //     <View style={[styles.container_indicator, styles.horizontal]}>
-            //         <ActivityIndicator size="large" color="#0000ff" />
-            //         {/* <Text style={{color: '#000'}}>{err}</Text> */}
-            //     </View> :
-            //     <ScrollView style={styles.container}>
-            //         <DetailItem item={product}/>
-            //     </ScrollView>
-            // }
-            // </>
             <View style={styles.container}>
                 <CartContext.Consumer>
                     {
                         ({ addToCart }) => (
-                            <DetailItem addToCart={addToCart} item={product}/>
+                            <DetailItem addToCart={addToCart} item={product} />
                         )
                     }
                 </CartContext.Consumer>
@@ -45,7 +33,6 @@ export default class DetailScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        //height: '100%'
         flex: 1
     },
     container_indicator: {

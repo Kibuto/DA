@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { HOST } from '../key';
 import { AirbnbRating } from 'react-native-elements';
 
 export default class OrderScreen extends Component {
@@ -8,7 +9,13 @@ export default class OrderScreen extends Component {
         return (
             <TouchableOpacity onPress={onSwitchScreen} style={styles.container} activeOpacity={0.9}>
                 <View style={styles.content_left}>
-                    <Image resizeMode='stretch' style={styles.productImg} source={{ uri: product.images[0].url }} />
+                    <Image
+                        resizeMode='stretch'
+                        style={styles.productImg}
+                        source={{
+                            uri: product.images[0].url.split('https://').length > 1 ? product.images[0].url : `${HOST}${product.images[0].url}`
+                        }}
+                    />
                     {/* <View style={styles.boxShadow} /> */}
                 </View>
                 <View style={styles.content_right}>
@@ -56,9 +63,7 @@ const styles = StyleSheet.create({
     productImg: {
         height: 180,
         zIndex: 999,
-        transform: [{ scaleY: 1.2 }],
-        borderWidth: 1,
-        borderColor: '#DDD'
+        transform: [{ scaleY: 1.2 }]
     },
     header: {
         fontSize: 24,

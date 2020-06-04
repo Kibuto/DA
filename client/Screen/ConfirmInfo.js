@@ -37,7 +37,6 @@ class ConfirmInfo extends PureComponent {
             .then(res => res.json())
             .then(json => {
                 if (json.success) {
-                    console.log(json);
                     this.setState({
                         name: json.name,
                         phone: json.phone
