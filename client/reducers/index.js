@@ -88,7 +88,14 @@ export default (state, action) => {
         case Types.FETCH_CHECKANDREFUSEORDER: {
             return {
                 ...state,
-                listOrder: state.listOrder.splice(action.index, 1)
+                listOrder: state.listOrder.slice(0, action.index).concat(state.listOrder.slice(action.index + 1, state.listOrder.length))
+            }
+        }
+
+        case Types.FETCH_DELETEORDER: {
+            return {
+                ...state,
+                listOrder: state.listOrder.slice(0, action.index).concat(state.listOrder.slice(action.index + 1, state.listOrder.length))
             }
         }
 

@@ -6,6 +6,11 @@ import { _changeFormatToVND } from '../utils/Number';
 import { CartContext } from '../contexts/Cart';
 import HomeListItem from '../Components/HomeListItem';
 export default class OrderConfirmation extends PureComponent {
+
+    _handleOnSwitch(cartItems, amount, sum, cb) {
+        this.props.navigation.navigate("ConfirmInfo", { cartItems, amount, sum, fnc: cb })
+    }
+
     render() {
         return (
             <Container style={{ backgroundColor: ColorBg }}>
@@ -60,7 +65,7 @@ export default class OrderConfirmation extends PureComponent {
                                         </View>
                                     </View>
                                     <TouchableOpacity
-                                        onPress={() => this.props.navigation.navigate('ConfirmInfo', { cartItems, amount, sum, fnc: clearCart })}
+                                        onPress={() => this._handleOnSwitch(cartItems, amount, sum, clearCart)}
                                         activeOpacity={.6}
                                         style={styles.btn}
                                     >

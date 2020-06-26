@@ -20,12 +20,12 @@ export default class OrderListItem extends PureComponent {
                         <Text style={[styles.key, { marginRight: 10 }]}>#{item._id.slice(0, 7).toUpperCase()}</Text>
                     </View>
                     <View style={styles.Wrapper_tax}>
-                        <Text style={styles.key}>Date:</Text>
+                        <Text style={styles.key}>Order Date:</Text>
                         <Text style={[styles.key, { marginRight: 10 }]}>{item.date.split('T')[0]}</Text>
                     </View>
                     <View style={styles.Wrapper_tax}>
-                        <Text style={styles.key}>Total:</Text>
-                        <Text style={[styles.key, { marginRight: 10 }]}>{_changeFormatToVND(item.price)}</Text>
+                        <Text style={styles.key}>Deli Date:</Text>
+                        <Text style={[styles.key, { marginRight: 10 }]}>{item.deliveryDate.split('T')[0]}</Text>
                     </View>
                     <View style={styles.Wrapper_tax}>
                         <Text style={styles.key}>Status:</Text>

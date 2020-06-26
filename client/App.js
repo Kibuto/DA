@@ -12,7 +12,6 @@ import { CartProvider } from './contexts/Cart';
 import { Provider } from 'react-redux';
 import { store } from './store/index';
 import AppNavigator from './AppNavigator';
-
 class App extends Component {
 
   render() {

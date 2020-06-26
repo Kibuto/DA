@@ -231,3 +231,22 @@ export const fetchRefuseOrderRequest = (bearer, id, index) => {
             });
     }
 }
+
+export const fetchDeleteOrder = (index) => {
+    return {
+        type: Types.FETCH_DELETEORDER,
+        index
+    }
+}
+
+export const fetchDeleteOrderRequest = (bearer, id, index) => {
+    return (dispatch) => {
+        return fetchAPIAuthentication('api/order/deleteOrder', 'DELETE', id, bearer)
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    dispatch(fetchDeleteOrder(index));
+                }
+            });
+    }
+}

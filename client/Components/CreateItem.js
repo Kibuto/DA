@@ -224,7 +224,6 @@ class CreateItem extends Component {
                             <Picker.Item label="Mystery" value="Mystery" />
                             <Picker.Item label="Romance" value="Romance" />
                             <Picker.Item label="Horror" value="Horror" />
-                            <Picker.Item label="Different..." value="Different..." />
                         </Picker>
                     </View>
                     <Textarea

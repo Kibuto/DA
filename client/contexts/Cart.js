@@ -54,9 +54,7 @@ export class CartProvider extends Component {
   }
 
   deleteFromCart(product) {
-    console.log("delete product: ", product);
     const filt = this.state.cartItems.filter(item => item._id !== product._id);
-    console.log("filt: ", filt);
     this.setState({
       cartItems: filt,
       amount: this.state.amount - product.quantity,
@@ -68,7 +66,6 @@ export class CartProvider extends Component {
     let find = this.state.cartItems.find(
       item => item._id === product._id
     );
-    console.log('find: ', find);
     if (!find) {
       const productWithQuantity = { ...product, quantity: 1 };
       this.setState({

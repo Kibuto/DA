@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { Container, Header, Content } from "native-base";
 import { ColorBg, ColorHeader } from '../key';
-import { fetchRefuseOrderRequest, fetchCheckOrderRequest } from '../actions';
+import { fetchRefuseOrderRequest, fetchCheckOrderRequest, fetchDeleteOrderRequest } from '../actions';
 import { _changeFormatToVND } from '../utils/Number';
 import { connect } from 'react-redux';
 import HomeListItem from '../Components/HomeListItem';
@@ -22,7 +22,15 @@ class OrderDetails extends PureComponent {
         this.props.navigation.navigate('Orders');
     }
 
-    showAlert = (id, index, type) => {
+    _handleDeleteOrder = (id, index) => {
+        const { token } = this.props;
+        const bearer = `Bearer ${token}`;
+        console.log("Bear: ", bearer, id, index);
+        this.props.fetchDeleteOrder(bearer, id, index);
+        this.props.navigation.navigate('Orders');
+    }
+
+    showAlertAdmin = (id, index, type) => {
         Alert.alert(
             'Hello',
             `Do you want to ${type ? 'check' : 'refuse'} this order?`,
@@ -40,6 +48,26 @@ class OrderDetails extends PureComponent {
             { cancelable: false },
         )
     }
+
+    showAlertUser = (id, index) => {
+        Alert.alert(
+            'Hello',
+            `Do you want to delete this order?`,
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                },
+                {
+                    text: 'OK',
+                    onPress: () => this._handleDeleteOrder(id, index)
+                },
+            ],
+            { cancelable: false },
+        )
+    }
+
 
     render() {
         const { listOrder, isAdmin, index } = this.props.route.params;
@@ -106,25 +134,35 @@ class OrderDetails extends PureComponent {
                             isAdmin ?
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                                     <TouchableOpacity
-                                        onPress={() => this.showAlert(listOrder._id, index, true)}
+                                        onPress={() => this.showAlertAdmin(listOrder._id, index, true)}
                                         style={[styles.btn_admin, { backgroundColor: '#42b72a' }]}
                                     >
                                         <Text style={styles.btn_text}>Accept</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                        onPress={() => this.showAlert(listOrder._id, index, false)}
+                                        onPress={() => this.showAlertAdmin(listOrder._id, index, false)}
                                         style={[styles.btn_admin, { backgroundColor: '#e82b2b' }]}
                                     >
                                         <Text style={styles.btn_text}>Refuse</Text>
                                     </TouchableOpacity>
                                 </View>
                                 :
-                                <TouchableOpacity
-                                    activeOpacity={.6}
-                                    style={styles.btn}
-                                >
-                                    <Text style={styles.btn_text}>Delete</Text>
-                                </TouchableOpacity>
+                                listOrder.isCheck ? listOrder.isDeleted ?
+                                    <TouchableOpacity
+                                        activeOpacity={.6}
+                                        style={styles.btn}
+                                        onPress={() => this.showAlertUser(listOrder._id, index)}
+                                    >
+                                        <Text style={styles.btn_text}>Delete</Text>
+                                    </TouchableOpacity> : null :
+                                    <TouchableOpacity
+                                        activeOpacity={.6}
+                                        style={styles.btn}
+                                        onPress={() => this.showAlertUser(listOrder._id, index)}
+                                    >
+                                        <Text style={styles.btn_text}>Delete</Text>
+                                    </TouchableOpacity>
+
                         }
                     </View>
 
@@ -219,6 +257,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchRefuseOrder: (bearer, id, index) => {
             dispatch(fetchRefuseOrderRequest(bearer, id, index));
+        },
+        fetchDeleteOrder: (bearer, id, index) => {
+            dispatch(fetchDeleteOrderRequest(bearer, id, index))
         }
     }
 }

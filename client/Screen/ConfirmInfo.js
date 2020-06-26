@@ -1,11 +1,17 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform, Button } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Container, Header, Content, Item, Input, Label } from "native-base";
 import { fetchGetOrderRequest } from '../actions';
 import { connect } from 'react-redux';
 import { validatePhone } from '../utils/Validation';
 import { _handleGetFromStorage } from '../utils/Storage';
 import { ColorBg, ColorHeader, HOST } from '../key';
+
+function getCurrentDate() {
+    let d = new Date();
+    return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDay()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`
+}
 
 class ConfirmInfo extends PureComponent {
 
@@ -16,7 +22,11 @@ class ConfirmInfo extends PureComponent {
         errorName: false,
         errorAddress: false,
         errorPhone: false,
-        errorMessage: ''
+        errorDate: false,
+        errorMessage: '',
+        date: new Date('2020-06-26T12:12:12'),
+        mode: 'datetime',
+        show: false
     }
 
     componentDidMount() {
@@ -49,10 +59,11 @@ class ConfirmInfo extends PureComponent {
     }
 
     _handleOnConfirm = async () => {
-        const { name, phone, address } = this.state;
+        const { name, phone, address, date } = this.state;
         const { cartItems, sum, amount, fnc } = this.props.route.params;
         const token = await _handleGetFromStorage('token');
         const bearer = `Bearer ${token}`;
+        console.log('run')
         await fetch(`${HOST}/api/order/create`, {
             method: 'POST',
             headers: new Headers({
@@ -66,7 +77,8 @@ class ConfirmInfo extends PureComponent {
                 address,
                 cartItems,
                 sum,
-                amount
+                amount,
+                date
             })
         })
             .then(res => res.json())
@@ -98,12 +110,16 @@ class ConfirmInfo extends PureComponent {
     }
 
     _handleCheckConfirm = () => {
-        const { name, address, phone, errorAddress, errorName, errorPhone, errorMessage } = this.state;
+        const { name, address, phone, date, errorAddress, errorName, errorPhone, errorMessage } = this.state;
+        let dateConvert = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        let curDate = getCurrentDate();
+        console.log(dateConvert, curDate);
         if (!name && !address && !phone) {
             this.setState({
                 errorName: true,
                 errorAddress: true,
                 errorPhone: true,
+                errorDate: true,
                 errorMessage: 'These fields can not be blank'
             })
         }
@@ -112,6 +128,7 @@ class ConfirmInfo extends PureComponent {
                 errorName: true,
                 errorAddress: false,
                 errorPhone: false,
+                errorDate: false,
                 errorMessage: 'Field name can not be blank'
             })
         }
@@ -120,6 +137,7 @@ class ConfirmInfo extends PureComponent {
                 errorName: false,
                 errorAddress: true,
                 errorPhone: false,
+                errorDate: false,
                 errorMessage: 'Field address can not be blank'
             })
         }
@@ -128,7 +146,17 @@ class ConfirmInfo extends PureComponent {
                 errorName: false,
                 errorAddress: false,
                 errorPhone: true,
+                errorDate: false,
                 errorMessage: 'Field phone can not be blank or invalid'
+            })
+        }
+        else if (this.compareDate(new Date(curDate), new Date(dateConvert))) {
+            this.setState({
+                errorName: false,
+                errorAddress: false,
+                errorPhone: false,
+                errorDate: true,
+                errorMessage: 'Wrong delivery date'
             })
         }
         else {
@@ -136,8 +164,36 @@ class ConfirmInfo extends PureComponent {
         }
     }
 
+    setDate = (event, date) => {
+        date = date || this.state.date
+        this.setState({
+            show: Platform.OS === 'ios' ? true : false,
+            date,
+        });
+    }
+
+    show = mode => {
+        this.setState({
+            show: true,
+            mode
+        })
+    }
+
+    datePicker = () => {
+        this.show('datetime');
+    }
+
+    compareDate = (date1, date2) => {
+        if (date1 > date2) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     render() {
-        const { name, address, phone, errorAddress, errorName, errorPhone, errorMessage } = this.state;
+        const { name, address, phone, errorAddress, errorName, errorPhone, errorDate, errorMessage, date, show, mode } = this.state;
         return (
             <Container style={{ backgroundColor: ColorBg }}>
                 <Header
@@ -195,6 +251,26 @@ class ConfirmInfo extends PureComponent {
                             value={phone}
                         />
                     </Item>
+                    <View>
+                        <Label style={[styles.label, { marginTop: 15 }]} error={errorDate ? true : false}>Delivery date:</Label>
+                        <TouchableOpacity
+                            activeOpacity={.6}
+                            onPress={this.datePicker}
+                            style={[styles.deliveryDate, errorDate && styles.err_date]}
+                        >
+                            <Text style={[styles.input, { marginLeft: 20 }]}>{`${date}`}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {
+                        show && <DateTimePicker
+                            value={date.getDay()}
+                            mode={mode}
+                            is24Hour={true}
+                            display='spinner'
+                            timeZoneOffsetInSeconds={3600}
+                            onChange={this.setDate}
+                        />
+                    }
                     <TouchableOpacity
                         onPress={this._handleCheckConfirm}
                         activeOpacity={.6}
@@ -248,7 +324,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 15,
         borderRadius: 999,
-        marginVertical: 20,
+        marginVertical: 30,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: .9,
         shadowRadius: 10,
@@ -267,6 +343,21 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         color: 'red',
         fontStyle: 'italic'
+    },
+    deliveryDate: {
+        marginTop: 5,
+        backgroundColor: '#fff',
+        borderRadius: 999,
+        paddingVertical: 24,
+        shadowOffset: { height: 2, width: 0 },
+        shadowOpacity: .7,
+        shadowRadius: 10,
+        elevation: 5
+    },
+    err_date: {
+        borderStyle: `solid`,
+        borderColor: 'red',
+        borderWidth: 1
     }
 })
 

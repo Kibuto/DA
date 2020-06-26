@@ -198,12 +198,12 @@ class RegisterItem extends Component {
                             <Text style={styles.btn_text}>REGISTER</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            //onPress={() => navigation.navigate('LogIn')}
+                            onPress={() => navigation.navigate('Login')}
                             style={styles.link}
                             activeOpacity={.6}
                         >
                             <Text style={styles.link_text}>
-                                Old to TiTi Store ?
+                                Have you already account ?
                                 <Text style={styles.register}> Sign In</Text>
                             </Text>
                         </TouchableOpacity>
