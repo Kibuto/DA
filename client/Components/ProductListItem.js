@@ -26,11 +26,11 @@ export default class OrderScreen extends Component {
                     <View style={styles.star}>
                         <AirbnbRating
                             count={5}
-                            defaultRating={notification ? 0 : 4}
+                            defaultRating={product.seller !== 'Admin' ? 0 : 4}
                             size={20}
                             showRating={false}
                         />
-                        <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '700' }}>{notification ? 0 : 4}</Text>
+                        <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '700' }}>{product.seller !== 'Admin' ? 0 : 4}</Text>
                     </View>
                     {
                         notification ? product.isDeleted ?

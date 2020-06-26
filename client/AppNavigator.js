@@ -20,7 +20,8 @@ import Welcome from './Screen/Welcome';
 import Notification from './Screen/Notifications';
 import OrderConfirmation from './Screen/OrderConfirmation';
 import ConfirmInfo from './Screen/ConfirmInfo';
-import OrderDetails from './Screen/OrderDetails'
+import OrderDetails from './Screen/OrderDetails';
+import CreateDetails from './Screen/CreateDetails';
 import { CartContext } from './contexts/Cart';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Badge } from 'react-native-elements';
@@ -112,6 +113,7 @@ export default function AppNavigator(props) {
         <Stack.Screen name='OrderConfirmation' component={OrderConfirmation} />
         <Stack.Screen name='ConfirmInfo' component={ConfirmInfo} />
         <Stack.Screen name='OrderDetails' component={OrderDetails} />
+        <Stack.Screen name='CreateDetails' component={CreateDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

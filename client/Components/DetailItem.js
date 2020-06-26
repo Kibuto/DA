@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import WallPaper from '../Components/WallPaper';
 import { _changeFormatToVND } from '../utils/Number';
-import { HOST } from 'react-native-gesture-handler';
+import { HOST } from '../key';
 export default class DetailItem extends Component {
 
     render() {
