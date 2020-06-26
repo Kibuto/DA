@@ -156,6 +156,7 @@ module.exports.getProduct = async (req, res, next) => {
                 res.send({
                     success: true,
                     product: product,
+                    isAdmin: false,
                     message: 'get data successfully'
                 })
             }
@@ -302,6 +303,26 @@ module.exports.checkNotifications = async (req, res, next) => {
             res.send({
                 success: true,
                 message: 'Respond data successfully'
+            })
+        }
+    })
+}
+
+module.exports.deleteProduct = async (req, res, next) => {
+    const { body } = req;
+    await checkProduct.findByIdAndDelete({
+        _id: body.id
+    }, (err, product) => {
+        if (err) {
+            res.send({
+                success: false,
+                message: 'Server error when delete order'
+            })
+        }
+        else {
+            res.send({
+                success: true,
+                message: 'Delete order succesfully'
             })
         }
     })

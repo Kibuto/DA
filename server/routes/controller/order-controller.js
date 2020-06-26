@@ -140,6 +140,7 @@ module.exports.refuseOrder = async (req, res, next) => {
 
 module.exports.deleteOrder = async (req, res, next) => {
     const { body } = req;
+    console.log(body.body);
     await Order.findByIdAndDelete({
         _id: body.body
     }, (err, order) => {

@@ -12,4 +12,5 @@ router.put('/checkProduct', authController.requireToken, controller.checkProduct
 router.put('/refuseProduct', authController.requireToken, controller.refuseProduct);
 router.get('/notifications', authController.requireToken, controller.notifications);
 router.put('/checkNotification', authController.requireToken, controller.checkNotifications);
+router.delete('/deleteProduct', authController.requireToken, controller.deleteProduct);
 module.exports = router;
