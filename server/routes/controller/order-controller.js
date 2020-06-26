@@ -3,7 +3,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 module.exports.create = (req, res, next) => {
     const { body, userId } = req;
-    const { cartItems, name, phone, address, sum, amount } = body;
+    const { cartItems, name, phone, address, sum, amount, date } = body;
     let newOrder = new Order();
     newOrder.userId = userId;
     newOrder.name = name;
@@ -12,6 +12,7 @@ module.exports.create = (req, res, next) => {
     newOrder.phone = phone;
     newOrder.address = address;
     newOrder.amount = amount;
+    newOrder.deliveryDate = date.split("T").join(' ');
     newOrder.save((err, order) => {
         if (err) {
             return res.send({
@@ -136,3 +137,23 @@ module.exports.refuseOrder = async (req, res, next) => {
             }
         })
 };
+
+module.exports.deleteOrder = async (req, res, next) => {
+    const { body } = req;
+    await Order.findByIdAndDelete({
+        _id: body.body
+    }, (err, order) => {
+        if (err) {
+            res.send({
+                success: false,
+                message: 'Server error when delete order'
+            })
+        }
+        else {
+            res.send({
+                success: true,
+                message: 'Delete order succesfully'
+            })
+        }
+    })
+}

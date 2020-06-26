@@ -6,4 +6,5 @@ router.post('/order/create', authController.requireToken, controller.create);
 router.get('/order/getOrder', authController.requireToken, controller.getOrder);
 router.put('/order/refuseOrder', authController.requireToken, controller.refuseOrder);
 router.put('/order/checkOrder', authController.requireToken, controller.checkOrder);
+router.delete('/order/deleteOrder', authController.requireToken, controller.deleteOrder);
 module.exports = router;

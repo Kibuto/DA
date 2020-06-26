@@ -12,6 +12,9 @@ var OrderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    deliveryDate: {
+        type: Date
+    },
     isCheck: {
         type: Boolean,
         default: false
